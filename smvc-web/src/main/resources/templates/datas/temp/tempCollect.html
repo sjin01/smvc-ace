@@ -1,0 +1,444 @@
+#parse("/common/north.html")
+<style>
+    .title_div{
+        margin-top: 3%;
+    }
+
+    ul.ztree {
+        margin-top: 0;
+        width: auto;
+        height: auto;
+        /*height: 300px;*/
+    }
+
+    .ztree {
+        overflow-y: scroll;
+        overflow-x: auto;
+    }
+</style>
+<script src="$contextPath/static/js/org_fueluxtree.js"></script>
+<div class="page-header">
+    <h1 class="no-margin col-sm-8 left page-header-h1">
+        数据
+        <small>
+            <i class="ace-icon fa fa-angle-double-right"></i>
+            <a href="$contextPath/data/collect">数据标准列表</a>
+        </small>
+        <small>
+            <i class="ace-icon fa fa-angle-double-right"></i>
+            定义数据标准
+        </small>
+    </h1>
+
+    <div class="input-group col-sm-4">
+        <input type="text" id="condition" class="form-control search-query" style="border: 0;width: 0;">
+
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-xs-12">
+        <form class="form-horizontal" id="myform" name="myform" method="post"
+              action="$contextPath/data/collect/addOrUpdate">
+            <input type="hidden" name="flagId" value="$!flagId">
+            <div id="notificationFileList_hidden" style="display: none;"></div>
+            <div id="notificationFileList_del_hidden" style="display: none;"></div>
+
+            <div id="receives_div" style="display: none;">
+
+            </div>
+
+            <div class="form-group">
+                <input type="hidden" value="$!{tempInfoVo.id}" name="id">
+                <label for="title" class="col-xs-12 col-sm-3 control-label no-padding-right">
+                    <span style="color: red;">*</span>主题
+                </label>
+
+                <div class="col-xs-12 col-sm-5">
+                    <input id="title" name="title" class="form-control limited" maxlength="512" rows="1"
+                              onblur="checkLen(this)" value="$!tempInfoVo.title">
+
+                    </input>
+                </div>
+                <div class="help-block col-xs-12 col-sm-reset inline">
+                    <i class="ace-icon fa fa-times-circle red" style="display: none;"></i>
+                    <i class="ace-icon fa fa-check-circle" style="display: none;"></i>
+                    <span style="color: red;font-size: xx-small;"></span>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="col-xs-12 col-sm-3 control-label no-padding-right" style="margin-top: 1%;">
+                    <span style="color: red;">*</span>内容
+                </label>
+
+                <div class="col-xs-12 col-sm-5">
+                    #if($!tempInfoVo.tempInfoDetails.size()>0)
+                        #foreach($item in $!tempInfoVo.tempInfoDetails)
+                            #if($velocityCount ==$!tempInfoVo.tempInfoDetails.size())
+                    <div class="title_div">
+                        <input type="text" name="details"value="$item.detail" readonly="readonly">
+                        <!--<i class="fa fa-minus-circle"  style="color: red;" onclick="delItem(this);"></i>
+                        <i class="fa fa-plus-circle" style="color: red;" onclick="addItem();"></i>-->
+                    </div>
+                            #else
+                    <div class="title_div">
+                        <input type="text" name="details"  value="$item.detail" readonly="readonly">
+                        <!--<i class="fa fa-minus-circle" style="color: red;" onclick="delItem(this);"></i>-->
+                    </div>
+                            #end
+                        #end
+                    #else
+                    <div class="title_div">
+                        <input type="text" name="details" maxlength="32" style="width: 80%">
+                        <i class="fa fa-minus-circle" style="color: red;" onclick="delItem(this);"></i>
+                        <i class="fa fa-plus-circle" style="color: red;" onclick="addItem();"></i>
+                    </div>
+                    #end
+                </div>
+            </div>
+
+
+            <div class="form-group">
+                #if($orgList.size()==1)
+                <label class="col-xs-12 col-sm-3 control-label no-padding-right">
+                    您的部门
+                </label>
+
+                <div class="col-xs-12 col-sm-5">
+                    <select name="orgid"  style="width: 80%">
+                        #foreach($org in $orgList)
+                            #if($velocityCount==1)
+                            <option value="$org.id" selected="selected">$!org.orgname</option>
+                            #end
+                        #end
+                    </select>
+                </div>
+                #else
+                <label class="col-xs-12 col-sm-3 control-label no-padding-right">
+                    请选择您的部门
+                </label>
+
+                <div class="col-xs-12 col-sm-5">
+                    <select name="orgid"  style="width: 80%">
+                        #foreach($org in $orgList)
+                            <option value="$org.id">$!org.orgname</option>
+                        #end
+                    </select>
+                </div>
+                #end
+            </div>
+
+            <div class="form-group">
+                <label class="col-xs-12 col-sm-3 control-label no-padding-right">
+                    说明
+                </label>
+
+                <div class="col-xs-12 col-sm-5">
+                    <input type="text" value="$!tempInfoVo.remark" name="remark" maxlength="32" style="width: 80%;" >
+
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="col-xs-12 col-sm-3 control-label no-padding-right">
+                    <span style="color: red;">*</span>填写人
+                </label>
+                <div class="row">
+                    <div class="col-sm-6">
+                        <div class="widget-color-grey">
+                            <ul id="knowsTree" class="ztree"style="width: 80%"></ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+        <div class="clearfix form-actions no-margin-bottom">
+            <div class="center">
+                <a class="btn btn-info " onclick="save()">
+                    <i class="ace-icon fa fa-check bigger-110"></i>保存
+                </a>
+                &nbsp; &nbsp; &nbsp;
+                <a class="btn" href="$contextPath/data/collect">
+                    <i class="ace-icon fa fa-undo bigger-125"></i>
+                    返回
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="$contextPath/static/ace/js/jquery.gritter.min.js"></script>
+<script type="text/javascript">
+
+
+    var tree ;
+    $(function () {
+        var orgid='$!tempInfoVo.orgid';
+        if(orgid!=null&& $.trim(orgid)!=''){
+            $("select[name=orgid]").val(orgid);
+            $("select[name=orgid]").attr("disabled",true);
+        }
+
+        $('textarea.limited').inputlimiter({
+            remText: '您还能输入 %n 个字符，',
+            limitText: '最多能输入 : %n 字符。'
+        });
+
+        getOrgs();
+        orgJudge();
+        getInfoUser($("input[name=id]").val());
+
+        $("div#main-container").css("width","99%")
+    });
+
+    function getData(){
+
+    }
+
+    function orgJudge() {
+        var len = $("select[name=orgid]").find("option").length;
+        if (len >1) {
+            $("#selectOrg_div div").last().find("span").text("由于您属于多个机构,请选择一个机构。默认为选择框第一个");
+        } else {
+            $("select[name=orgid]").find("option").eq(0).attr("selected", true);
+            $("select[name=orgid]").attr("readonly", "readonly");
+        }
+    }
+
+
+    function save() {
+        var title = $("#title").val();
+        if ($.trim(title)=='') {
+            $("#title").parent().next().find("i.red").show();
+            $("#title").parent().next().find("i").not(".red").hide();
+            $("#title").parent().next().find("span").text("请输入主题");
+            $("#title").focus();
+            return false;
+        } else if (title.length >= 64) {
+            $("#title").parent().next().find("i.red").show();
+            $("#title").parent().next().find("i").not(".red").hide();
+            $("#title").parent().next().find("span").text("主题最多只能输入512个汉字或字母");
+            $("#title").focus();
+            return false;
+        } else {
+            $("#title").parent().next().find("i.red").hide();
+            $("#title").parent().next().find("i").not(".red").show();
+            $("#title").parent().next().find("span").text("");
+        }
+
+        var flag=true;
+        $("div.title_div").each(function(index){
+            var row=Number(index)+1;
+            var detail=$(this).find("input").eq(0).val();
+            if(detail==null|| $.trim(detail)==''){
+                flag=false;
+                myGritterError("第"+row+"行不能为空!","提示",1000);
+               return false;
+            }
+        });
+
+        if(!recieveCheck()){
+            return false;
+        }
+
+        if(flag){
+            myConfirm("确认发起数据收集吗?",function(){
+                document.myform.submit();
+            });
+        }
+
+    }
+
+    function checkLen(e) {
+        var title = e.value;
+        if (title.length >= 64) {
+            $(e).parent().next().find("i").not(".red").hide();
+            $(e).parent().next().find("i.red").show();
+            $(e).parent().next().find("span").text("主题最多只能输入64个汉字或字母");
+            return false;
+        } else if (title.length == 0) {
+
+            if ($.trim(e.id) == "title") {
+                $(e).parent().next().find("i").not(".red").hide();
+                $(e).parent().next().find("i.red").show();
+                $(e).parent().next().find("span").text("请输入主题");
+                return false;
+            }
+
+        } else {
+            $(e).parent().next().find("i.red").hide();
+            $(e).parent().next().find("i").not(".red").show();
+            $(e).parent().next().find("span").text("");
+        }
+    }
+
+    /**
+     * 删除一项内容
+     */
+    function delItem(e) {
+        if($("div.title_div").length>1){
+            $(e).parent().remove();
+            $(".fa-plus-circle").remove();
+            addItem_img();
+        }else{
+            $("input[name=detail]").val('');
+        }
+
+    }
+    /**
+     * 添加一项内容
+     */
+    function addItem() {
+
+        if($("div.title_div").length>9){
+            myGritterError("最多只能设置10项!","提示",1000);
+        }else{
+            var str="<div class='title_div'>"+
+                    "<input type='text' maxlength='32' name='details'style='width: 80%;'>"+
+                    "&nbsp;<i class='fa fa-minus-circle' style='color: red;' onclick='delItem(this);'></i>"+
+                    "</div>";
+            $(".fa-plus-circle").remove();
+            $(".title_div").last().after(str);
+            addItem_img();
+            $(".title_div").last().find("input").eq(0).focus();
+        }
+    }
+
+    function addItem_img(){
+        $(".title_div").first().find("i.fa-minus-circle").after("&nbsp;<i class='fa fa-plus-circle' style='color: red;' onclick='addItem();'></i>");
+    }
+
+
+    //知识点树树配置Start
+    var knowsetting = {
+        async: {
+            enable: true
+        },
+        check: {
+            enable: true,
+            chkboxType: {"Y": "", "N": ""}
+        },
+        view: {
+            dblClickExpand: false
+        },
+        data: {
+            simpleData: {
+                enable: true,
+                idKey: "id",
+                pIdKey: "pid"
+            },
+            key: {
+                name: "name"
+            }
+        },
+        callback: {
+            //beforeClick: beforeKnowClick,
+            onCheck: onKnowCheck,
+            onExpand: onExpand
+        }
+    };
+
+    function onExpand(treeId, treeNode){
+        $(".ico_docu").each(function(){
+         if($(this).attr("style")!=''){
+             $(this).removeClass("ico_docu").addClass("ico_close");
+                $(this).attr("style","");
+             }
+         });
+    }
+    function beforeKnowClick(treeId, treeNode) {
+
+        var zTree = $.fn.zTree.getZTreeObj("knowsTree");
+        zTree.checkNode(treeNode, !treeNode.checked, null, true);
+        return false;
+    }
+
+    function onKnowCheck(e, treeId, treeNode) {
+        var zTree = $.fn.zTree.getZTreeObj("knowsTree");
+
+        checkZtreeChildren(treeId, treeNode);
+        var nodes = zTree.getCheckedNodes(true);
+
+        $("#receives_div").html('');
+        var a=0;
+        for (var i = 0, l = nodes.length; i < l; i++) {
+            if(nodes[i].type=='user'){
+                var userid=nodes[i].id;
+                userid=userid.substring(1,userid.length);
+                $("#receives_div").append("<input type='hidden' name='receives["+a+"].userid' value='" + userid + "'/>")
+                if(nodes[i].pid==null)
+                    nodes[i].pid=-1;
+                $("#receives_div").append("<input type='hidden' name='receives["+a+"].orgid' value='" + nodes[i].pid + "'/><br>")
+                a++;
+            }
+        }
+    }
+
+    //知识点树配置End
+
+    function getOrgs(){
+        var pid=$("input[name=flagId]").val()==''?0:$("input[name=flagId]").val();
+        jQuery.ajax({
+            url: "$contextPath/data/collect/getTreeByPid",
+            data:{pid:pid},
+            dataType: "JSON",
+            success: function (data) {
+                jQuery.fn.zTree.init(jQuery("#knowsTree"), knowsetting, data);
+                var treeObj = $.fn.zTree.getZTreeObj("knowsTree");
+                var nodes = treeObj.getNodes();
+                //给没有字节点的机构加上标识
+                for(var a in nodes){
+                    changeTreeCss("knowsTree",nodes[a]);
+                }
+
+            }
+        });
+    }
+
+    function getInfoUser(tempId){
+        if(tempId!=''&& $.trim(tempId)!=''&&tempId!=undefined){
+            jQuery.ajax({
+                url: "$contextPath/data/collect/getInfoUser?tempId="+tempId,
+                dataType: "JSON",
+                success: function (data) {
+                    var zTree = $.fn.zTree.getZTreeObj("knowsTree");
+                    //zTree.expandAll(true);
+                    var nodes =null;
+                    if(data!=''&&data.length>0){
+                        for(i=0;i<data.length;i++){
+                            nodes = zTree.getNodesByParam("id", data[i].userid, null);
+                            if(nodes!=''&&nodes!=null&&nodes.length>0){
+                                for(a in nodes){
+                                    if(null!=nodes[a]&&nodes[a].pid==data[i].orgid){
+                                        zTree.checkNode(nodes[a]);
+                                        onKnowCheck(null, "knowsTree", nodes[a]);
+                                        break;
+                                    }
+                                }
+                            }
+                        }
+
+                    }
+                }
+            });
+        }
+    }
+
+
+    /**
+     * 是否选中接收人
+     * @returns {boolean}
+     */
+    function recieveCheck(){
+        var flag=false;
+        var recieves = $('#receives_div').find("input").length;
+        if (recieves < 1) {
+            myGritterError("请选择填写人","提示",1000);
+            flag=false;
+        } else {
+            flag=true;
+        }
+        return flag;
+    }
+</script>
+#parse("/common/south.html")

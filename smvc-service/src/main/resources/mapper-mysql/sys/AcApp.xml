@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="net.hunanst.eduz100.api.sys.AcApp" >
+  <resultMap id="BaseResultMap" type="net.hunanst.eduz100.api.sys.AcApp" >
+    <id column="ID" property="id" jdbcType="INTEGER" />
+    <result column="APPNAME" property="appname" jdbcType="VARCHAR" />
+    <result column="APPCODE" property="appcode" jdbcType="VARCHAR" />
+    <result column="STATUS" property="status" jdbcType="VARCHAR" />
+    <result column="APPURL" property="appurl" jdbcType="VARCHAR" />
+    <result column="MEMO" property="memo" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    ID, APPNAME, APPCODE, STATUS, APPURL, MEMO
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from ac_app
+    where ID = #{value}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from ac_app
+    where ID = #{value}
+  </delete>
+  <insert id="insert" parameterType="net.hunanst.eduz100.api.sys.AcApp" >
+    <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER" >
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into ac_app (APPNAME, APPCODE, STATUS, 
+      APPURL, MEMO)
+    values (#{appname,jdbcType=VARCHAR}, #{appcode,jdbcType=VARCHAR}, #{status,jdbcType=VARCHAR}, 
+      #{appurl,jdbcType=VARCHAR}, #{memo,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="net.hunanst.eduz100.api.sys.AcApp" >
+    <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER" >
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into ac_app
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="appname != null" >
+        APPNAME,
+      </if>
+      <if test="appcode != null" >
+        APPCODE,
+      </if>
+      <if test="status != null" >
+        STATUS,
+      </if>
+      <if test="appurl != null" >
+        APPURL,
+      </if>
+      <if test="memo != null" >
+        MEMO,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="appname != null" >
+        #{appname,jdbcType=VARCHAR},
+      </if>
+      <if test="appcode != null" >
+        #{appcode,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null" >
+        #{status,jdbcType=VARCHAR},
+      </if>
+      <if test="appurl != null" >
+        #{appurl,jdbcType=VARCHAR},
+      </if>
+      <if test="memo != null" >
+        #{memo,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="net.hunanst.eduz100.api.sys.AcApp" >
+    update ac_app
+    <set >
+      <if test="appname != null" >
+        APPNAME = #{appname,jdbcType=VARCHAR},
+      </if>
+      <if test="appcode != null" >
+        APPCODE = #{appcode,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null" >
+        STATUS = #{status,jdbcType=VARCHAR},
+      </if>
+      <if test="appurl != null" >
+        APPURL = #{appurl,jdbcType=VARCHAR},
+      </if>
+      <if test="memo != null" >
+        MEMO = #{memo,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where ID = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="net.hunanst.eduz100.api.sys.AcApp" >
+    update ac_app
+    set APPNAME = #{appname,jdbcType=VARCHAR},
+      APPCODE = #{appcode,jdbcType=VARCHAR},
+      STATUS = #{status,jdbcType=VARCHAR},
+      APPURL = #{appurl,jdbcType=VARCHAR},
+      MEMO = #{memo,jdbcType=VARCHAR}
+    where ID = #{id,jdbcType=INTEGER}
+  </update>
+  <select id="select_page" resultMap="BaseResultMap" parameterType="net.hunanst.eduz100.api.sys.AcApp" >
+    select
+    <include refid="Base_Column_List" />
+     from ac_app
+    <where >
+      <if test="id!=null" >
+        AND ID=#{id}
+      </if>
+      <if test="appname!=null" >
+        AND APPNAME=#{appname}
+      </if>
+      <if test="appcode!=null" >
+        AND APPCODE=#{appcode}
+      </if>
+      <if test="status!=null" >
+        AND STATUS=#{status}
+      </if>
+      <if test="appurl!=null" >
+        AND APPURL=#{appurl}
+      </if>
+      <if test="memo!=null" >
+        AND MEMO=#{memo}
+      </if>
+    </where>
+  </select>
+  
+  <select id="selectCondition_page" resultMap="BaseResultMap" parameterType="net.hunanst.eduz100.api.sys.AcApp" >
+    select
+    <include refid="Base_Column_List" />
+    from ac_app
+    <if test="condition!=null" >
+    where APPNAME like '%${condition}%'
+    </if>
+    order by id desc
+  </select>
+  
+  <delete id="deletes" parameterType="list">
+    delete from ac_app
+    where ID in 
+    (<foreach collection="list" item="item" separator=",">
+    #{item}
+    </foreach>)
+  </delete>
+  
+  <select id="selectAll" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from ac_app
+    order by id desc
+  </select>
+</mapper>

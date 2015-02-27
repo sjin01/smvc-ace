@@ -1,0 +1,79 @@
+#parse("/common/north.html")
+
+<div class="page-header">
+    <h1>
+        审批通过
+        <small>
+            <i class="ace-icon fa fa-angle-double-right"></i>
+            您的操作已生效，该公文已通过审批！
+        </small>
+    </h1>
+</div>
+
+<div class="widget-box no-border">
+
+
+    <div class="widget-body">
+        <div class="widget-main">
+            <!-- #section:plugins/fuelux.wizard -->
+            <div id="fuelux-wizard" data-target="#step-container">
+                <!-- #section:plugins/fuelux.wizard.steps -->
+                <ul class="wizard-steps">
+                    <li data-target="#step1" class="active">
+                        <span class="step">1</span>
+                        <span class="title">审批通过</span>
+                    </li>
+
+                    <li data-target="#step2">
+                        <span class="step">2</span>
+                        <span class="title">签发各部门</span>
+                    </li>
+
+                    <li data-target="#step3">
+                        <span class="step">3</span>
+                        <span class="title">各部门签收</span>
+                    </li>
+
+                    <li data-target="#step4">
+                        <span class="step">4</span>
+                        <span class="title">公文归档</span>
+                    </li>
+                </ul>
+                <!-- /section:plugins/fuelux.wizard.steps -->
+            </div>
+
+            <hr>
+
+            <!-- #section:plugins/fuelux.wizard.container -->
+            <div class="step-content pos-rel" id="step-container">
+                <div class="step-pane active" id="step1">
+                    <h3 class="lighter block green">您此时可以对这一批公文附件，加盖公章，但此功能暂未开通，敬请期待！
+                        <button class="btn btn-sm" style="float: right" onclick="backList();">返回</button></h3>
+
+                    <div id="form_div"></div>
+                </div>
+
+            </div>
+
+            <!-- /section:plugins/fuelux.wizard -->
+        </div><!-- /.widget-main -->
+    </div><!-- /.widget-body -->
+</div>
+
+<br style="clear:both;">
+
+<script type="text/javascript">
+
+    function backList (){
+        /*myConfirm("等待发起人来进行签发，将使您失去对该公文进行签发的权限！您确定放弃此次签发吗？" ,function (){
+            location.href = '$ contextPath/oa/officialdocument';
+        });*/
+        location.href = '$contextPath/oa/officialdocument/approve?odid=$!{odid}';
+    }
+
+    $(function (){
+
+    })
+</script>
+
+#parse("/common/south.html")

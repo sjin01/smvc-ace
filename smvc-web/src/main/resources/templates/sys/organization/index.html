@@ -1,0 +1,332 @@
+#parse("/common/north.html")
+<style>
+.ztree a {width: 90%}
+</style>
+<script type="text/javascript">
+var ztree;
+var myDropzone ;
+
+$(function(){
+	initZtree ();
+	initDropzone ();
+});
+
+function initZtree(){
+	ztree = $.fn.zTree.init($("#treeDemo"), {
+		async: {url: '$contextPath/sys/organization/list', enable: true},
+		view: {selectedMulti: false, showIcon: true},
+		check: {enable: true, chkboxType: { "Y" : "", "N" : "" }},
+		data: {
+			simpleData: {enable: true, idKey: "id", pIdKey: "parentid"},
+			key: {name: "orgname"}
+		},
+		callback:{
+			onClick: function(event, treeId, treeNode, clickFlag) {
+				
+				$("#validation-form label.col-sm-9").each(function(){
+					$(this).html(treeNode[$(this).attr("id")]);
+				});
+				
+				var parentnode = treeNode.getParentNode();
+				if(parentnode){
+					$("#parentorgname").html(parentnode.orgname);
+				}else{
+					$("#parentorgname").html('');
+				}
+				
+				var belongnode = ztree.getNodeByParam("id", treeNode.belongorgid);
+				if(belongnode==null){
+					$("#belongorgname").html(ztree.getNodes()[0].orgname);
+				}else{
+					$("#belongorgname").html(belongnode.orgname);
+				}
+			},
+			onAsyncSuccess: function (event, treeId, treeNode, msg){
+				ztree.expandNode(ztree.getNodeByTId(treeId+"_1"));
+				//ztree.expandAll(true);
+			}
+		}
+	}, null);
+}
+
+function deletes(){
+	if(ztree.getCheckedNodes().length!=1) {
+		alert("请勾选一个机构！");
+		return;
+	}
+	var treeNode = ztree.getCheckedNodes()[0];
+	
+	if(confirm("确定删除该机构及其下属的子机构吗？")){
+		jQuery.ajax({
+            type:"post",
+            url:"$contextPath/sys/organization/deletes",
+            data: treeNode,
+            dataType: "json",
+            success:function(data){
+                if(data.data>0){
+                	var parentnode = treeNode.getParentNode();
+                	if(parentnode!=null){
+                		$("#"+parentnode.tId+"_a").click();
+                	}else{
+                		$("#validation-form :input").each(function(){
+                			$(this).val('');
+                		});
+                	}
+                	ztree.removeNode(treeNode);
+                }
+            }
+        });
+	}
+}
+
+function detail(operation){
+	if(operation=='insert'){
+		if(ztree.getNodes().length>0){
+			if(ztree.getCheckedNodes().length!=1){
+				alert("请勾选一个机构！");
+				return;
+			}
+			var treeNode = ztree.getCheckedNodes()[0];
+			location.href='$contextPath/sys/organization/detail?operationtype='+operation+'&parentid='+treeNode.id;
+		}else{
+			location.href='$contextPath/sys/organization/detail?operationtype='+operation+'&parentid=-1';
+		}
+		
+	}else if(operation=='update'){
+		if(ztree.getCheckedNodes().length!=1){
+			alert("请勾选一个机构！");
+			return;
+		}
+		var treeNode = ztree.getCheckedNodes()[0];
+		var parentid = treeNode.parentid!=null ? treeNode.parentid : -1;
+		location.href='$contextPath/sys/organization/detail?operationtype='+operation+'&id='+treeNode.id+'&parentid='+parentid;
+	}
+}
+
+function setfunc(){
+	if(ztree.getCheckedNodes().length!=1){
+		alert("请勾选一个机构！");
+		return;
+	}
+	var treeNode = ztree.getCheckedNodes()[0];
+	/* if($loginUser.belongorgid>0 && treeNode.id==treeNode.belongorgid){
+		alert("不能设置学校功能！");
+		return;
+	} */
+	if('$!loginUser.usercode'!='admin'){
+		if($loginUser.belongorgid==0){
+			if(treeNode.id!=treeNode.belongorgid){
+				alert("不能设置学校子机构的功能！");
+				return;
+			}
+		}else{
+			if(treeNode.id==treeNode.belongorgid){
+				alert("不能设置学校根机构的功能！");
+				return;
+			}
+		}
+	}
+	location.href='$contextPath/sys/organization/funcrelation?orgid='+treeNode.id;
+}
+
+function setbatchfunc(){
+	var nodes = ztree.getCheckedNodes();
+	if(nodes.length==0){
+		alert("请至少勾选一个机构！");
+		return;
+	}
+	
+	var orgids = [];
+	for(var i=0; i<nodes.length; i++){
+		if(nodes[0].belongorgid!=nodes[i].belongorgid){
+			alert("所选机构的所属机构必须相同！");
+			return;
+		}
+		orgids.push(nodes[i].id);
+	}
+	
+	location.href='$contextPath/sys/organization/funcbatch?orgids='+orgids.join(",");
+}
+
+function importOrg(){
+	if(ztree.getCheckedNodes().length!=1){
+		alert("请勾选一个机构！");
+		return;
+	}
+	var treeNode = ztree.getCheckedNodes()[0];
+	
+	$("#discoverradio").val("$contextPath/sys/organization/upload/discover/"+treeNode.id);
+	$("#addradio").val("$contextPath/sys/organization/upload/add/"+treeNode.id);
+	$("#addradio")[0].click();
+	if(!$("#errorinfo-div").hasClass("hide")) $("#errorinfo-div").addClass("hide");
+	$("#dropzone .dz-remove").each(function(){ this.click(); });
+	$("#myModal").modal({backdrop:"static"});
+}
+
+function initDropzone (){
+    Dropzone.autoDiscover = false;
+    try {
+        myDropzone = new Dropzone("#dropzone" , {
+            paramName: "file", // The name that will be used to transfer the file
+            maxFilesize: 2, // MB
+            addRemoveLinks : true,
+            acceptedFiles: ".xls",
+            dictDefaultMessage :
+                    '<span class="bigger-150 bolder"><i class="ace-icon fa fa-caret-right red"></i> Drop files</span> to upload \
+                    <span class="smaller-80 grey">(or click)</span> <br /> \
+                    <i class="upload-icon ace-icon fa fa-cloud-upload blue fa-3x"></i>'
+            ,
+            dictResponseError: '上传文件时发生错误!',
+            //change the previewTemplate to use Bootstrap progress bars
+            previewTemplate: "<div class=\"dz-preview dz-file-preview\">\n  " +
+            "<div class=\"dz-details\">\n    " +
+            "<div class=\"dz-filename\"><span data-dz-name></span></div>\n    " +
+            "<div class=\"dz-size\" data-dz-size></div>\n    " +
+            "<img data-dz-thumbnail />\n  </div>\n  " +
+            "<div class=\"progress progress-small progress-striped active\">" +
+            "<div class=\"progress-bar progress-bar-success\" data-dz-uploadprogress></div></div>\n  " +
+            "<div class=\"dz-success-mark\"><span></span></div>\n  <div class=\"dz-error-mark\"><span></span></div>\n  " +
+            "<div class=\"dz-error-message\"><span data-dz-errormessage></span></div>\n</div>"
+            ,
+            success: function (data, message, xhr) {
+                if(message.data){
+                	$("#errorinfo-div strong").html("文件“"+data.name+"”导入失败！原因如下：");
+                	$("#errorinfo-div span").html(message.data);
+                	$("#errorinfo-div").removeClass("hide");
+                	return data.previewElement ? data.previewElement.classList.add("dz-error") : void 0;
+                }else{
+                	ztree.destroy();
+                    initZtree ();
+                	$("#errorinfo-div").addClass("hide");
+                	$("#myModal").modal('hide');
+                    return data.previewElement ? data.previewElement.classList.add("dz-success") : void 0;
+                }
+            }
+        });
+    } catch(e) {
+        alert('Dropzone.js不支持旧浏览器!');
+    }
+}
+
+function setImportMethod(target){
+	myDropzone.options.url = target.value;
+}
+</script>
+
+<div class="page-header">
+    <h1 class="page-header-h1">机构管理
+        <small>
+            <i class="ace-icon fa fa-angle-double-right"></i> 管理机构信息
+        </small>
+    </h1>
+</div>
+
+<div class="row">
+	<div class="col-sm-12" style="border-right: 1px dotted rgb(226, 226, 226); min-height: 380px;">
+		<div class="widget-box transparent ui-sortable-handle">
+			<div class="widget-header">
+				<h4 class="widget-title">机构树</h4>
+				<div class="widget-toolbar">
+		            <a href="javascript:void(0)" data-action="fullscreen"><i class="ace-icon fa fa-expand"></i>&nbsp;全屏</a>
+		            &nbsp;&nbsp;
+		            <a href="javascript:void(0)" data-action="collapse"><i class="ace-icon fa fa-chevron-up"></i>&nbsp;折叠</a>
+		        </div>
+		        <div class="action-buttons widget-toolbar">
+	                <a class="red" href="javascript:void(0)" onclick="setfunc()"><i class="ace-icon fa fa-cog bigger-130"></i>&nbsp;设置功能</a>
+	                &nbsp;&nbsp;
+	                <a class="pink" href="javascript:void(0)" onclick="setbatchfunc()"><i class="ace-icon fa fa-cog bigger-130"></i>&nbsp;批量设置功能</a>
+	            </div>
+		        <div class="action-buttons widget-toolbar">
+	                <a class="violet" href="$contextPath/download/excel/organization-import-template.xls"><i class="ace-icon glyphicon glyphicon-download bigger-130"></i>&nbsp;模板下载</a>
+	                &nbsp;&nbsp;
+	                <a class="brown" href="javascript:void(0)" onclick="importOrg()"><i class="ace-icon glyphicon glyphicon-upload bigger-130"></i>&nbsp;导入机构</a>
+	            </div>
+	            <div class="action-buttons widget-toolbar">
+	            	<a class="pink" href="javascript:void(0)" onclick="detail('insert')"><i class="ace-icon fa fa-plus-square-o bigger-130"></i>&nbsp;添加</a>
+	                &nbsp;&nbsp;
+	                <a class="green" href="javascript:void(0)" onclick="detail('update')"><i class="ace-icon fa fa-edit bigger-130"></i>&nbsp;修改</a>
+	                &nbsp;&nbsp;
+	                <a class="red" href="javascript:void(0)" onclick="deletes()"><i class="ace-icon fa fa-trash-o bigger-130"></i>&nbsp;删除</a>
+	            </div>
+			</div>
+			<div class="widget-body">
+				<div class="widget-main padding-8">
+					<div class="col-sm-6" style="border-right: 1px dotted rgb(226, 226, 226); min-height: 380px;">
+						<ul id="treeDemo" class="ztree"></ul>
+					</div>
+					<div class="col-sm-6">
+						<form class="form-horizontal" id="validation-form" name="validation-form" method="post">
+				            
+				            <div class="form-group">
+				                <label class="col-sm-3 control-label no-padding-right"> 所属机构： </label>
+				                <label class="col-sm-9" id="belongorgname"> &nbsp; </label>
+				            </div>
+				            
+				            <div class="form-group">
+				                <label class="col-sm-3 control-label no-padding-right"> 父机构： </label>
+				                <label class="col-sm-9" id="parentorgname"> &nbsp; </label>
+				            </div>
+				            
+				            <div class="form-group">
+				                <label class="col-sm-3 control-label no-padding-right"> 机构： </label>
+				                <label class="col-sm-9" id="orgname"> &nbsp; </label>
+				            </div>
+				
+				            <div class="form-group">
+				                <label class="col-sm-3 control-label no-padding-right"> 机构全名： </label>
+				                <label class="col-sm-9" id="orgfullname"> &nbsp; </label>
+				            </div>
+				            
+				            <div class="form-group">
+				                <label class="col-sm-3 control-label no-padding-right"> 显示顺序： </label>
+				                <label class="col-sm-9" id="sortid"> &nbsp; </label>
+				            </div>
+				        </form>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog" style="width: 700px">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="myModalLabel">导入机构 (请上传xls格式的文件)</h4>
+      </div>
+      <div class="modal-body">
+      	<div style="width: 260px; float: left">
+      		<div class="alert alert-danger" style="margin: 0 10px 10px 0; padding: 5px">
+				<strong>警告：“覆盖导入”</strong>会删除该机构下的所有子机构；慎用此操作！！！
+			</div>
+      		<label>
+				<input name="form-field-radio" value="add" id="addradio" type="radio" class="ace" checked onclick="setImportMethod(this)">
+				<span class="lbl"> 新增导入</span>
+			</label>
+			&nbsp;&nbsp;&nbsp;&nbsp;
+      		<label>
+				<input name="form-field-radio" value="discover" id="discoverradio" type="radio" class="ace" onclick="setImportMethod(this)">
+				<span class="lbl"> 覆盖导入</span>
+			</label>
+			<div id="errorinfo-div" class="alert alert-warning hide" style="margin: 20px 10px 10px 0; padding: 5px">
+				<strong>导入失败!</strong><br>
+				<span>&nbsp;</span>
+			</div>
+      	</div>
+        <form action="#" class="dropzone form-horizontal inline" id="dropzone" style="min-height: 260px; width: 400px;">
+            <div class="fallback">
+                <input name="file" type="file"/>
+            </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+        <!-- <button type="button" class="btn btn-primary">Save changes</button> -->
+      </div>
+    </div>
+  </div>
+</div>
+	                
+#parse("/common/south.html")

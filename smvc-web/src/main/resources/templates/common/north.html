@@ -1,0 +1,823 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta name="renderer" content="webkit">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta charset="utf-8" />
+<title>临澧县教育平台OA系统</title>
+
+<meta name="description" content="overview &amp; stats" />
+<meta name="viewport"
+	content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
+
+<!-- bootstrap & fontawesome -->
+<link rel="stylesheet"
+	href="$contextPath/static/ace/css/bootstrap.min.css" />
+<link rel="stylesheet"
+	href="$contextPath/static/ace/css/font-awesome.min.css" />
+
+
+<!-- page specific plugin styles -->
+<link rel="stylesheet"
+	href="$contextPath/static/ace/css/jquery-ui.min.css" />
+<link rel="stylesheet"
+	href="$contextPath/static/ace/css/jquery-ui.custom.min.css" />
+<link rel="stylesheet" href="$contextPath/static/ace/css/chosen.css" />
+<link rel="stylesheet" href="$contextPath/static/ace/css/datepicker.css" />
+<link rel="stylesheet"
+	href="$contextPath/static/ace/css/bootstrap-timepicker.css" />
+<link rel="stylesheet"
+	href="$contextPath/static/ace/css/daterangepicker.css" />
+<link rel="stylesheet"
+	href="$contextPath/static/ace/css/bootstrap-datetimepicker.css" />
+<link rel="stylesheet"
+	href="$contextPath/static/ace/css/colorpicker.css" />
+
+<link rel="stylesheet" href="$contextPath/static/ace/css/dropzone.css" />
+<link rel="stylesheet"
+	href="$contextPath/static/ace/css/jquery.gritter.css" />
+
+<!-- text fonts -->
+<link rel="stylesheet" href="$contextPath/static/ace/css/ace-fonts.css" />
+<!-- ace styles -->
+<link rel="stylesheet" href="$contextPath/static/ace/css/ace.min.css"
+	id="main-ace-style" />
+
+<!--[if lte IE 9]>
+		<link rel="stylesheet" href="$contextPath/static/ace/css/ace-part2.min.css" />
+        <![endif]-->
+<link rel="stylesheet"
+	href="$contextPath/static/ace/css/ace-skins.min.css" />
+<link rel="stylesheet"
+	href="$contextPath/static/ace/css/ace-rtl.min.css" />
+
+<!--[if lte IE 9]>
+		<link rel="stylesheet" href="$contextPath/static/ace/css/ace-ie.min.css" />
+		<![endif]-->
+
+<!-- inline styles related to this page -->
+
+
+<!-- ace settings handler -->
+<script src="$contextPath/static/ace/js/ace-extra.min.js"></script>
+
+<!-- HTML5shiv and Respond.js for IE8 to support HTML5 elements and media queries -->
+
+<!--[if lte IE 8]>
+		<script src="$contextPath/static/ace/js/html5shiv.min.js"></script>
+		<script src="$contextPath/static/ace/js/respond.min.js"></script>
+		<![endif]-->
+
+<!-- ******************************************************************** -->
+
+<!-- basic scripts -->
+
+<!--[if !IE]> -->
+<script type="text/javascript">
+		window.jQuery || document.write("<script src='$contextPath/static/ace/js/jquery.min.js'>"+"<"+"/script>");
+		</script>
+<!-- <![endif]-->
+
+<!--[if IE]>
+		<script type="text/javascript">
+		window.jQuery || document.write("<script src='$contextPath/static/ace/js/jquery1x.min.js'>"+"<"+"/script>");
+		</script>
+		<![endif]-->
+<script type="text/javascript">
+		if('ontouchstart' in document.documentElement) document.write("<script src='$contextPath/static/ace/js/jquery.mobile.custom.min.js'>"+"<"+"/script>");
+		</script>
+<script src="$contextPath/static/ace/js/bootstrap.min.js"></script>
+
+<!-- page specific plugin scripts -->
+
+<!--[if lte IE 8]>
+		<script src="$contextPath/static/ace/js/excanvas.min.js"></script>
+		<![endif]-->
+
+
+
+
+<script src="$contextPath/static/ace/js/jquery-ui.custom.min.js"></script>
+<script src="$contextPath/static/ace/js/jquery.ui.touch-punch.min.js"></script>
+<script src="$contextPath/static/ace/js/chosen.jquery.min.js"></script>
+
+<script
+	src="$contextPath/static/ace/js/date-time/bootstrap-datepicker.min.js"></script>
+<script
+	src="$contextPath/static/ace/js/date-time/bootstrap-timepicker.min.js"></script>
+<script src="$contextPath/static/ace/js/date-time/moment.min.js"></script>
+<script
+	src="$contextPath/static/ace/js/date-time/daterangepicker.min.js"></script>
+<script
+	src="$contextPath/static/ace/js/date-time/bootstrap-datetimepicker.min.js"></script>
+<script src="$contextPath/static/ace/js/bootstrap-colorpicker.min.js"></script>
+<script src="$contextPath/static/ace/js/jquery.knob.min.js"></script>
+<script src="$contextPath/static/ace/js/jquery.autosize.min.js"></script>
+<script
+	src="$contextPath/static/ace/js/jquery.inputlimiter.1.3.1.min.js"></script>
+<script src="$contextPath/static/ace/js/jquery.maskedinput.min.js"></script>
+<script src="$contextPath/static/ace/js/bootstrap-tag.min.js"></script>
+<script src="$contextPath/static/ace/js/typeahead.jquery.min.js"></script>
+
+<script src="$contextPath/static/ace/js/jquery.dataTables.min.js"></script>
+<script src="$contextPath/static/ace/js/jquery.dataTables.bootstrap.js"></script>
+
+<script
+	src="$contextPath/static/ace/js/fuelux/data/fuelux.tree-sample-demo-data.js"></script>
+<script src="$contextPath/static/ace/js/fuelux/fuelux.tree.min.js"></script>
+
+<script src="$contextPath/static/ace/js/bootbox.min.js"></script>
+
+<script src="$contextPath/static/ace/js/jquery.validate.min.js"></script>
+<script src="$contextPath/static/ace/js/dropzone.min.js"></script>
+
+<link rel="stylesheet"
+	href="$contextPath/static/plugins/zTree/css/zTreeStyle/zTreeStyle.css"
+	type="text/css">
+<script type="text/javascript"
+	src="$contextPath/static/plugins/zTree/js/jquery.ztree.all-3.5.min.js"></script>
+
+<!-- ace scripts -->
+<script src="$contextPath/static/ace/js/ace-elements.min.js"></script>
+<script src="$contextPath/static/ace/js/ace.min.js"></script>
+
+
+<!-- 自己写的公共js或者css文件   因为搞不清有些什么依赖， 所以放到最后来 -->
+<script src="$contextPath/static/js/common.js"></script>
+<link rel="stylesheet" href="$contextPath/static/css/common.css" />
+
+<!-- inline scripts related to this page -->
+<script type="text/javascript">
+			jQuery(function($) {
+				$(window).keydown(function(e){
+					 if(e.keyCode==27){
+						 window.clearInterval(t);
+					 }
+				});
+				
+				var menulist = [];
+			    #foreach($func in $authfuncs) #if($func.functype!='2' && ($func.allowable || $loginUser.usercode=='admin'))
+			    menulist.push({id:'$!func.id',parentid:'$!func.parentid',funcname:'$!func.funcname', funcaction:'$!{contextPath}$!{func.funcaction}',funcicon:'$!func.funcicon'});
+			    #end #end
+				
+				var rootmenu;
+				for(var i in menulist){
+					if(menulist[i].parentid==''){
+						rootmenu = menulist[i];
+					}else{
+						for(var j in menulist){
+							if(menulist[j].id == menulist[i].parentid){
+								if(menulist[j].childrenfunc==null)
+									menulist[j].childrenfunc = [];
+								menulist[j].childrenfunc.push(menulist[i]);
+								break;
+							}
+						}
+					}
+				}
+				
+				if(rootmenu) loop(rootmenu, $("#menutree"));
+				
+				initMenuInfo();
+				
+				/*if(!$("#ace-settings-navbar")[0].checked){
+					$("#ace-settings-navbar").click();
+				}
+				if(!$("#ace-settings-compact")[0].checked){
+					$("#ace-settings-compact").click();
+				}*/
+				
+				getMessageMembers();
+
+                unReadNotification();
+			});
+
+            function oneNoti(notid){
+                if(notid!=null&& $.trim(notid)!=''&&notid!=undefined&&notid!='undefined'){
+                    window.location.href="$contextPath/oa/notification/notiById?id="+notid;
+                }
+            }
+            /**
+             * 获取当前用户的未读通知
+             */
+            function unReadNotification(){
+                /*$.ajax({
+                    url: "$contextPath/oa/notification/unRead",
+                    dataType: 'json',
+                    success: function (data) {
+                        $("#unread_ul").html('');
+                        var viewNum=3;
+                        var str="";
+                        if(data&&data.length>0){
+                            var len=data.length;
+                            $("#showUnRead").html(len);
+                            $("#unread_ul").append("<li class='dropdown-header'><i class='ace-icon fa fa-exclamation-triangle'></i>"+len+"条未读通知</li>");
+
+                            if(len>viewNum) len=viewNum;
+
+                            for(var a=0;a<len;a++){
+                                str+="<li><a href='javascript:void(0);' onclick='oneNoti("+data[a].notificationid+");'>"+data[a].title+"</a></li>";
+                            }
+                        }
+                        str+="<li class='dropdown-footer'>"+
+                                "<a href='$contextPath/oa/notification/display'> 查看所有通知 <i class='ace-icon fa fa-arrow-right'></i></a>"+
+                                "</li>";
+                        $("#unread_ul").append(str);
+                    }
+                });*/
+            }
+			
+			function loop (parentfunc, dom){
+				var childrenfunc = parentfunc.childrenfunc;
+				for(var i in childrenfunc){
+					if(childrenfunc[i].childrenfunc && childrenfunc[i].childrenfunc.length>0){
+						dom.append('<li class="hsub">'+
+							'<a href="#" class="dropdown-toggle">'+
+								'<i class="menu-icon fa '+childrenfunc[i].funcicon+'"></i>'+
+								'<span class="menu-text"> '+childrenfunc[i].funcname+' </span>'+
+								'<b class="arrow fa fa-angle-down"></b>'+
+							'</a>'+
+							'<b class="arrow"></b>'+
+							'<ul class="submenu"></ul>'+
+						'</li>');
+						loop (childrenfunc[i], dom.children("li:last").children("ul"));
+					}else{
+						dom.append('<li class="">'+
+							'<a href="'+childrenfunc[i].funcaction+'">'+
+								'<i class="menu-icon fa '+childrenfunc[i].funcicon+'"></i>'+
+								'<span class="menu-text"> '+childrenfunc[i].funcname+' </span>'+
+							'</a>'+
+							'<b class="arrow"></b>'+
+						'</li>');
+					}
+				}
+			}
+			
+			// 初始化页面的效果
+			function initMenuInfo(){
+				var pathname = window.location.pathname;
+				var $a = $("#menutree a[href='"+pathname+"']");
+				
+				if($a.length==0 && '$!{dual.pathname}'!=''){
+					pathname = '$!{dual.pathname}';
+					$a = $("#menutree a[href='"+pathname+"']");
+				}
+				
+				if($a.length==0){
+					pathname = window.location.pathname;
+					var alist = $("#menutree a");
+					for(var i=0; i<alist.length; i++){
+						if(pathname.indexOf($(alist[i]).attr("href")) != -1){
+							pathname = $(alist[i]).attr("href");
+							break;
+						}
+					}
+					$a = $("#menutree a[href='"+pathname+"']");
+				}
+				
+				if($a.length>0){
+					setHighLightStyle4Menu($a.parent("li"));
+					setTitle($a, true);
+				}
+			}
+			
+			// 高亮显示左边的菜单
+			function setHighLightStyle4Menu($li){
+				if($li.children("ul").length>0) $li.addClass("active open");
+				else $li.addClass("active");
+				
+				var $pli = $li.parent("ul").parent("li");
+				if($pli.length==1){
+					setHighLightStyle4Menu($pli);
+				}
+			}
+			
+			// 高亮显示顶部的导航
+			function setTitle($a, active){
+				if(active){
+					$("#titleul").prepend('<li class="active">'+$a.text()+'</li>');
+				}else{
+					$("#titleul").prepend('<li><a href="#">'+$a.text()+'</a>&nbsp;</li>');
+				}
+				
+				var $pa = $a.parent("li").parent("ul").siblings("a");
+				if($pa.length>0){
+					setTitle($pa, false);
+				}else{
+					$("#titleul li:first").prepend('<i class="ace-icon fa fa-home home-icon"></i>');
+				}
+			}
+			
+			//获取成员列表
+			function getMessageMembers(){
+				$.ajax({
+                    url: "$contextPath/oa/message/getMessageMembers?",
+                    dataType: 'json',
+                    success: function (data) {
+						var ops = "";
+						for (var tab in data) {
+							var img = '';
+							if(data[tab].imgurl && data[tab].imgurl !='' &&  data[tab].imgurl !='null'){
+								img = '$!{nginx_filepath}' + data[tab].imgurl;
+							}else{
+								img = '$contextPath/static/ace/avatars/avatar2.png';
+							}
+							ops += '<li class="hsub"><a href="#"'+
+								'onclick="onLineMessage('+data[tab].id+',\''+data[tab].username+'\',\'' + img +'\')"> ' +
+								'<img class="nav-user-photo" style="width:32px; height:32px;"'+
+								'alt="" src="'+img+'"><span class="user-info">'+data[tab].username+'</span></a></li>';
+						}
+						$("#membersList").append(ops);
+                    }
+                });
+			}
+			
+			var t;
+			var message_dialog;
+			//聊天弹窗
+			function onLineMessage(id, name ,img,fn) {
+                $.ajax({
+                    async:false,
+                    url:"$contextPath/index/messageDialog",
+					data : {'receiveId' : id ,'img':img},
+                    type:'POST',
+                    dataType:'HTML',
+                    success:function( data ){
+                        message_dialog = bootbox.dialog({
+                            title: '<i class="fa fa-comments-o bigger-130"></i> 正在与 ' + name + ' 对话',
+                            closeButton:false,
+                            message: data,
+                            buttons: {
+                                "closebtn": {
+                                    "label": "关 闭",
+                                    "className": "btn btn-sm",
+                                    "callback": function () {
+                                        window.clearInterval(t);
+                                        //message_dialog.modal("hide");
+                                        if(fn){
+                                            getdataForChat();
+                                        }
+                                    }
+                                },
+                                "sendbtn": {
+                                    "label": "发 送",
+                                    "className": "btn btn-primary btn-sm testta",
+                                    "callback": function () {
+                                        // window.clearInterval(t);
+                                        sendMessage(id, name ,img);
+                                        return false;
+                                    }
+                                }
+                            }
+                        })
+                        $(".testta").attr("id","teatui");
+                    }
+                });
+
+                $("#receiveId").val(id);
+
+			}
+			
+			function onPushMessage(id, name ,img){
+				onLineMessage(id, name ,img);
+			}
+			//发送消息
+			function sendMessage(id, name ,img) {
+				//var id = $("#receiveId").val();
+				var message = $("#messageContent").val();
+				if(!message){
+					myGritterError("您不能发送空的消息！");
+					return false;
+				}
+
+                var myimg ='';   // 用户自己头像
+                if('$!loginUser.imgurl' && '$!loginUser.imgurl' !=''){
+                    myimg = '${nginx_filepath}$!{loginUser.imgurl}';
+                }else{
+                    myimg = '$contextPath/static/ace/avatars/avatar2.png';
+                }
+
+				var str = '<div align="left"><p  align="right"> '
+						+ message
+						+ '<img class="nav-user-photo" alt="" style="width:40px; height:40px;" src="'+myimg+'">'
+						+ '</p></div>';
+				$.ajax({
+		                    url: "$contextPath/oa/message/saveMessage?recipient="+id +"&content="+message+"&name="+name+"&img="+img,
+		                    dataType: 'json',
+		                    success: function (data) {
+		                    	$("#onLineMessage").append(str);
+		        			    var mai=document.getElementById('onLineMessage');
+		        			    mai.scrollTop=mai.scrollHeight;
+		        				$("#messageContent").val("");
+		                    }
+		                }); 
+			}
+			
+			function changeVi(s){
+				if(s==1){
+					$("#membersList").attr("style","display:none");
+					$("#menutree").attr("style","");
+				}else if(s==2){
+					$("#menutree").attr("style","display:none");
+					$("#membersList").attr("style","");
+				}
+			}
+		</script>
+
+</head>
+
+<body class="no-skin">
+	<div id="navbar" class="navbar navbar-default">
+		<script type="text/javascript">
+				try{ace.settings.check('navbar' , 'fixed')}catch(e){}
+			</script>
+
+		<div class="navbar-container" id="navbar-container">
+			<button type="button" class="navbar-toggle menu-toggler pull-left"
+				id="menu-toggler">
+				<span class="sr-only">切换</span> <span class="icon-bar"></span> <span
+					class="icon-bar"></span> <span class="icon-bar"></span>
+			</button>
+
+			<div class="navbar-header pull-left">
+				<a href="#" class="navbar-brand"> <small> <i
+						class="fa fa-leaf"></i>临澧县教育平台OA系统
+				</small>
+				</a>
+			</div>
+
+			<div class="navbar-buttons navbar-header pull-right"
+				role="navigation">
+				<ul class="nav ace-nav">
+
+                    <li class="purple">
+                        <a data-toggle="dropdown"class="dropdown-toggle" href="#">
+                            <i class="ace-icon fa fa-bell icon-animated-bell"></i>
+                            <span class="badge badge-important" id="showUnRead">0</span>
+                    </a>
+                        <ul class="dropdown-menu-right dropdown-navbar navbar-pink dropdown-menu dropdown-caret dropdown-close" id="unread_ul">
+                            <li class="dropdown-header">
+                                <i class='ace-icon fa fa-bell'></i>您暂时没有新的通知
+                            </li>
+                            <li class="dropdown-footer">
+                            <a href="$!contextPath/oa/notification/display"> 查看所有通知 <i class="ace-icon fa fa-arrow-right"></i></a></li>
+							<!--<li>
+                                <a href="#">
+                                    <i class="btn btn-xs btn-primary fa fa-user"></i> 12月8日会议纪要
+							    </a>
+                            </li>
+
+							<li>
+                                <a href="#">
+									<div class="clearfix">
+										<span class="pull-left"> <i
+											class="btn btn-xs no-hover btn-success fa fa-shopping-cart"></i>
+											老师建议
+										</span> <span class="pull-right badge badge-success">+8</span>
+									</div>
+							    </a>
+                            </li>
+
+							<li class="dropdown-footer">
+                                <a href="#"> 查看所有通知 <i	class="ace-icon fa fa-arrow-right"></i></a>
+							</li>-->
+						</ul>
+                    </li>
+
+                    <li id="oa_mail_push" class="green">
+                        <a id="oa_mail_push_count" data-toggle='dropdown' class='dropdown-toggle' href='#'>
+                            <i class='ace-icon fa fa-envelope icon-animated-vertical'></i>
+                            <span class='badge badge-success'>0</span>
+                        </a>
+                        <ul id="oa_mail_push_detail" class="dropdown-menu-right dropdown-navbar dropdown-menu dropdown-caret dropdown-close">
+                            <li class='dropdown-header'><i class='ace-icon fa fa-exclamation-triangle'></i>您暂时没有新的邮件</li>
+                            <li class='dropdown-footer'>
+                                <a href='$contextPath/oa/email/inbox.html?flag=inbox'> 查看所有邮件 <i class='ace-icon fa fa-arrow-right'></i></a>
+                            </li>
+                        </ul>
+                    </li>
+                    <li id="oa_message_push" class="red">
+                        <a id="oa_message_push_count" data-toggle='dropdown' class='dropdown-toggle' href='#'>
+                            <i class='ace-icon fa fa-comments icon-animated-vertical'></i>
+                            <span class='badge badge-important'>0</span>
+                        </a>
+                        <ul id="oa_message_push_detail"  class='dropdown-menu-right dropdown-navbar dropdown-menu dropdown-caret dropdown-close'>
+                        	<li class='dropdown-header'><i class='ace-icon fa fa-exclamation-triangle'></i>您暂时没有新的消息</li>
+                        </ul>
+                    </li>
+					<li class="light-blue"><a data-toggle="dropdown" href="#"
+						class="dropdown-toggle"> <img class="nav-user-photo"
+							src="#if($!loginUser.imgurl && $!loginUser.imgurl !='')${nginx_filepath}$!{loginUser.imgurl} #else $contextPath/static/ace/avatars/avatar2.png #end"
+
+							alt="Jason's Photo" /> <span class="user-info"> <small>欢迎您，</small>
+								$!loginUser.username
+						</span> <i class="ace-icon fa fa-caret-down"></i>
+						<div id="push_userid" class="hide" >$!loginUser.id</div>
+					</a>
+
+						<ul
+							class="user-menu dropdown-menu-right dropdown-menu dropdown-yellow dropdown-caret dropdown-close">
+							<li><a href="$contextPath/userprofile"> <i class="ace-icon fa fa-user"></i>
+									个人设置
+							</a></li>
+
+							<li class="divider"></li>
+
+							<li><a href="$contextPath/logout"> <i
+									class="ace-icon fa fa-power-off"></i> 系统登出
+							</a></li>
+						</ul></li>
+				</ul>
+			</div>
+		</div>
+	</div>
+
+	<div class="main-container" id="main-container">
+		<script type="text/javascript">
+				try{ace.settings.check('main-container' , 'fixed')}catch(e){}
+			</script>
+
+		<div id="sidebar" class="sidebar responsive">
+			<script type="text/javascript">
+					try{ace.settings.check('sidebar' , 'fixed')}catch(e){}
+				</script>
+
+			<div class="sidebar-shortcuts" id="sidebar-shortcuts">
+				<div class="sidebar-shortcuts-large" id="sidebar-shortcuts-large">
+					<button class="btn btn-success width-45" onclick="changeVi(1)">
+						<i class="ace-icon fa fa-signal"></i>菜单
+					</button>
+					<button class="btn btn-info width-45" onclick="changeVi(2)">
+						<i class="ace-icon fa fa-users"></i>成员列表
+					</button>
+##					<button class="btn btn-warning">
+##						<i class="ace-icon fa fa-users"></i>
+##					</button>
+					#*<button class="btn btn-danger">
+						<i class="ace-icon fa fa-cogs"></i>
+					</button>*#
+				</div>
+
+				<div class="sidebar-shortcuts-mini" id="sidebar-shortcuts-mini">
+					<span class="btn btn-success"></span> <span class="btn btn-info"></span>
+					<span class="btn btn-warning"></span> <span class="btn btn-danger"></span>
+				</div>
+			</div>
+
+			<ul class="nav nav-list" id="menutree" >
+				<li class="">
+					<a href="/eduz100/index"><i class="menu-icon fa fa-desktop"></i><span class="menu-text"> 首页 </span></a>
+					<b class="arrow"></b>
+				</li>
+			</ul>
+
+
+			<ul class="nav nav-list" id="membersList" style="display: none;"
+				style="overflow: auto; max-height: 1000px" >
+
+			</ul>
+
+
+			<div class="sidebar-toggle sidebar-collapse" id="sidebar-collapse">
+				<i class="ace-icon fa fa-angle-double-left"
+					data-icon1="ace-icon fa fa-angle-double-left"
+					data-icon2="ace-icon fa fa-angle-double-right"></i>
+			</div>
+
+			<script type="text/javascript">
+					try{ace.settings.check('sidebar' , 'collapsed')}catch(e){}
+				</script>
+		</div>
+
+		<div class="main-content">
+			<div class="breadcrumbs" id="breadcrumbs">
+				<script type="text/javascript">
+						try{ace.settings.check('breadcrumbs' , 'fixed')}catch(e){}
+					</script>
+
+				<ul class="breadcrumb" id="titleul">
+				</ul>
+
+				<!-- <div class="nav-search" id="nav-search">
+						<form class="form-search">
+							<span class="input-icon">
+								<input type="text" placeholder="搜索 ..." class="nav-search-input" id="nav-search-input" autocomplete="off" />
+								<i class="ace-icon fa fa-search nav-search-icon"></i>
+							</span>
+						</form>
+					</div> -->
+			</div>
+
+			<div class="page-content">
+				<div class="ace-settings-container" id="ace-settings-container"
+					style="display: none;">
+					<div class="btn btn-app btn-xs btn-warning ace-settings-btn"
+						id="ace-settings-btn">
+						<i class="ace-icon fa fa-cog bigger-150"></i>
+					</div>
+					<div class="ace-settings-box clearfix" id="ace-settings-box">
+						<div class="pull-left width-50">
+							<div class="ace-settings-item">
+								<div class="pull-left">
+									<select id="skin-colorpicker" class="hide">
+										<option data-skin="no-skin" value="#438EB9">#438EB9</option>
+										<option data-skin="skin-1" value="#222A2D">#222A2D</option>
+										<option data-skin="skin-2" value="#C6487E">#C6487E</option>
+										<option data-skin="skin-3" value="#D0D0D0">#D0D0D0</option>
+									</select>
+								</div>
+								<span>&nbsp; Choose Skin</span>
+							</div>
+							<div class="ace-settings-item">
+								<input type="checkbox" class="ace ace-checkbox-2"
+									id="ace-settings-navbar" /> <label class="lbl"
+									for="ace-settings-navbar"> Fixed Navbar</label>
+							</div>
+							<div class="ace-settings-item">
+								<input type="checkbox" class="ace ace-checkbox-2"
+									id="ace-settings-sidebar" /> <label class="lbl"
+									for="ace-settings-sidebar"> Fixed Sidebar</label>
+							</div>
+							<div class="ace-settings-item">
+								<input type="checkbox" class="ace ace-checkbox-2"
+									id="ace-settings-breadcrumbs" /> <label class="lbl"
+									for="ace-settings-breadcrumbs"> Fixed Breadcrumbs</label>
+							</div>
+							<div class="ace-settings-item">
+								<input type="checkbox" class="ace ace-checkbox-2"
+									id="ace-settings-rtl" /> <label class="lbl"
+									for="ace-settings-rtl"> Right To Left (rtl)</label>
+							</div>
+							<div class="ace-settings-item">
+								<input type="checkbox" class="ace ace-checkbox-2"
+									id="ace-settings-add-container" /> <label class="lbl"
+									for="ace-settings-add-container"> Inside <b>.container</b>
+								</label>
+							</div>
+						</div>
+						<div class="pull-left width-50">
+							<div class="ace-settings-item">
+								<input type="checkbox" class="ace ace-checkbox-2"
+									id="ace-settings-hover" /> <label class="lbl"
+									for="ace-settings-hover"> Submenu on Hover</label>
+							</div>
+							<div class="ace-settings-item">
+								<input type="checkbox" class="ace ace-checkbox-2"
+									id="ace-settings-compact" /> <label class="lbl"
+									for="ace-settings-compact"> Compact Sidebar</label>
+							</div>
+							<div class="ace-settings-item">
+								<input type="checkbox" class="ace ace-checkbox-2"
+									id="ace-settings-highlight" /> <label class="lbl"
+									for="ace-settings-highlight"> Alt. Active Item</label>
+							</div>
+						</div>
+					</div>
+				</div>
+
+                <div id="sendMail_div" class="modal fade in" tabindex="-1" aria-hidden="false" style="display: none;">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header no-padding">
+                                <div class="table-header">
+                                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                                        <span class="white" onclick="closeSendMail_div();">×</span>
+                                    </button>
+                                    正在给<span id="recievename"></span>发送邮件
+                                </div>
+                            </div>
+                            <div id="close_maildiv">
+                            <div class="modal-body no-padding" style="margin-left: -15%;">
+                                <form class="form-horizontal" role="form" id="sendMail_form">
+                                    <input type="hidden" name="userids" class="recipient" />
+                                    <input type="hidden" name="content" class="contnet" />
+                                    <br>
+                                    <div class="form-group">
+                                        <label class="col-sm-3 control-label no-padding-right">
+                                            <span class="red">*</span> 邮件标题
+                                        </label>
+
+                                        <div class="col-sm-4">
+                                            <input type="text" style="width:100%"
+                                                   class="input-mini spinner-input form-control" name="title">
+
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label class="col-sm-3 control-label no-padding-right">
+                                            <span class="red">*</span> 邮件内容
+                                        </label>
+
+                                        <div class="col-sm-4">
+                                            <textarea id="subject" name="subject" class="limited" maxlength="512"
+                                                      style="height: 100%; width: 80%;margin-left: 10%;"></textarea>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+
+                            <div class="modal-footer no-margin-top">
+                                <p class="pull-right">
+                                    <button class="btn btn-sm btn-success" id="createMail">
+                                        <i class="ace-icon fa fa-floppy-o"></i>
+                                        发送
+                                    </button>
+
+                                    <button class="btn btn-sm btn-danger " data-dismiss="modal" onclick="closeSendMail_div();" id="closeDiv">
+                                        <i class="ace-icon fa fa-times"></i>
+                                        取消
+                                    </button>
+                                </p>
+                            </div>
+                            </div>
+                            <div class="modal-footer no-margin-top" style="display: none;" id="success_mail">
+                                <p class="pull-left">
+                                    邮件发送成功!!!
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <script type="text/javascript">
+                    $(document).keydown(function(event){
+                        if(event.keyCode==27){
+                            closeSendMail_div();
+                        }
+                    });
+
+                    //邮箱弹窗
+                    function mailBox(recieve,name) {
+
+                        CKEDITOR.replace('subject', {
+                            allowedContent: true,
+                            toolbar: [
+                                ['Bold', 'Italic', 'Underline', 'Strike', 'TextColor', '-', 'NumberedList', 'BulletedList', '-', '-', 'Smiley', 'SpecialChar']
+                            ],
+                            height: 100, width: 480
+                        });
+
+                        $("#recievename").html(name);
+                        $('#sendMail_form').find("input[name=userids]").val(recieve);
+                        $("#close_maildiv").show();
+                        $("#success_mail").hide();
+                        $("#sendMail_div").modal("show");
+                    }
+
+                    function closeSendMail_div(){
+
+                        $("input[name=userids]").val('');
+                        $("input[name=contnet]").val('');
+                        $("input[name=title]").val('');
+                        if(CKEDITOR.instances["subject"]){
+                            CKEDITOR.instances["subject"].setData('');
+                            CKEDITOR.instances["subject"].destroy();
+                        }
+
+                    }
+
+
+                    var tt;
+                    $("#createMail").on("click",function(){
+
+                        var title=$("input[name=title]").val();
+                        if(title==null|| $.trim(title)==''){
+                            myGritterError("请输入邮件标题","提示",1000);
+                            return false;
+                        }
+
+                        var content=CKEDITOR.instances["subject"].getData();
+                        $("#sendMail_form :input[name=content]").val(content);
+                        if(content==null|| $.trim(content)==''){
+                            myGritterError("请输入邮件内容","提示",1000);
+                            return false;
+                        }
+                        var userids=$("input[name=userids]").val();
+                        $.ajax({
+                            url:"$contextPath/index/sendMail",
+                            data:{
+                                title:title,content:content,userids:userids
+                            },
+                            datatype:'json',
+                            success:function(data){
+                                closeSendMail_div();
+                                if(data){
+                                    $("#close_maildiv").hide();
+                                    $("#success_mail").show();
+                                }else{
+                                    $("#close_maildiv").hide();
+                                    $("#success_mail").find("p").html("发送失败,请稍后再试");
+                                    $("#success_mail").show();
+                                }
+                                setTimeout("closeDiv_mail()", 1000);
+                            }
+                        });
+                    });
+
+                    function closeDiv_mail(){
+                        $("#closeDiv").click();
+                    }
+
+                </script>
+
+				<div class="page-content-area">

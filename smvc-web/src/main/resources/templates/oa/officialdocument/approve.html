@@ -1,0 +1,277 @@
+<!-- 审批文件 -->
+#parse("/common/north.html")
+
+
+<script src="$contextPath/static/ace/js/jquery.gritter.min.js"></script>
+
+<style>
+    .padding-top-20 {
+        padding-top: 20px;
+    }
+</style>
+
+<div class="page-header">
+    <h1>
+
+        #if(${officialdocument.status} == 1)
+            等待审批
+        #elseif(${officialdocument.status} == 2)
+            等待签发
+        #elseif(${officialdocument.status} == 3)
+            等待签收
+        #elseif(${officialdocument.status} == 4)
+            完成签收
+        #elseif(${officialdocument.status} == 5)
+            已被驳回
+        #end
+        <small>
+        </small>
+    </h1>
+</div>
+
+<div class="col-xs-12">
+
+    <dl style="padding-left: 50px; padding-right: 50px;">
+        <dt></dt>
+        <dd>
+            <h4>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;${officialdocument.title}</h4>
+            <hr/>
+        </dd>
+
+        #if(${officialdocument.content} && !$null.isNull($!{officialdocument.content}) && ${officialdocument.content} != "")
+            <dt></dt>
+            <dd>
+                <div class="row">
+                    <div class="col-xs-12">
+                        <blockquote>
+                            <p class="lighter line-height-125" style="font-family: 'Open Sans'; font-size: 13px; color: #393939; line-height: 1.5;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                $!{officialdocument.content}
+                            </p>
+                        </blockquote>
+                    #*<small>
+                        Someone famous
+                        <cite title="Source Title">Source Title</cite>
+                    </small>*#
+                    </div>
+                </div>
+            </dd>
+        #end
+
+    </dl>
+    <dl class="dl-horizontal">
+        <dt class="">发布人</dt>
+        <dd class="">$!{officialdocument.username}</dd>
+
+        <dt class="padding-top-20">发布部门</dt>
+        <dd class="padding-top-20">$!{officialdocument.orgname}</dd>
+
+        <dt class="padding-top-20">提交时间</dt>
+        <dd class="padding-top-20">$!{officialdocument.commitdateStr}</dd>
+
+        <dt class="padding-top-20">提交到</dt>
+        <dd class="padding-top-20">
+            #if(${officialdocument.delivertype}==2)
+                $!{org.orgname}
+            #elseif(${officialdocument.delivertype}==1)
+                $!{user.username}
+                （
+                #foreach($orgObj in $orgList)
+                    #if($velocityCount != 1)
+                        ，
+                    #end
+                    $!{orgObj.orgname}
+                #end
+                ）
+            #end
+        </dd>
+
+        <dt class="padding-top-20">文件</dt>
+        <dd class="padding-top-20">
+            <ul class="list-unstyled">
+
+                #foreach($fileitem in $officialdocumentFileList)
+                    <li class="text-primary" id="fileitem_li_${fileitem.id}">
+                        <i class="ace-icon fa fa-caret-right blue"></i>
+
+                        #if($fileitem.suffix == 'doc' || $fileitem.suffix == 'docx')
+                            <i class="fa fa-file-word-o"></i>
+                        #elseif($fileitem.suffix == 'xls' || $fileitem.suffix == 'xlsx')
+                            <i class="fa fa-file-excel-o"></i>
+                        #elseif($fileitem.suffix == 'pdf')
+                            <i class="fa fa-file-pdf-o"></i>
+                        #elseif($fileitem.suffix == 'txt')
+                            <i class="fa fa-file-text-o"></i>
+                        #elseif($fileitem.suffix == 'ppt' || $fileitem.suffix == 'pptx')
+                            <i class="fa fa-file-powerpoint-o"></i>
+                        #else
+                            <i class="fa fa-file-o"></i>
+                        #end
+                        $fileitem.filename
+
+                        <div class="action-buttons inline">
+                            &nbsp;&nbsp;
+                            <a class="purple" href="javascript:void(0);" onclick="preview($fileitem.id)" title="预览" data-rel="tooltip" data-placement="bottom">
+                                <i class="ace-icon glyphicon glyphicon-search bigger-110"></i>
+                            </a>
+                            &nbsp;
+                            #if(${fileitem.sealpath} && ${fileitem.sealpath}!='')
+                                <a class="purple" href="$!nginx_filepath${fileitem.sealpath}" onclick="" title="下载" data-rel="tooltip" data-placement="bottom">
+                                    <i class="ace-icon fa fa-download bigger-110"></i>
+                                </a>
+                            #else
+                                <a class="purple" href="$!nginx_filepath${fileitem.filepath}" onclick="" title="下载" data-rel="tooltip" data-placement="bottom">
+                                    <i class="ace-icon fa fa-download bigger-110"></i>
+                                </a>
+                            #end
+                        </div>
+                    </li>
+                #end
+
+            </ul>
+        </dd>
+
+        <dt class="padding-top-20">重要等级</dt>
+        <dd class="padding-top-20">
+            #foreach($foo in [1..${officialdocument.importantlevel}])
+                <i class="fa fa-star orange"></i>
+            #end
+            #set($arr=5-$officialdocument.importantlevel)
+            #if($arr !=0)
+
+                #foreach($foo in [1..$arr])
+                    <i class="fa fa-star-o orange"></i>
+                #end
+            #end
+            #*<i class="fa fa-star orange"></i>
+            <i class="fa fa-star orange"></i>
+            <i class="fa fa-star orange"></i>
+            <i class="fa fa-star-o orange"></i>*#
+        </dd>
+
+        <dt class="padding-top-20">时效性</dt>
+        <dd class="padding-top-20">
+            #if($officialdocument.timelinessflag == 1)
+                <i class="ace-icon fa fa-exclamation-triangle orange" ></i> 截止日期： ${officialdocument.lastdateStr}
+            #elseif ($officialdocument.timelinessflag == 0)
+                不具
+            #end
+
+        </dd>
+
+        <dt class="padding-top-20">当前状态</dt>
+        <dd class="padding-top-20">
+            #if(${officialdocument.status} == 1)
+                <span class="label label-warning arrowed-right arrowed-in"> 待审批 </span>
+            #elseif(${officialdocument.status} == 2)
+                <span class="label label-info arrowed-right arrowed-in"> 待签发 </span>
+            #elseif(${officialdocument.status} == 3)
+                <span class="label label-purple arrowed-right arrowed-in"> 待签收 </span>
+            #elseif(${officialdocument.status} == 4)
+                <span class="label label-success arrowed-in arrowed-in-right"> 已签收 </span>
+            #elseif(${officialdocument.status} == 5)
+                <span class="label label-danger arrowed arrowed-in-right"> 被驳回 </span>
+            #end
+        </dd>
+
+        <dt class="padding-top-20">流转记录</dt>
+        <dd class="padding-top-20">
+
+            #foreach ($deliver in ${deliverList})
+                <div class="itemdiv dialogdiv">
+                    <div class="user">
+                        <img alt="" src="$contextPath/static/ace/avatars/avatar2.png">
+                    </div>
+
+                    <div class="body">
+                        <div class="time">
+                            <i class="ace-icon fa fa-clock-o"></i>
+                            <span class="blue">$!{deliver.deliverdate}</span>
+                        </div>
+
+                        <div class="name">
+                            <a href="#">$!{deliver.username}</a>
+                            &nbsp;
+                            <span class="badge badge-info">$!{deliver.orgname}</span>
+                        </div>
+                        <div class="text">
+                            <span class="orange">操作：&nbsp;&nbsp;&nbsp;</span>
+                            #if(${deliver.changeflag} == 0 && ${deliver.changestatus} == 1)
+                                <i class="ace-icon fa fa-share bigger-110"></i>移交 至<a href="#">$!{deliver.deliverorgname}$!{deliver.deliverusername}</a>
+
+                            #elseif(${deliver.changeflag} == 1 && ${deliver.changestatus} == 1)
+                                <i class="ace-icon fa fa-share blue bigger-110"></i> 提交 至<a href="#">$!{deliver.deliverorgname}$!{deliver.deliverusername}</a>
+
+                            #elseif(${deliver.changeflag} == 1 && ${deliver.changestatus} == 2)
+                                <i class="ace-icon fa fa-circle green"></i> 审批通过
+
+                            #elseif(${deliver.changeflag} == 1 && ${deliver.changestatus} == 3)
+                                <i class="ace-icon fa fa-share green bigger-110"></i> 签发 至<a href="#">$!{deliver.deliverorgname}$!{deliver.deliverusername}</a>
+
+                            #elseif(${deliver.changestatus} == 4)
+                                <i class="ace-icon fa fa-check bigger-110 green"></i> 签收
+                                #if(${deliver.changeflag} == 1)
+                                    &nbsp;&nbsp;&nbsp;至此已全部签收
+                                #end
+
+                            #elseif(${deliver.changeflag} == 1 && ${deliver.changestatus} == 5)
+                                <i class="ace-icon fa fa-times bigger-110 red"></i> 驳回
+                            #elseif(${deliver.changestatus} == 6)
+                                <i class="ace-icon fa fa-share blue bigger-110"></i> 重新提交 至<a href="#">$!{deliver.deliverorgname}$!{deliver.deliverusername}</a>
+                            #elseif(${deliver.changestatus} == 7)
+                                <i class="ace-icon fa fa-check bigger-110 green"></i> 强制所有人签收
+                            #end
+
+                            #if($!{deliver.postilcontent} && $!{deliver.postilcontent}!="")
+                                <br/> <span class="grey">批注：&nbsp;&nbsp;&nbsp;</span>
+                                $!{deliver.postilcontent}
+                            #end
+
+                        </div>
+
+                    </div>
+                </div>
+
+            #end
+        </dd>
+
+        #if($!{loadForm4Flag})
+            <dt class="padding-top-20"><a href="#form_div" onclick="loadForm4();">我要归档</a></dt>
+            <dd class="padding-top-20"></dd>
+        #end
+    </dl>
+
+    <div id="form_div"></div>
+
+</div>
+
+<br style="clear:both;">
+
+
+<script type="text/javascript">
+
+    function preview(id, suffix){
+        window.open('$!contextPath/oa/officialdocument/fileView?fileid='+id);
+    }
+
+    function loadForm4(){
+        $("#form_div").load("$contextPath/oa/officialdocument/loadapprovefrom?type=4&officialDocumentId=$!{officialdocument.id}");
+    }
+
+    function loadForm (){
+        var state = "$!{officialdocument.status}";
+        var odid = "$!{officialdocument.id}"
+        if(state ){
+            $("#form_div").load("$contextPath/oa/officialdocument/loadapprovefrom?type="+state+"&officialDocumentId="+odid);
+        }
+    }
+
+    $(function (){
+        if('$!{loadFormFlag}'==1)loadForm();
+        if('$!{loadForm7Flag}'==1) $("#form_div").load("$contextPath/oa/officialdocument/loadapprovefrom?type=7&officialDocumentId=$!{officialdocument.id}");
+
+        $('[data-rel=tooltip]').tooltip({container:'body'});
+
+    })
+</script>
+
+#parse("/common/south.html")

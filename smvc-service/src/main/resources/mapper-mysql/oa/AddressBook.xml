@@ -1,0 +1,333 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="addressBook" >
+  <resultMap id="BaseResultMap" type="net.hunanst.eduz100.api.oa.AddressBook" >
+    <id column="ID" property="id" jdbcType="INTEGER" />
+    <result column="OWNER" property="owner" jdbcType="INTEGER" />
+    <result column="OPERID" property="operid" jdbcType="INTEGER" />
+    <result column="NAME" property="name" jdbcType="VARCHAR" />
+    <result column="EMAIL" property="email" jdbcType="VARCHAR" />
+    <result column="PHONE" property="phone" jdbcType="VARCHAR" />
+    <result column="OFFICEPHONE" property="officephone" jdbcType="VARCHAR" />
+    <result column="QQ" property="qq" jdbcType="VARCHAR" />
+    <result column="BIRTHDAY" property="birthday" jdbcType="DATE" />
+    <result column="ORGID" property="orgid" jdbcType="INTEGER" />
+    <result column="COMPANY" property="company" jdbcType="VARCHAR" />
+    <result column="DEPARTMENT" property="department" jdbcType="VARCHAR" />
+    <result column="POSITION" property="position" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    ID, OWNER, OPERID, NAME, EMAIL, PHONE, OFFICEPHONE, QQ, BIRTHDAY, ORGID, COMPANY, DEPARTMENT, 
+    POSITION,REMARK,DATE_FORMAT(BIRTHDAY,'%Y-%m-%d') BIRTHDAYSTR
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from t_oa_address_book
+    where ID = #{value}
+  </select>
+  
+  <delete id="deletes" parameterType="list">
+    	delete from t_oa_address_book
+    	where ID in 
+    	<foreach open="(" collection="list" item="item" separator="," close=")">
+    	#{item}
+    	</foreach>
+  </delete>
+  
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from t_oa_address_book
+    where ID = #{value}
+  </delete>
+  <insert id="insert" parameterType="net.hunanst.eduz100.api.oa.AddressBook" >
+    <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER" >
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into t_oa_address_book (OWNER, OPERID, NAME, EMAIL, 
+      PHONE, OFFICEPHONE, QQ, 
+      BIRTHDAY, ORGID, COMPANY, 
+      DEPARTMENT, POSITION,REMARK)
+    values (#{owner,jdbcType=INTEGER}, #{operid,jdbcType=INTEGER}, #{name,jdbcType=VARCHAR}, #{email,jdbcType=VARCHAR}, 
+      #{phone,jdbcType=VARCHAR}, #{officephone,jdbcType=VARCHAR}, #{qq,jdbcType=VARCHAR}, 
+      #{birthday,jdbcType=DATE}, #{orgid,jdbcType=INTEGER}, #{company,jdbcType=VARCHAR}, 
+      #{department,jdbcType=VARCHAR}, #{position,jdbcType=VARCHAR}, #{remark,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="net.hunanst.eduz100.api.oa.AddressBook" >
+    <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER" >
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into t_oa_address_book
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="owner != null" >
+        OWNER,
+      </if>
+      <if test="operid != null" >
+        OPERID,
+      </if>
+      <if test="name != null" >
+        NAME,
+      </if>
+      <if test="email != null" >
+        EMAIL,
+      </if>
+      <if test="phone != null" >
+        PHONE,
+      </if>
+      <if test="officephone != null" >
+        OFFICEPHONE,
+      </if>
+      <if test="qq != null" >
+        QQ,
+      </if>
+      <if test="birthday != null" >
+        BIRTHDAY,
+      </if>
+      <if test="orgid != null" >
+        ORGID,
+      </if>
+      <if test="company != null" >
+        COMPANY,
+      </if>
+      <if test="department != null" >
+        DEPARTMENT,
+      </if>
+      <if test="position != null" >
+        POSITION,
+      </if>
+      <if test="remark != null" >
+        REMARK,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="owner != null" >
+        #{owner,jdbcType=INTEGER},
+      </if>
+      <if test="operid != null" >
+        #{operid,jdbcType=INTEGER},
+      </if>
+      <if test="name != null" >
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="email != null" >
+        #{email,jdbcType=VARCHAR},
+      </if>
+      <if test="phone != null" >
+        #{phone,jdbcType=VARCHAR},
+      </if>
+      <if test="officephone != null" >
+        #{officephone,jdbcType=VARCHAR},
+      </if>
+      <if test="qq != null" >
+        #{qq,jdbcType=VARCHAR},
+      </if>
+      <if test="birthday != null" >
+        #{birthday,jdbcType=DATE},
+      </if>
+      <if test="orgid != null" >
+        #{orgid,jdbcType=INTEGER},
+      </if>
+      <if test="company != null" >
+        #{company,jdbcType=VARCHAR},
+      </if>
+      <if test="department != null" >
+        #{department,jdbcType=VARCHAR},
+      </if>
+      <if test="position != null" >
+        #{position,jdbcType=VARCHAR},
+      </if>
+      <if test="remark != null" >
+        #{remark,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="net.hunanst.eduz100.api.oa.AddressBook" >
+    update t_oa_address_book
+    <set >
+      <if test="owner != null" >
+        OWNER = #{owner,jdbcType=INTEGER},
+      </if>
+      <if test="operid != null" >
+        OPERID = #{operid,jdbcType=INTEGER},
+      </if>
+      <if test="name != null" >
+        NAME = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="email != null" >
+        EMAIL = #{email,jdbcType=VARCHAR},
+      </if>
+      <if test="phone != null" >
+        PHONE = #{phone,jdbcType=VARCHAR},
+      </if>
+      <if test="officephone != null" >
+        OFFICEPHONE = #{officephone,jdbcType=VARCHAR},
+      </if>
+      <if test="qq != null" >
+        QQ = #{qq,jdbcType=VARCHAR},
+      </if>
+      <if test="birthday != null" >
+        BIRTHDAY = #{birthday,jdbcType=DATE},
+      </if>
+      <if test="orgid != null" >
+        ORGID = #{orgid,jdbcType=INTEGER},
+      </if>
+      <if test="company != null" >
+        COMPANY = #{company,jdbcType=VARCHAR},
+      </if>
+      <if test="department != null" >
+        DEPARTMENT = #{department,jdbcType=VARCHAR},
+      </if>
+      <if test="position != null" >
+        POSITION = #{position,jdbcType=VARCHAR},
+      </if>
+      <if test="remark != null" >
+        REMARK = #{remark,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where ID = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="net.hunanst.eduz100.api.oa.AddressBook" >
+    update t_oa_address_book
+    set OWNER = #{owner,jdbcType=INTEGER},
+      OPERID = #{operid,jdbcType=INTEGER},
+      NAME = #{name,jdbcType=VARCHAR},
+      EMAIL = #{email,jdbcType=VARCHAR},
+      PHONE = #{phone,jdbcType=VARCHAR},
+      OFFICEPHONE = #{officephone,jdbcType=VARCHAR},
+      QQ = #{qq,jdbcType=VARCHAR},
+      BIRTHDAY = #{birthday,jdbcType=DATE},
+      ORGID = #{orgid,jdbcType=INTEGER},
+      COMPANY = #{company,jdbcType=VARCHAR},
+      DEPARTMENT = #{department,jdbcType=VARCHAR},
+      POSITION = #{position,jdbcType=VARCHAR},
+      REMARK = #{remark,jdbcType=VARCHAR}
+    where ID = #{id,jdbcType=INTEGER}
+  </update>
+  
+  <select id="selectPojoList_page" resultMap="BaseResultMap" parameterType="net.hunanst.eduz100.api.oa.AddressBook">
+  	SELECT b.ID,IFNULL(b.NAME,o.USERNAME) NAME,o.TELNUMBER PHONE,o.EMAIL,o.IMGURL,b.OPERID
+	FROM t_oa_address_book b
+	LEFT JOIN ac_operator o ON b.OPERID = o.ID
+	<where >
+      <if test="id!=null" >
+        AND b.ID=#{id}
+      </if>
+      <if test="owner!=null" >
+        AND b.OWNER=#{owner}
+      </if>
+      <if test="operid!=null" >
+        AND b.OPERID=#{operid}
+      </if>
+      <if test="name!=null" >
+        AND o.USERNAME like CONCAT('%',#{name},'%')
+      </if>
+      <if test="email!=null" >
+        AND o.EMAIL=#{email}
+      </if>
+      <if test="phone!=null" >
+        AND o.TELNUMBER=#{phone}
+      </if>
+      <if test="officephone!=null" >
+        AND OFFICEPHONE=#{officephone}
+      </if>
+      <if test="qq!=null" >
+        AND QQ=#{qq}
+      </if>
+      <if test="birthday!=null" >
+        AND BIRTHDAY=#{birthday}
+      </if>
+      <if test="orgid!=null" >
+        AND ORGID=#{orgid}
+      </if>
+      <if test="company!=null" >
+        AND COMPANY=#{company}
+      </if>
+      <if test="department!=null" >
+        AND DEPARTMENT=#{department}
+      </if>
+      <if test="position!=null" >
+        AND POSITION=#{position}
+      </if>
+    </where>
+    order by id desc
+  </select>
+  
+  <select id="select_page" resultMap="BaseResultMap" parameterType="net.hunanst.eduz100.api.oa.AddressBook" >
+    select
+    <include refid="Base_Column_List" />
+     from t_oa_address_book
+    <where >
+      <if test="id!=null" >
+        AND ID=#{id}
+      </if>
+      <if test="owner!=null" >
+        AND OWNER=#{owner}
+      </if>
+      <if test="operid!=null" >
+        AND OPERID=#{operid}
+      </if>
+      <if test="name!=null" >
+        AND NAME=#{name}
+      </if>
+      <if test="email!=null" >
+        AND EMAIL=#{email}
+      </if>
+      <if test="phone!=null" >
+        AND PHONE=#{phone}
+      </if>
+      <if test="officephone!=null" >
+        AND OFFICEPHONE=#{officephone}
+      </if>
+      <if test="qq!=null" >
+        AND QQ=#{qq}
+      </if>
+      <if test="birthday!=null" >
+        AND BIRTHDAY=#{birthday}
+      </if>
+      <if test="orgid!=null" >
+        AND ORGID=#{orgid}
+      </if>
+      <if test="company!=null" >
+        AND COMPANY=#{company}
+      </if>
+      <if test="department!=null" >
+        AND DEPARTMENT=#{department}
+      </if>
+      <if test="position!=null" >
+        AND POSITION=#{position}
+      </if>
+      <if test="status!=null and status==1">
+        AND OPERID IS NOT NULL
+      </if>
+      <if test="status!=null and status==2" >
+        AND OPERID IS NULL
+      </if>
+    </where>
+    order by id desc
+  </select>
+  
+  <insert id="addAddressBookByAcOperId" parameterType="Map">
+  	INSERT INTO t_oa_address_book(OWNER,NAME,OPERID,PHONE,EMAIL)
+   	SELECT ${owner}, USERNAME,ID,TELNUMBER,EMAIL FROM ac_operator
+   	WHERE ID =  #{operId}
+  </insert>
+
+  <select id="selectByowner" parameterType="net.hunanst.eduz100.api.oa.vo.AddressBookVo" resultType="net.hunanst.eduz100.api.oa.vo.AddressBookVo">
+      select ao.IMGURL,org.orgname,ab.id,ab.OWNER,ab.OPERID,ab.name,ab.email,replace(ab.phone,' ','') phone,ab.ORGID
+      from t_oa_address_book ab left join ac_org org on ab.ORGID=org.id
+      left join ac_operator ao on ao.id=ab.OPERID
+    where ab.OWNER=#{owner}
+    <if test="limit!=null">
+        limit #{limit}
+    </if>
+  </select>
+  
+  <select id="findUser" parameterType="Map" resultType="net.hunanst.eduz100.api.oa.vo.AddressBookVo">
+  	SELECT o.ID,o.USERCODE,o.USERNAME,o.TELNUMBER,IF(a.OPERID IS NULL,1,0) FLAG ,o.IMGURL
+  	FROM ac_operator o
+	LEFT JOIN t_oa_address_book a ON o.ID = a.OPERID AND a.OWNER = #{operId}
+	WHERE CONCAT(o.USERCODE,'-',o.USERNAME) LIKE CONCAT('%',#{userName},'%')
+	AND o.ID != #{operId} AND o.STATUS = 1
+	ORDER BY o.ID
+  </select>
+  
+</mapper>

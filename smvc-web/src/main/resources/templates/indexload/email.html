@@ -1,0 +1,98 @@
+#if(!$!{mails} || $!{mails.size()}==0)
+暂无数据！
+#else
+
+<div class="scrollable" data-size="300" data-position="left">
+    #foreach($mail in $!mails)
+    <div class="itemdiv commentdiv">
+        <div class="user">
+            #if($!mail.imgurl)
+                <img alt="$!ab.name的头像" src="$!{nginx_filepath}$!mail.imgurl">
+            #else
+                <img alt="" src="$contextPath/static/ace/avatars/avatar2.png">
+            #end
+
+        </div>
+
+        <div class="body">
+            <div class="name">
+                <span>$!mail.sendername</span>
+            </div>
+
+            <div class="time">
+                <i class="ace-icon fa fa-clock-o"></i>
+                <span class="green">$!mail.senddateStr</span>
+            </div>
+
+            <div class="text">
+
+
+
+                    <i class="ace-icon fa fa-quote-left"></i>
+                    <a href="$contextPath/oa/email/inbox?flag=inbox&mailid=$!mail.id" class="email_content"
+                       onclick="dd(this);">
+
+                        $!mail.content
+                    </a>
+
+
+
+
+            </div>
+        </div>
+
+        <!--<div class="tools">
+        <div class="action-buttons bigger-125" style="margin-top: -70%">
+            <a href="$ contextPath/oa/email/inbox?flag=mail&mailid=$! mail.id">
+                <i class="ace-icon fa fa-pencil blue"></i>
+            </a>
+
+            <a href="#">
+                <i class="ace-icon fa fa-trash-o red"></i>
+            </a>
+        </div>
+    </div>-->
+    </div>
+
+    #end
+</div>
+
+<div>
+    <a href="$contextPath/oa/email/inbox?flag=inbox" style="float: right;padding-right: 30px;">更多&gt;&gt;</a>
+
+    <div class="space-18"></div>
+</div>
+<br>
+#end
+
+
+
+<br style="clear:both;">
+
+
+<script type="text/javascript">
+    $(function () {
+        $('.scrollable').each(function () {
+            var $this =
+            $(this);
+            $(this).ace_scroll({
+                size: $this.data('size') || 100
+        });
+    });
+
+
+    $("a").each(function () {
+        var sFeatures = "height=600, width=810, scrollbars=yes, resizable=yes";
+        var flag = $(this).next().attr('href');
+        if (flag == undefined || flag == 'undefined' || flag.indexOf("http") >= 0) {
+            //window.open( $(this).next().attr("href"), '临澧OA平台', sFeatures );
+            $(this).next().attr("target", "_blank");
+        }
+        else {
+            $(this).next().attr('href', "http://" + $(this).next().attr("href"));
+            $(this).next().attr("target", "_blank");
+        }
+
+    });
+    })
+</script>

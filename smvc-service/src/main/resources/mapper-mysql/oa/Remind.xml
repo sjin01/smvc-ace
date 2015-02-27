@@ -1,0 +1,183 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="Remind" >
+  <resultMap id="BaseResultMap" type="net.hunanst.eduz100.api.oa.Remind" >
+
+    <id column="ID" property="id" jdbcType="INTEGER" />
+    <result column="REMINDTYPE" property="remindtype" jdbcType="INTEGER" />
+    <result column="OPERATORUSERID" property="operatoruserid" jdbcType="INTEGER" />
+    <result column="RECIPIENTUSERID" property="recipientuserid" jdbcType="INTEGER" />
+    <result column="CONTENT" property="content" jdbcType="VARCHAR" />
+    <result column="STATUS" property="status" jdbcType="INTEGER" />
+    <result column="TYPE" property="type" jdbcType="INTEGER" />
+    <result column="SENDDATE" property="senddate" jdbcType="TIMESTAMP" />
+
+  </resultMap>
+  <sql id="Base_Column_List" >
+    ID, REMINDTYPE, OPERATORUSERID, RECIPIENTUSERID, CONTENT, STATUS, TYPE, SENDDATE
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select
+    <include refid="Base_Column_List" />
+    from t_oa_remind
+    where ID = #{value}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from t_oa_remind
+    where ID = #{value}
+  </delete>
+  <insert id="insert" parameterType="net.hunanst.eduz100.api.oa.Remind" >
+    insert into t_oa_remind (ID, REMINDTYPE, OPERATORUSERID,
+    RECIPIENTUSERID, CONTENT, STATUS,
+    TYPE, SENDDATE)
+    values (#{id,jdbcType=INTEGER}, #{remindtype,jdbcType=INTEGER}, #{operatoruserid,jdbcType=INTEGER},
+    #{recipientuserid,jdbcType=INTEGER}, #{content,jdbcType=VARCHAR}, #{status,jdbcType=INTEGER},
+    #{type,jdbcType=INTEGER}, #{senddate,jdbcType=TIMESTAMP})
+  </insert>
+
+  <!--  insertList 批量插入  mysql 主键需要自增 -->
+  <insert id="insertList" parameterType="java.util.List">
+    insert into t_oa_remind
+    ( REMINDTYPE, OPERATORUSERID,
+    RECIPIENTUSERID, CONTENT, STATUS,
+    TYPE, SENDDATE )
+    values
+    <foreach collection="list" item="item" index="index"  separator="," >
+      (
+      #{item.remindtype},
+      #{item.operatoruserid},
+      #{item.recipientuserid},
+      #{item.content},
+
+      #{item.status},
+      #{item.type},
+      #{item.senddate}
+      )
+    </foreach>
+  </insert>
+
+  <insert id="insertSelective" parameterType="net.hunanst.eduz100.api.oa.Remind" >
+    insert into t_oa_remind
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        ID,
+      </if>
+      <if test="remindtype != null" >
+        REMINDTYPE,
+      </if>
+      <if test="operatoruserid != null" >
+        OPERATORUSERID,
+      </if>
+      <if test="recipientuserid != null" >
+        RECIPIENTUSERID,
+      </if>
+      <if test="content != null and content!= ''" >
+        CONTENT,
+      </if>
+      <if test="status != null" >
+        STATUS,
+      </if>
+      <if test="type != null" >
+        TYPE,
+      </if>
+      <if test="senddate != null" >
+        SENDDATE,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="remindtype != null" >
+        #{remindtype,jdbcType=INTEGER},
+      </if>
+      <if test="operatoruserid != null" >
+        #{operatoruserid,jdbcType=INTEGER},
+      </if>
+      <if test="recipientuserid != null" >
+        #{recipientuserid,jdbcType=INTEGER},
+      </if>
+      <if test="content != null and content!= ''" >
+        #{content,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null" >
+        #{status,jdbcType=INTEGER},
+      </if>
+      <if test="type != null" >
+        #{type,jdbcType=INTEGER},
+      </if>
+      <if test="senddate != null" >
+        #{senddate,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="net.hunanst.eduz100.api.oa.Remind" >
+    update t_oa_remind
+    <set >
+      <if test="remindtype != null" >
+        REMINDTYPE = #{remindtype,jdbcType=INTEGER},
+      </if>
+      <if test="operatoruserid != null" >
+        OPERATORUSERID = #{operatoruserid,jdbcType=INTEGER},
+      </if>
+      <if test="recipientuserid != null" >
+        RECIPIENTUSERID = #{recipientuserid,jdbcType=INTEGER},
+      </if>
+      <if test="content != null" >
+        CONTENT = #{content,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null" >
+        STATUS = #{status,jdbcType=INTEGER},
+      </if>
+      <if test="type != null" >
+        TYPE = #{type,jdbcType=INTEGER},
+      </if>
+      <if test="senddate != null" >
+        SENDDATE = #{senddate,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where ID = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="net.hunanst.eduz100.api.oa.Remind" >
+    update t_oa_remind
+    set REMINDTYPE = #{remindtype,jdbcType=INTEGER},
+    OPERATORUSERID = #{operatoruserid,jdbcType=INTEGER},
+    RECIPIENTUSERID = #{recipientuserid,jdbcType=INTEGER},
+    CONTENT = #{content,jdbcType=VARCHAR},
+    STATUS = #{status,jdbcType=INTEGER},
+    TYPE = #{type,jdbcType=INTEGER},
+    SENDDATE = #{senddate,jdbcType=TIMESTAMP}
+    where ID = #{id,jdbcType=INTEGER}
+  </update>
+  <select id="select_page" resultMap="BaseResultMap" parameterType="net.hunanst.eduz100.api.oa.Remind" >
+    select
+    <include refid="Base_Column_List" />
+    from t_oa_remind
+    <where >
+      <if test="id!=null" >
+        AND ID=#{id}
+      </if>
+      <if test="remindtype!=null" >
+        AND REMINDTYPE=#{remindtype}
+      </if>
+      <if test="operatoruserid!=null" >
+        AND OPERATORUSERID=#{operatoruserid}
+      </if>
+      <if test="recipientuserid!=null" >
+        AND RECIPIENTUSERID=#{recipientuserid}
+      </if>
+      <if test="content!=null" >
+        AND CONTENT=#{content}
+      </if>
+      <if test="status!=null" >
+        AND STATUS=#{status}
+      </if>
+      <if test="type!=null" >
+        AND TYPE=#{type}
+      </if>
+      <if test="senddate!=null" >
+        AND SENDDATE=#{senddate}
+      </if>
+    </where>
+  </select>
+</mapper>

@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="OfficialdocumentRecord" >
+  <resultMap id="BaseResultMap" type="net.hunanst.eduz100.api.oa.OfficialdocumentRecord" >
+    <id column="ID" property="id" jdbcType="INTEGER" />
+    <result column="OFFICIALDOCUMENTID" property="officialdocumentid" jdbcType="INTEGER" />
+    <result column="USERID" property="userid" jdbcType="INTEGER" />
+    <result column="ORGID" property="orgid" jdbcType="INTEGER" />
+    <result column="TYPE" property="type" jdbcType="INTEGER" />
+    <result column="DATE" property="date" jdbcType="TIMESTAMP" />
+
+  </resultMap>
+
+  <sql id="Base_Column_List" >
+    ID, OFFICIALDOCUMENTID, USERID, ORGID, TYPE ,DATE
+  </sql>
+
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from t_oa_officialdocument_record
+    where ID = #{value}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from t_oa_officialdocument_record
+    where ID = #{value}
+  </delete>
+  <insert id="insert" parameterType="net.hunanst.eduz100.api.oa.OfficialdocumentRecord" >
+    insert into t_oa_officialdocument_record (ID, OFFICIALDOCUMENTID, USERID, 
+      ORGID, TYPE ,DATE)
+    values (#{id,jdbcType=INTEGER}, #{officialdocumentid,jdbcType=INTEGER}, #{userid,jdbcType=INTEGER}, 
+      #{orgid,jdbcType=INTEGER}, #{type,jdbcType=INTEGER} ,#{date, jdbcType=TIMESTAMP} )
+  </insert>
+  <insert id="insertSelective" parameterType="net.hunanst.eduz100.api.oa.OfficialdocumentRecord" >
+    insert into t_oa_officialdocument_record
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        ID,
+      </if>
+      <if test="officialdocumentid != null" >
+        OFFICIALDOCUMENTID,
+      </if>
+      <if test="userid != null" >
+        USERID,
+      </if>
+      <if test="orgid != null" >
+        ORGID,
+      </if>
+      <if test="type != null" >
+        TYPE,
+      </if>
+      <if test="date != null" >
+        DATE,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="officialdocumentid != null" >
+        #{officialdocumentid,jdbcType=INTEGER},
+      </if>
+      <if test="userid != null" >
+        #{userid,jdbcType=INTEGER},
+      </if>
+      <if test="orgid != null" >
+        #{orgid,jdbcType=INTEGER},
+      </if>
+      <if test="type != null" >
+        #{type,jdbcType=INTEGER},
+      </if>
+      <if test="date != null" >
+        #{date, jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="net.hunanst.eduz100.api.oa.OfficialdocumentRecord" >
+    update t_oa_officialdocument_record
+    <set >
+      <if test="officialdocumentid != null" >
+        OFFICIALDOCUMENTID = #{officialdocumentid,jdbcType=INTEGER},
+      </if>
+      <if test="userid != null" >
+        USERID = #{userid,jdbcType=INTEGER},
+      </if>
+      <if test="orgid != null" >
+        ORGID = #{orgid,jdbcType=INTEGER},
+      </if>
+      <if test="type != null" >
+        TYPE = #{type,jdbcType=INTEGER},
+      </if>
+      <if test="date != null" >
+        DATE = #{date, jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where ID = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="net.hunanst.eduz100.api.oa.OfficialdocumentRecord" >
+    update t_oa_officialdocument_record
+    set OFFICIALDOCUMENTID = #{officialdocumentid,jdbcType=INTEGER},
+      USERID = #{userid,jdbcType=INTEGER},
+      ORGID = #{orgid,jdbcType=INTEGER},
+      TYPE = #{type,jdbcType=INTEGER},
+      DATE = #{date, jdbcType=TIMESTAMP}
+    where ID = #{id,jdbcType=INTEGER}
+  </update>
+  <select id="select_page" resultMap="BaseResultMap" parameterType="net.hunanst.eduz100.api.oa.OfficialdocumentRecord" >
+    select
+    <include refid="Base_Column_List" />
+     from t_oa_officialdocument_record
+    <where >
+      <if test="id!=null" >
+        AND ID=#{id}
+      </if>
+      <if test="officialdocumentid!=null" >
+        AND OFFICIALDOCUMENTID=#{officialdocumentid}
+      </if>
+      <if test="userid!=null" >
+        AND USERID=#{userid}
+      </if>
+      <if test="orgid!=null" >
+        AND ORGID=#{orgid}
+      </if>
+      <if test="type!=null" >
+        AND TYPE=#{type}
+      </if>
+      <if test="date!=null" >
+        AND DATE=#{date}
+      </if>
+    </where>
+  </select>
+
+  <!-- 个人档案 -->
+  <select id="selectOfficialdocumentByRecordForUser_page" resultType="net.hunanst.eduz100.api.oa.Officialdocument"
+          parameterType="net.hunanst.eduz100.api.oa.OfficialdocumentRecord">
+      select
+      t.*
+      ,
+      (
+      select ofd.DELIVERDATE from t_oa_officialdocument_deliver ofd
+      where ofd.OFFICIALDOCUMENTID = t.id and ofd.CHANGEFLAG =1 and ofd.CHANGESTATUS in (4,7) order by ofd.DELIVERDATE desc
+      limit 0,1
+      ) as ataotime
+      , r.date as recorddate
+      from t_oa_officialdocument_record r
+      left join t_oa_officialdocument t on r.officialdocumentid = t.id
+      where r.type = 1 and r.userid = #{userid}
+  </select>
+
+  <!-- 部门档案 -->
+  <select id="selectOfficialdocumentByRecordForOrg_page" resultType="net.hunanst.eduz100.api.oa.Officialdocument"
+          parameterType="net.hunanst.eduz100.api.oa.OfficialdocumentRecord">
+      select
+      t.*
+      ,
+      (
+      select ofd.DELIVERDATE from t_oa_officialdocument_deliver ofd
+      where ofd.OFFICIALDOCUMENTID = t.id and ofd.CHANGEFLAG =1 and ofd.CHANGESTATUS in (4,7) order by ofd.DELIVERDATE desc
+      limit 0,1
+      ) as ataotime
+      , r.date as recorddate
+      from t_oa_officialdocument_record r
+      left join t_oa_officialdocument t on r.officialdocumentid = t.id
+      where r.type = 2 and r.orgid = #{orgid}
+  </select>
+</mapper>

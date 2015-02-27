@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="net.hunanst.eduz100.api.sys.AcOperlog" >
+  <resultMap id="BaseResultMap" type="net.hunanst.eduz100.api.sys.AcOperlog" >
+    <id column="ID" property="id" jdbcType="INTEGER" />
+    <result column="OPERID" property="operid" jdbcType="INTEGER" />
+    <result column="USERCODE" property="usercode" jdbcType="VARCHAR" />
+    <result column="USERNAME" property="username" jdbcType="VARCHAR" />
+    <result column="LOGTIME" property="logtime" jdbcType="TIMESTAMP" />
+    <result column="LOGIP" property="logip" jdbcType="VARCHAR" />
+  </resultMap>
+  <resultMap id="ResultMapWithBLOBs" type="net.hunanst.eduz100.api.sys.AcOperlog" extends="BaseResultMap" >
+    <result column="LOGCONTENT" property="logcontent" jdbcType="LONGVARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    ID, OPERID, USERCODE, USERNAME, LOGTIME, LOGIP
+  </sql>
+  <sql id="Blob_Column_List" >
+    LOGCONTENT
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="ResultMapWithBLOBs" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from ac_operlog
+    where ID = #{value}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from ac_operlog
+    where ID = #{value}
+  </delete>
+  <insert id="insert" parameterType="net.hunanst.eduz100.api.sys.AcOperlog" >
+    <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER" >
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into ac_operlog (OPERID, USERCODE, USERNAME, 
+      LOGTIME, LOGIP, LOGCONTENT
+      )
+    values (#{operid,jdbcType=INTEGER}, #{usercode,jdbcType=VARCHAR}, #{username,jdbcType=VARCHAR}, 
+      #{logtime,jdbcType=TIMESTAMP}, #{logip,jdbcType=VARCHAR}, #{logcontent,jdbcType=LONGVARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="net.hunanst.eduz100.api.sys.AcOperlog" >
+    <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER" >
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into ac_operlog
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="operid != null" >
+        OPERID,
+      </if>
+      <if test="usercode != null" >
+        USERCODE,
+      </if>
+      <if test="username != null" >
+        USERNAME,
+      </if>
+      <if test="logtime != null" >
+        LOGTIME,
+      </if>
+      <if test="logip != null" >
+        LOGIP,
+      </if>
+      <if test="logcontent != null" >
+        LOGCONTENT,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="operid != null" >
+        #{operid,jdbcType=INTEGER},
+      </if>
+      <if test="usercode != null" >
+        #{usercode,jdbcType=VARCHAR},
+      </if>
+      <if test="username != null" >
+        #{username,jdbcType=VARCHAR},
+      </if>
+      <if test="logtime != null" >
+        #{logtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="logip != null" >
+        #{logip,jdbcType=VARCHAR},
+      </if>
+      <if test="logcontent != null" >
+        #{logcontent,jdbcType=LONGVARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="net.hunanst.eduz100.api.sys.AcOperlog" >
+    update ac_operlog
+    <set >
+      <if test="operid != null" >
+        OPERID = #{operid,jdbcType=INTEGER},
+      </if>
+      <if test="usercode != null" >
+        USERCODE = #{usercode,jdbcType=VARCHAR},
+      </if>
+      <if test="username != null" >
+        USERNAME = #{username,jdbcType=VARCHAR},
+      </if>
+      <if test="logtime != null" >
+        LOGTIME = #{logtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="logip != null" >
+        LOGIP = #{logip,jdbcType=VARCHAR},
+      </if>
+      <if test="logcontent != null" >
+        LOGCONTENT = #{logcontent,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    where ID = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="net.hunanst.eduz100.api.sys.AcOperlog" >
+    update ac_operlog
+    set OPERID = #{operid,jdbcType=INTEGER},
+      USERCODE = #{usercode,jdbcType=VARCHAR},
+      USERNAME = #{username,jdbcType=VARCHAR},
+      LOGTIME = #{logtime,jdbcType=TIMESTAMP},
+      LOGIP = #{logip,jdbcType=VARCHAR},
+      LOGCONTENT = #{logcontent,jdbcType=LONGVARCHAR}
+    where ID = #{id,jdbcType=INTEGER}
+  </update>
+  <select id="select_page" resultMap="BaseResultMap" parameterType="net.hunanst.eduz100.api.sys.AcOperlog" >
+    select
+    <include refid="Base_Column_List" />
+     from ac_operlog
+    <where >
+      <if test="id!=null" >
+        AND ID=#{id}
+      </if>
+      <if test="operid!=null" >
+        AND OPERID=#{operid}
+      </if>
+      <if test="usercode!=null" >
+        AND USERCODE=#{usercode}
+      </if>
+      <if test="username!=null" >
+        AND USERNAME=#{username}
+      </if>
+      <if test="logtime!=null" >
+        AND LOGTIME=#{logtime}
+      </if>
+      <if test="logip!=null" >
+        AND LOGIP=#{logip}
+      </if>
+      <if test="logcontent!=null" >
+        AND LOGCONTENT=#{logcontent}
+      </if>
+    </where>
+  </select>
+</mapper>

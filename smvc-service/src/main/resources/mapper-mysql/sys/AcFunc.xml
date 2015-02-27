@@ -1,0 +1,253 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="net.hunanst.eduz100.api.sys.AcFunc" >
+  <resultMap id="BaseResultMap" type="net.hunanst.eduz100.api.sys.AcFunc" >
+    <id column="ID" property="id" jdbcType="INTEGER" />
+    <result column="FUNCNAME" property="funcname" jdbcType="VARCHAR" />
+    <result column="FUNCCODE" property="funccode" jdbcType="VARCHAR" />
+    <result column="FUNCACTION" property="funcaction" jdbcType="VARCHAR" />
+    <result column="FUNCICON" property="funcicon" jdbcType="VARCHAR" />
+    <result column="FUNCTYPE" property="functype" jdbcType="CHAR" />
+    <result column="FUNCSEQ" property="funcseq" jdbcType="VARCHAR" />
+    <result column="SORTID" property="sortid" jdbcType="INTEGER" />
+    <result column="PARENTID" property="parentid" jdbcType="INTEGER" />
+    <result column="APPID" property="appid" jdbcType="INTEGER" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    ID, FUNCNAME, FUNCCODE, FUNCACTION, FUNCICON, FUNCTYPE, FUNCSEQ, SORTID, PARENTID, 
+    APPID
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from ac_func
+    where ID = #{value}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from ac_func
+    where ID = #{value}
+  </delete>
+  <insert id="insert" parameterType="net.hunanst.eduz100.api.sys.AcFunc" >
+    <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER" >
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into ac_func (FUNCNAME, FUNCCODE, FUNCACTION, 
+      FUNCICON, FUNCTYPE, FUNCSEQ, 
+      SORTID, PARENTID, APPID
+      )
+    values (#{funcname,jdbcType=VARCHAR}, #{funccode,jdbcType=VARCHAR}, #{funcaction,jdbcType=VARCHAR}, 
+      #{funcicon,jdbcType=VARCHAR}, #{functype,jdbcType=CHAR}, #{funcseq,jdbcType=VARCHAR}, 
+      #{sortid,jdbcType=INTEGER}, #{parentid,jdbcType=INTEGER}, #{appid,jdbcType=INTEGER}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="net.hunanst.eduz100.api.sys.AcFunc" >
+    <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER" >
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into ac_func
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="funcname != null" >
+        FUNCNAME,
+      </if>
+      <if test="funccode != null" >
+        FUNCCODE,
+      </if>
+      <if test="funcaction != null" >
+        FUNCACTION,
+      </if>
+      <if test="funcicon != null" >
+        FUNCICON,
+      </if>
+      <if test="functype != null" >
+        FUNCTYPE,
+      </if>
+      <if test="funcseq != null" >
+        FUNCSEQ,
+      </if>
+      <if test="sortid != null" >
+        SORTID,
+      </if>
+      <if test="parentid != null" >
+        PARENTID,
+      </if>
+      <if test="appid != null" >
+        APPID,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="funcname != null" >
+        #{funcname,jdbcType=VARCHAR},
+      </if>
+      <if test="funccode != null" >
+        #{funccode,jdbcType=VARCHAR},
+      </if>
+      <if test="funcaction != null" >
+        #{funcaction,jdbcType=VARCHAR},
+      </if>
+      <if test="funcicon != null" >
+        #{funcicon,jdbcType=VARCHAR},
+      </if>
+      <if test="functype != null" >
+        #{functype,jdbcType=CHAR},
+      </if>
+      <if test="funcseq != null" >
+        #{funcseq,jdbcType=VARCHAR},
+      </if>
+      <if test="sortid != null" >
+        #{sortid,jdbcType=INTEGER},
+      </if>
+      <if test="parentid != null" >
+        #{parentid,jdbcType=INTEGER},
+      </if>
+      <if test="appid != null" >
+        #{appid,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="net.hunanst.eduz100.api.sys.AcFunc" >
+    update ac_func
+    <set >
+      <if test="funcname != null" >
+        FUNCNAME = #{funcname,jdbcType=VARCHAR},
+      </if>
+      <if test="funccode != null" >
+        FUNCCODE = #{funccode,jdbcType=VARCHAR},
+      </if>
+      <if test="funcaction != null" >
+        FUNCACTION = #{funcaction,jdbcType=VARCHAR},
+      </if>
+      <if test="funcicon != null" >
+        FUNCICON = #{funcicon,jdbcType=VARCHAR},
+      </if>
+      <if test="functype != null" >
+        FUNCTYPE = #{functype,jdbcType=CHAR},
+      </if>
+      <if test="funcseq != null" >
+        FUNCSEQ = #{funcseq,jdbcType=VARCHAR},
+      </if>
+      <if test="sortid != null" >
+        SORTID = #{sortid,jdbcType=INTEGER},
+      </if>
+      <if test="parentid != null" >
+        PARENTID = #{parentid,jdbcType=INTEGER},
+      </if>
+      <if test="appid != null" >
+        APPID = #{appid,jdbcType=INTEGER},
+      </if>
+    </set>
+    where ID = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="net.hunanst.eduz100.api.sys.AcFunc" >
+    update ac_func
+    set FUNCNAME = #{funcname,jdbcType=VARCHAR},
+      FUNCCODE = #{funccode,jdbcType=VARCHAR},
+      FUNCACTION = #{funcaction,jdbcType=VARCHAR},
+      FUNCICON = #{funcicon,jdbcType=VARCHAR},
+      FUNCTYPE = #{functype,jdbcType=CHAR},
+      FUNCSEQ = #{funcseq,jdbcType=VARCHAR},
+      SORTID = #{sortid,jdbcType=INTEGER},
+      PARENTID = #{parentid,jdbcType=INTEGER},
+      APPID = #{appid,jdbcType=INTEGER}
+    where ID = #{id,jdbcType=INTEGER}
+  </update>
+  <select id="select_page" resultMap="BaseResultMap" parameterType="net.hunanst.eduz100.api.sys.AcFunc" >
+    select
+    <include refid="Base_Column_List" />
+     from ac_func
+    <where >
+      <if test="id!=null" >
+        AND ID=#{id}
+      </if>
+      <if test="funcname!=null" >
+        AND FUNCNAME=#{funcname}
+      </if>
+      <if test="funccode!=null" >
+        AND FUNCCODE=#{funccode}
+      </if>
+      <if test="funcaction!=null" >
+        AND FUNCACTION=#{funcaction}
+      </if>
+      <if test="funcicon!=null" >
+        AND FUNCICON=#{funcicon}
+      </if>
+      <if test="functype!=null" >
+        AND FUNCTYPE=#{functype}
+      </if>
+      <if test="funcseq!=null" >
+        AND FUNCSEQ=#{funcseq}
+      </if>
+      <if test="sortid!=null" >
+        AND SORTID=#{sortid}
+      </if>
+      <if test="parentid!=null" >
+        AND PARENTID=#{parentid}
+      </if>
+      <if test="appid!=null" >
+        AND APPID=#{appid}
+      </if>
+    </where>
+  </select>
+  
+  	<select id="selectAll" resultMap="BaseResultMap">
+  	 	select <include refid="Base_Column_List" />
+     	from ac_func
+     	order by SORTID
+  	</select>
+  	
+  	<update id="updateSeq" parameterType="net.hunanst.eduz100.api.sys.AcFunc">
+  		update ac_func 
+		set
+		<choose>
+			<when test="parentid==null or parentid==0">
+				funcseq = concat(#{id})
+			</when>
+			<otherwise>
+				funcseq = concat(funcseq, '-', #{id})
+			</otherwise>
+		</choose>
+		where id = #{id}
+  	</update>
+  	
+  	<delete id="deleteAndChildren" parameterType="net.hunanst.eduz100.api.sys.AcFunc">
+  		delete from ac_func where id = #{id} or funcseq like '${funcseq}-%'
+  	</delete>
+  	
+  	<select id="selectFuncByOperid" resultType="net.hunanst.eduz100.api.sys.AcFunc" parameterType="int">
+  	 	<!-- select t1.ID, t1.FUNCNAME, t1.FUNCCODE, t1.FUNCACTION, t1.FUNCICON, t1.FUNCTYPE, 
+  	 		t1.FUNCSEQ, t1.SORTID, t1.PARENTID, t1.APPID
+  	 	from ac_func t1
+		inner join ac_role_func t2 on t1.id = t2.funcid
+		inner join ac_oper_role t3 on t2.roleid = t3.roleid
+		where t3.operid = #{value}
+		union 
+		select t1.ID, t1.FUNCNAME, t1.FUNCCODE, t1.FUNCACTION, t1.FUNCICON, t1.FUNCTYPE, 
+  	 		t1.FUNCSEQ, t1.SORTID, t1.PARENTID, t1.APPID
+		from ac_func t1
+		inner join ac_org_func t2 on t1.id = t2.funcid
+		inner join ac_oper_org_relation t3 on t2.orgid = t3.orgid
+		where t3.operid = #{value} -->
+		select tx.*, case when ty.FUNCID is null then false else true end allowable
+		from ac_func tx
+		left join (
+			select t1.FUNCID from ac_role_func t1
+			inner join ac_oper_role t2 on t1.ROLEID = t2.ROLEID and t2.OPERID = #{value}
+			UNION
+			select t3.FUNCID from ac_org_func t3
+			inner join ac_oper_org_relation t4 on t3.ORGID = t4.ORGID and t4.OPERID = #{value}
+		) ty on tx.id = ty.FUNCID
+		order by tx.SORTID
+  	</select>
+  	
+  	<select id="selectFuncTreeByIds" resultMap="BaseResultMap" parameterType="list">
+  		select <include refid="Base_Column_List" />
+     	from ac_func
+     	where id in ( <foreach collection="list" item="item" separator=","> #{item}</foreach> )
+     	order by SORTID
+  	</select>
+  	
+  	<select id="selectByBelongOrg" resultMap="BaseResultMap" parameterType="int">
+  		select t1.* from ac_func t1
+		inner join ac_org_func t2 on t1.id = t2.FUNCID and t2.ORGID = #{value}
+		order by t1.SORTID
+  	</select>
+</mapper>

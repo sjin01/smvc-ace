@@ -1,0 +1,369 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="MailBox">
+    <resultMap id="BaseResultMap" type="net.hunanst.eduz100.api.oa.MailBox">
+        <id column="ID" property="id" jdbcType="INTEGER"/>
+        <result column="MAILID" property="mailid" jdbcType="INTEGER"/>
+        <result column="USERID" property="userid" jdbcType="INTEGER"/>
+        <result column="BOXTYPE" property="boxtype" jdbcType="INTEGER"/>
+    </resultMap>
+
+    <resultMap id="mailFile" type="net.hunanst.eduz100.api.oa.MailFile">
+        <id column="ID" property="id" jdbcType="INTEGER"/>
+        <result column="MAILID" property="mailid" jdbcType="INTEGER"/>
+        <result column="FILEPATH" property="filepath" jdbcType="VARCHAR"/>
+        <result column="SUFFIX" property="suffix" jdbcType="VARCHAR"/>
+        <result column="SIZE" property="size" jdbcType="DOUBLE"/>
+        <result column="FILENAME" property="filename" jdbcType="VARCHAR"/>
+    </resultMap>
+    
+    <resultMap id="AcOperatorIdAndName" type="net.hunanst.eduz100.api.oa.AcOperatorIdAndName">
+        <id column="id" property="id" jdbcType="VARCHAR"/>
+        <result column="label" property="label" jdbcType="VARCHAR"/>
+        <result column="value" property="value" jdbcType="VARCHAR" />
+    </resultMap>
+    
+    <resultMap id="mailDetail" type="net.hunanst.eduz100.api.oa.MailDetail">
+        <result column="mailid" property="mailid" jdbcType="INTEGER"/>
+        <result column="userid" property="userid" jdbcType="INTEGER"/>
+        <result column="boxtype" property="boxtype" jdbcType="INTEGER"/>
+        <result column="username" property="username" jdbcType="VARCHAR"/>
+        <result column="mailtitle" property="mailtitle" jdbcType="VARCHAR"/>
+        <result column="createdate" property="createdate" jdbcType="VARCHAR"/>
+        <result column="mailcontent" property="mailcontent" jdbcType="BLOB" javaType = "java.lang.String"/>
+        <result column="readstate" property="readstate" jdbcType="INTEGER"/>
+    </resultMap>
+    
+	  <resultMap id="tempblob" type="java.util.HashMap">
+	        <result property="mailcontent" column="mailcontent" jdbcType="BLOB" javaType = "java.lang.String" />
+	  </resultMap>
+
+    <resultMap id="addressBook" type="net.hunanst.eduz100.api.oa.AddressBook" >
+        <id column="ID" property="id" jdbcType="INTEGER" />
+        <result column="OWNER" property="owner" jdbcType="INTEGER" />
+        <result column="OPERID" property="operid" jdbcType="INTEGER" />
+        <result column="NAME" property="name" jdbcType="VARCHAR" />
+        <result column="EMAIL" property="email" jdbcType="VARCHAR" />
+        <result column="PHONE" property="phone" jdbcType="VARCHAR" />
+        <result column="OFFICEPHONE" property="officephone" jdbcType="VARCHAR" />
+        <result column="QQ" property="qq" jdbcType="VARCHAR" />
+        <result column="BIRTHDAY" property="birthday" jdbcType="DATE" />
+        <result column="ORGID" property="orgid" jdbcType="INTEGER" />
+        <result column="COMPANY" property="company" jdbcType="VARCHAR" />
+        <result column="DEPARTMENT" property="department" jdbcType="VARCHAR" />
+        <result column="POSITION" property="position" jdbcType="VARCHAR" />
+    </resultMap>
+
+
+    
+    <sql id="Base_Column_List">
+    ID, MAILID, USERID, BOXTYPE
+  </sql>
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+        select
+        <include refid="Base_Column_List"/>
+        from t_oa_mail_box
+        where ID = #{value}
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from t_oa_mail_box
+    where ID = #{value}
+  </delete>
+    <insert id="insert" useGeneratedKeys="true" keyProperty="id" parameterType="net.hunanst.eduz100.api.oa.MailBox">
+    insert into t_oa_mail_box ( MAILID, USERID, 
+      BOXTYPE)
+    values ( #{mailid,jdbcType=INTEGER}, #{userid,jdbcType=INTEGER}, 
+      #{boxtype,jdbcType=INTEGER})
+  </insert>
+    <insert id="insertSelective" parameterType="net.hunanst.eduz100.api.oa.MailBox">
+        insert into t_oa_mail_box
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                ID,
+            </if>
+            <if test="mailid != null">
+                MAILID,
+            </if>
+            <if test="userid != null">
+                USERID,
+            </if>
+            <if test="boxtype != null">
+                BOXTYPE,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{id,jdbcType=INTEGER},
+            </if>
+            <if test="mailid != null">
+                #{mailid,jdbcType=INTEGER},
+            </if>
+            <if test="userid != null">
+                #{userid,jdbcType=INTEGER},
+            </if>
+            <if test="boxtype != null">
+                #{boxtype,jdbcType=INTEGER},
+            </if>
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective" parameterType="net.hunanst.eduz100.api.oa.MailBox">
+        update t_oa_mail_box
+        <set>
+            <if test="mailid != null">
+                MAILID = #{mailid,jdbcType=INTEGER},
+            </if>
+            <if test="userid != null">
+                USERID = #{userid,jdbcType=INTEGER},
+            </if>
+            <if test="boxtype != null">
+                BOXTYPE = #{boxtype,jdbcType=INTEGER},
+            </if>
+        </set>
+        where ID = #{id,jdbcType=INTEGER}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="net.hunanst.eduz100.api.oa.MailBox">
+    update t_oa_mail_box
+    set MAILID = #{mailid,jdbcType=INTEGER},
+      USERID = #{userid,jdbcType=INTEGER},
+      BOXTYPE = #{boxtype,jdbcType=INTEGER}
+    where ID = #{id,jdbcType=INTEGER}
+  </update>
+    <select id="select_page" resultMap="BaseResultMap" parameterType="net.hunanst.eduz100.api.oa.MailBox">
+        select
+        <include refid="Base_Column_List"/>
+        from t_oa_mail_box
+        <where>
+            <if test="id!=null">
+                AND ID=#{id}
+            </if>
+            <if test="mailid!=null">
+                AND MAILID=#{mailid}
+            </if>
+            <if test="userid!=null">
+                AND USERID=#{userid}
+            </if>
+            <if test="boxtype!=null">
+                AND BOXTYPE=#{boxtype}
+            </if>
+        </where>
+    </select>
+
+   <select id="selectInboxByCondition" resultMap="mailDetail" parameterType="net.hunanst.eduz100.api.oa.MailBox">
+        select m.id as mailid, m.userid, a.username, m.title as mailtitle ,
+        m.createdate,m.content as mailcontent,mb.readstate
+          from t_oa_mail_box mb left join t_oa_mail m on (mb.mailid = m.id)
+          left join ac_operator a on (m.userid = a.id)
+        <where>
+        	1=1 
+            <if test="mailid!=null">
+                AND mb.MAILID=#{mailid}
+            </if>
+            <if test="userid!=null">
+                AND mb.USERID=#{userid}
+            </if>
+			AND mb.BOXTYPE= 2
+        </where>
+        order by m.createdate desc
+        <if test="iDisplayStart!=null">
+             limit  #{iDisplayStart} 
+        </if>
+        <if test="iDisplayLength!=null and iDisplayLength > 0 ">
+             ,  #{iDisplayLength}
+        </if>
+    </select>
+    
+    <select id="selectInboxCountByCondition" resultType="Integer" parameterType="net.hunanst.eduz100.api.oa.MailBox">
+        select count(1)
+          from t_oa_mail_box mb left join t_oa_mail m on (mb.mailid = m.id)
+          left join ac_operator a on (m.userid = a.id)
+        <where>
+        	1=1 
+            <if test="mailid!=null">
+                AND mb.MAILID=#{mailid}
+            </if>
+            <if test="userid!=null">
+                AND mb.USERID=#{userid}
+            </if>
+			AND mb.BOXTYPE= 2
+        </where>
+    </select>
+    
+    
+    <select id="selectSentBoxByCondition" resultMap="mailDetail" parameterType="net.hunanst.eduz100.api.oa.MailBox">
+        select m.id as mailid, mu.userid, a.username, m.title as mailtitle ,
+        m.createdate,m.content as mailcontent, 1 as readstate
+          from t_oa_mail_user mu 
+          left join t_oa_mail m on (mu.mailid = m.id)
+          left join t_oa_mail_box mb on (mb.mailid = mu.mailid)
+          left join ac_operator a on (mu.userid = a.id)
+        <where>
+        	1=1 
+            <if test="mailid!=null">
+                AND mb.MAILID=#{mailid}
+            </if>
+            <if test="userid!=null">
+                AND mb.USERID=#{userid}
+            </if>
+           	AND mb.BOXTYPE= 1
+        </where>
+        order by m.createdate desc
+        <if test="iDisplayStart!=null">
+             limit  #{iDisplayStart} 
+        </if>
+        <if test="iDisplayLength!=null and iDisplayLength > 0 ">
+             ,  #{iDisplayLength}
+        </if>
+    </select>
+    
+    
+    <select id="selectSentBoxCountByCondition" resultType="Integer" parameterType="net.hunanst.eduz100.api.oa.MailBox">
+        select count(1)
+          from t_oa_mail_user mu 
+          left join t_oa_mail m on (mu.mailid = m.id)
+          left join t_oa_mail_box mb on (mb.mailid = mu.mailid)
+          left join ac_operator a on (mu.userid = a.id)
+        <where>
+        	1=1 
+            <if test="mailid!=null">
+                AND mb.MAILID=#{mailid}
+            </if>
+            <if test="userid!=null">
+                AND mb.USERID=#{userid}
+            </if>
+           	AND mb.BOXTYPE= 1
+        </where>
+    </select>
+    
+    
+    <select id="selectDraftBoxByCondition" resultMap="mailDetail" parameterType="net.hunanst.eduz100.api.oa.MailBox">
+        select m.id as mailid, '', '没有接收人' as username, m.title as mailtitle ,
+        m.createdate,m.content as mailcontent, 1 as readstate
+          from t_oa_mail_box mb
+          left join t_oa_mail m on (mb.mailid = m.id)
+        <where>
+        	1=1 
+            <if test="mailid!=null">
+                AND mb.MAILID=#{mailid}
+            </if>
+            <if test="userid!=null">
+                AND mb.USERID=#{userid}
+            </if>
+           	AND mb.BOXTYPE= 0
+        </where>
+        order by m.createdate desc
+        <if test="iDisplayStart!=null">
+             limit  #{iDisplayStart} 
+        </if>
+        <if test="iDisplayLength!=null and iDisplayLength > 0 ">
+             ,  #{iDisplayLength}
+        </if>
+    </select>
+    
+    
+   <select id="selectDraftBoxCountByCondition" resultType="Integer"  parameterType="net.hunanst.eduz100.api.oa.MailBox">
+        select count(1)
+          from t_oa_mail_box mb
+          left join t_oa_mail m on (mb.mailid = m.id)
+        <where>
+        	1=1 
+            <if test="mailid!=null">
+                AND mb.MAILID=#{mailid}
+            </if>
+            <if test="userid!=null">
+                AND mb.USERID=#{userid}
+            </if>
+           	AND mb.BOXTYPE= 0
+        </where>
+    </select>
+    
+    <select id="selectUnReadMailCountByCondition" resultType="Integer" parameterType="net.hunanst.eduz100.api.oa.MailBox">
+        select count(1)
+          from t_oa_mail_box mb left join t_oa_mail m on (mb.mailid = m.id)
+          left join ac_operator a on (m.userid = a.id)
+        <where>
+        	1=1 
+            <if test="userid!=null">
+                AND mb.USERID=#{userid}
+            </if>
+            and mb.readstate = 0
+			AND mb.BOXTYPE= 2
+        </where>
+    </select>
+    
+    
+    <select id="selectEmailReceiveOperaterByCondition" resultMap="AcOperatorIdAndName" parameterType="net.hunanst.eduz100.api.sys.AcOperator">
+        select a.id as id, a.username as label , a.id as value from ac_operator a
+        <where>
+        	1=1 
+            <if test="username!=null">
+                AND a.username like  '%${username}%'
+            </if>
+        </where>
+    </select>
+    
+    
+    
+    <select id="selectMailContent" resultMap="tempblob" parameterType="java.lang.Integer">
+        select  m.content as mailcontent   from t_oa_mail m 
+        <where>
+        	1=1 
+            <if test="mailid!=null">
+                AND m.ID=#{mailid}
+            </if>
+        </where>
+    </select>
+    
+    
+   <update id="updateMailState" parameterType="net.hunanst.eduz100.api.oa.MailBox">
+    update t_oa_mail_box
+    set 
+      readstate = 1
+    where mailid = #{mailid}
+    and userid = #{userid}
+    and readstate = 0;
+  </update>
+    
+    
+  <update id="delEmail" parameterType="net.hunanst.eduz100.api.oa.MailBox">
+    	delete from t_oa_mail_box
+        <where>
+        	1=1 
+            <if test="mailid!=null">
+                AND mailid = #{mailid}
+            </if>
+            <if test="userid!=null">
+                AND userid = #{userid}
+            </if>
+            <if test="boxtype!=null">
+                AND boxtype = #{boxtype}
+            </if>
+        </where>
+  </update>
+
+
+    <select id="selectMailFile"  resultMap="mailFile" parameterType="net.hunanst.eduz100.api.oa.MailBox">
+        select  m.mailid,m.filepath,m.suffix,m.size,m.filename   from t_oa_mail_file m
+        <where>
+            1=1
+            <if test="mailid!=null">
+                AND m.mailid=#{mailid}
+            </if>
+        </where>
+    </select>
+
+    <select id="selectMessageMembers"  resultMap="addressBook" parameterType="java.lang.Integer">
+        select b.operid ,b.name   from t_oa_address_book b
+        <where>
+            1=1
+            AND b.owner=#{value} and b.operid is not null
+        </where>
+    </select>
+
+    <insert id="addAddressBookByAcOperId" parameterType="net.hunanst.eduz100.api.oa.AddressBook">
+        INSERT INTO t_oa_address_book(OWNER,NAME,OPERID,PHONE,EMAIL)
+        SELECT #{owner} , USERNAME,ID,TELNUMBER,EMAIL FROM ac_operator
+        WHERE ID =  #{operid}
+    </insert>
+
+
+</mapper>

@@ -1,0 +1,197 @@
+#parse("/common/north.html")
+
+<div class="page-header">
+    <h1>
+        公文
+    #*<small>
+        <i class="ace-icon fa fa-angle-double-right"></i>
+    </small>*#
+    </h1>
+</div>
+
+<div class="col-sm-12">
+    <!-- #section:elements.tab -->
+    <div class="tabbable">
+        <ul class="nav nav-tabs padding-12" id="myTab">
+
+            <li class="dropdown
+            #if($flag == 1)
+                active
+            #end
+            ">
+                <a data-toggle="dropdown" class="dropdown-toggle" href="#">
+                    <i class="ace-icon glyphicon glyphicon-pencil"></i> 批阅 &nbsp;
+                    <i class="ace-icon fa fa-caret-down bigger-110 width-auto"></i>
+                </a>
+                <ul class="dropdown-menu dropdown-info">
+                    <li>
+                        <a data-toggle="tab" href="#" class="tab_ele"
+                           data-htmlUrl="$contextPath/oa/officialdocument?deliverid=$!{login_user.id}&delivertype=1">
+                            <i class="ace-icon glyphicon glyphicon-user"></i> 个 人 </a>
+                    </li>
+                    <li class="divider"></li>
+
+                    #foreach($orgItem in $login_orgList)
+                        <li>
+                            <a data-toggle="tab" href="#" class="tab_ele"
+                               data-htmlUrl="$contextPath/oa/officialdocument?deliverid=$!{orgItem.id}&delivertype=2">
+                                <i class="ace-icon glyphicon glyphicon-flag"></i> $!{orgItem.orgname} </a>
+                        </li>
+                    #end
+                    #*<li>
+                        <a data-toggle="tab" href="#" class="tab_ele"
+                           data-htmlUrl="$contextPath/oa/officialdocument/activitylist?deliverid=-1&delivertype=2">
+                            <i class="ace-icon glyphicon glyphicon-flag"></i> 综合部 </a>
+                    </li>
+
+                    <li>
+                        <a data-toggle="tab" href="#" class="tab_ele"
+                           data-htmlUrl="$contextPath/oa/officialdocument/activitylist?deliverid=-2&delivertype=2">
+                            <i class="ace-icon glyphicon glyphicon-flag"></i> 总经办 </a>
+                    </li>*#
+                </ul>
+            </li>
+
+            <li
+                #if($flag == 2)
+                        class="active"
+                #end
+                    >
+                #*<a data-toggle="tab" href="#home">
+                    <i class="green ace-icon fa fa-home bigger-120"></i>
+                    Home
+                </a>*#
+                <a data-toggle="tab" href="#" class="tab_ele" data-htmlUrl="$contextPath/oa/officialdocument/monitor">
+                    <i class="ace-icon fa fa-eye"></i> 跟踪 </a>
+            </li>
+
+            <li
+                #if($flag == 3)
+                        class="active"
+                #end
+                    >
+                <a data-toggle="tab" href="#" class="tab_ele" data-htmlUrl="$contextPath/oa/officialdocument/draft">
+                    <i class="ace-icon fa fa-edit"></i> 草稿箱 </a>
+            </li>
+
+            <li class="dropdown  #if($!flag == 4) active #end " >
+                <a data-toggle="dropdown" class="dropdown-toggle" href="#">
+                    <i class="ace-icon fa fa-archive"></i>档案柜 &nbsp;
+                    <i class="ace-icon fa fa-caret-down bigger-110 width-auto"></i>
+                </a>
+
+                <ul class="dropdown-menu dropdown-info">
+                    <li>
+                        <a data-toggle="tab" href="#" class="tab_ele"
+                           data-htmlUrl="$contextPath/oa/officialdocument/record?deliverid=$!{login_user.id}&delivertype=1" >
+                            <i class="ace-icon glyphicon glyphicon-user"></i> 个人档案 </a>
+                    </li>
+                    <li class="divider"></li>
+
+                    #foreach($orgItem in $login_orgList)
+                        <li>
+                            <a data-toggle="tab" href="#" class="tab_ele"
+                               data-htmlUrl="$contextPath/oa/officialdocument/record?deliverid=$!{orgItem.id}&delivertype=2" >
+                                <i class="ace-icon glyphicon glyphicon-flag"></i>部门档案： $!{orgItem.orgname} </a>
+                        </li>
+                    #end
+
+                </ul>
+            </li>
+
+            <li>
+                <a data-toggle="tab" href="javascript:void(0);" onclick="$('#toRelease').submit();">
+                    <i class="fa fa-plus-circle"></i> 我要发布 </a>
+            </li>
+
+            #*<li class="dropdown">
+                <a data-toggle="dropdown" class="dropdown-toggle" href="#">
+                    Dropdown &nbsp;
+                    <i class="ace-icon fa fa-caret-down bigger-110 width-auto"></i>
+                </a>
+
+                <ul class="dropdown-menu dropdown-info">
+                    <li class="">
+                        <a data-toggle="tab" href="#dropdown1">@fat</a>
+                    </li>
+
+                    <li>
+                        <a data-toggle="tab" href="#dropdown2">@mdo</a>
+                    </li>
+                </ul>
+            </li>*#
+        </ul>
+
+        <div class="tab-content no-border" >
+            <div id="tb_content" class="tab-pane fade active in">
+
+            </div>
+
+        </div>
+    </div>
+
+    <!-- /section:elements.tab -->
+</div>
+
+
+<!-- 跳转 发布页面 隐藏表单 -->
+<form action="$contextPath/oa/officialdocument/release" id="toRelease" method="post">
+    <input type="hidden" value="$contextPath/oa/officialdocument" name="pathname"/>
+    <input type="hidden" value="" name="odid" id="toRelease_odid"/>
+</form>
+
+<!-- 跳转 审批页面 隐藏表单 -->
+<form action="$contextPath/oa/officialdocument/approve" id="toApprove" method="post">
+    <input type="hidden" value="$contextPath/oa/officialdocument" name="pathname"/>
+    <input type="hidden" value="" name="odid" id="toApprove_odid"/>
+    <input type="hidden" value="" name="loadForm4Flag" id="toApprove_ataoflag"/>
+
+</form>
+
+
+<br style="clear:both;">
+
+<script type="text/javascript">
+    var _loginUserid = '$!{login_user.id}';
+
+    // 跳转 编辑 草稿 方法
+    function toRelease(id){
+        $("#toRelease_odid").val(id);
+        $("#toRelease").submit();
+    }
+
+    function toApprove (id  ,flag) {
+        $("#toApprove_odid").val(id);
+        if(flag) $("#toApprove_ataoflag").val(flag);
+
+        $("#toApprove").submit();
+    }
+
+    function loadContent (flag, deliverid , delivertype){
+
+    }
+
+    $(function (){
+        if('$flag' == 1)$("#tb_content").load('$contextPath/oa/officialdocument/activitylist?deliverid=$!{deliverid}&delivertype=$!{delivertype}');   // 加载第一个Tab
+        if('$flag' == 2)$("#tb_content").load('$contextPath/oa/officialdocument/monitorlist');   // 跟踪
+        if('$flag' == 3)$("#tb_content").load('$contextPath/oa/officialdocument/draftlist');   // 草稿
+        if('$flag' == 4)$("#tb_content").load('$contextPath/oa/officialdocument/recordlist?targetid=$!{deliverid}&type=$!{delivertype}')
+
+        $(".tab_ele").click( function (){
+            /*$("li.active").removeClass("active");
+
+            if($(this).attr('data-target')){
+                var id = $(this).attr('data-target');
+                $("#"+id).addClass("active");
+            }else{
+                $(this).parent().addClass("active");
+            }*/
+
+//            $("#tb_content").load($(this).attr("data-htmlUrl") );
+
+            location.href = $(this).attr("data-htmlUrl");
+        })
+    })
+</script>
+
+#parse("/common/south.html")

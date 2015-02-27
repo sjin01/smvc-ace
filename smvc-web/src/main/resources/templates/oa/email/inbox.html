@@ -1,0 +1,367 @@
+#parse("/common/north.html")
+<style>
+    .my_line{
+        height: 5px;
+        border-top: 1px solid #ddd;
+        text-align: center;
+    }
+    .my_line span{
+        position: relative;
+        top: -8px;
+        background: #fff;
+        padding: 0 20px;
+    }
+
+    .message-item{
+        padding: 8px;
+    }
+
+    .message-item .time {
+        width: 140px;
+    }
+
+</style>
+
+
+		<div class="main-content">
+                <!--<div id="push_userid" class="hide" >$!loginUser.id</div>-->
+                <div id="my_tree_modal" class="hide">
+                    <div id="treeview" class="tree"></div>
+                </div>
+				<!-- /section:basics/content.breadcrumbs -->
+				<div class="page-content">
+
+					<!-- /section:settings.box -->
+					<div class="page-content-area">
+
+						<div class="row">
+							<div class="col-xs-12">
+								<!-- PAGE CONTENT BEGINS -->
+								<div class="row">
+									<div class="col-xs-12">
+										<!-- #section:pages/inbox -->
+										<div class="tabbable">
+											<ul id="inbox-tabs" class="inbox-tabs nav nav-tabs padding-12">
+												<!-- /section:pages/inbox.compose-btn -->
+
+												<li id="li_mail_receivebox" >
+													<a data-toggle="tab" href="#inbox" data-target="inbox">
+														<i class="blue ace-icon fa fa-inbox bigger-130"></i>
+														<span class="bigger-110">收件箱</span>
+													</a>
+												</li>
+
+												<li id="li_mail_sentbox">
+													<a data-toggle="tab" href="#sent" data-target="sent">
+														<i class="orange ace-icon fa fa-location-arrow bigger-130"></i>
+														<span class="bigger-110">发件箱</span>
+													</a>
+												</li>
+
+												<li id="li_mail_draftbox">
+													<a data-toggle="tab" href="#draft" data-target="draft">
+														<i class="green ace-icon fa fa-pencil bigger-130"></i>
+														<span class="bigger-110">草稿箱</span>
+													</a>
+												</li>
+                                                <!-- #section:pages/inbox.compose-btn -->
+                                                <li class="li-new-mail">
+                                                    <a data-toggle="tab" href="#write" data-target="write" >
+                                                        <i class="ace-icon fa fa-envelope bigger-130 red"></i>
+                                                        <span class="bigger-110">写新邮件</span>
+                                                    </a>
+                                                </li><!-- /.li-new-mail -->
+
+											</ul>
+
+											<div class="tab-content no-border no-padding">
+												<div id="inbox" class="tab-pane in active">
+													<div class="message-container">
+														<!-- #section:pages/inbox.navbar -->
+														<div id="id-message-header">
+															<div id='id-message-new-navbar' class='message-navbar clearfix hide'>
+																<div class='message-bar'>
+																	<div class='message-toolbar'>
+																		<button type='button' class='btn btn-xs btn-white btn-primary  btn-save-message'>
+																			<i class='ace-icon fa fa-floppy-o bigger-125'></i>
+																			<span class='bigger-110'>保存草稿</span>
+																		</button>
+																		<!--
+																		<button type='button' class='btn btn-xs btn-white btn-primary'>
+																			<i class='ace-icon fa fa-times bigger-125 orange2'></i>
+																			<span class='bigger-110'>删除</span>
+																		</button>
+																		 -->
+																	</div>
+																</div>
+
+																<div>
+																	<div class='messagebar-item-left'>
+																		<a href='#' class='btn-back-message-list'>
+																			<i class='ace-icon fa fa-arrow-left bigger-110 middle blue'></i>
+																			<b class='middle bigger-110'>返回</b>
+																		</a>
+																	</div>
+
+																	<div id="my_mail_send_div" class='messagebar-item-right'>
+																		<span class='inline btn-send-message'>
+																			<button type='button' class='btn btn-sm btn-primary no-border btn-white btn-round'>
+																				<span class='bigger-110'>发送</span>
+
+																				<i class='ace-icon fa fa-arrow-right icon-on-right'></i>
+																			</button>
+																		</span>
+																	</div>
+																</div>
+															</div>
+
+															<div id="id-message-list-navbar" class="message-navbar clearfix">
+																<div class="message-bar">
+																	<div class="message-infobar" id="id-message-infobar">
+																		<span class="blue bigger-150">收件箱</span>
+																		<span class="grey bigger-110"></span>
+																	</div>
+                                                                    <div  id="check_all_del" class="message-toolbar hide">
+                                                                        <button type="button" class="btn btn-xs btn-white btn-primary ">
+                                                                            <i class="ace-icon fa fa-trash-o bigger-125 orange"></i>
+                                                                            <span class="bigger-110">批量删除</span>
+                                                                        </button>
+                                                                    </div>
+
+																</div>
+
+                                                                <div>
+                                                                    <div id="all_checkbox" class="messagebar-item-left">
+                                                                        <label class="inline middle">
+                                                                            <input type="checkbox" id="id-toggle-all" class="ace">
+                                                                            <span class="lbl"></span>
+                                                                        </label>
+                                                                    </div>
+                                                                </div>
+
+															</div>
+
+															<div id="id-message-item-navbar" class="message-navbar clearfix">
+																<div class="message-bar">
+																	<div class="message-toolbar">
+																	</div>
+																</div>
+
+																<div>
+																	<div id="div_back_btn" class="messagebar-item-left">
+																		<a href="#" class="btn-back-message-list">
+																			<i class="ace-icon fa fa-arrow-left blue bigger-110 middle"></i>
+																			<b class="bigger-110 middle">返回</b>
+																		</a>
+																	</div>
+																</div>
+															</div>
+														</div>
+
+														<!-- /section:pages/inbox.navbar -->
+														<div class="message-list-container">
+															<!-- #section:pages/inbox.message-list -->
+															<div class="message-list" id="message-list"></div>
+														</div>
+
+														<!-- #section:pages/inbox.message-footer -->
+														<div class="message-footer clearfix">
+
+															<div class="pull-left"> 邮件总数</div>
+
+															<div class="pull-right">
+																<div class="inline middle"> 邮件页数 </div>
+
+																&nbsp; &nbsp;
+																<ul class="pagination middle">
+																	<li>
+																		<a href="#">
+																			<i class="ace-icon fa fa-step-backward middle"></i>
+																		</a>
+																	</li>
+
+																	<li>
+																		<a href="#">
+																			<i class="ace-icon fa fa-caret-left bigger-140 middle"></i>
+																		</a>
+																	</li>
+
+																	<li>
+																		<span>
+																			<input value="1" maxlength="10" type="text" />
+																		</span>
+																	</li>
+
+																	<li>
+																		<a href="#">
+																			<i class="ace-icon fa fa-caret-right bigger-140 middle"></i>
+																		</a>
+																	</li>
+
+																	<li>
+																		<a href="#">
+																			<i class="ace-icon fa fa-step-forward middle"></i>
+																		</a>
+																	</li>
+																</ul>
+															</div>
+														</div>
+
+														<!-- /section:pages/inbox.message-footer -->
+													</div>
+												</div>
+											</div><!-- /.tab-content -->
+										</div><!-- /.tabbable -->
+
+										<!-- /section:pages/inbox -->
+									</div><!-- /.col -->
+								</div><!-- /.row -->
+
+								<!-- 写邮件页面 -->
+								<form id="id-message-form" class="hide form-horizontal message-form col-xs-12">
+                                    <div class="row">
+
+
+                                        <div  class="col-sm-10">
+                                            <div class="form-group">
+                                                <label class="col-sm-3 control-label no-padding-right" for="form-field-recipient">收件人:</label>
+
+                                                <div class="col-sm-6 col-xs-12">
+                                                    <div class="input-icon block col-xs-12 no-padding">
+                                                        <input maxlength="100" type="text" class="col-xs-12" name="recipient" id="form-field-recipient" placeholder="请输入收件人内部邮箱地址" />
+                                                        <input id="form-field-recipient_id" type="hidden"/>
+                                                        <i class="ace-icon fa fa-user"></i>
+                                                    </div>
+                                                </div>
+                                                <label id="my_mail_choose_stuff" class="btn btn-warning btn-sm">指定人员</label>
+                                            </div>
+
+                                            <div class="hr hr-18 dotted"></div>
+
+                                            <div class="form-group">
+                                                <label class="col-sm-3 control-label no-padding-right" for="form-field-subject">主题:</label>
+
+                                                <div class="col-sm-6 col-xs-12">
+                                                    <div class="input-icon block col-xs-12 no-padding">
+                                                        <input maxlength="50" type="text" class="col-xs-12" name="subject" id="form-field-subject" placeholder="请输入主题内容" />
+                                                        <i class="ace-icon fa fa-comment-o"></i>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div class="hr hr-18 dotted"></div>
+
+                                            <div class="form-group">
+                                                <label class="col-sm-3 control-label no-padding-right">
+                                                    <span class="inline space-24 hidden-480"></span>
+                                                    正文:
+                                                </label>
+
+                                                <!-- #section:plugins/editor.wysiwyg -->
+                                                <div class="col-sm-9">
+                                                    <div class="wysiwyg-editor"></div>
+                                                </div>
+                                                <!-- /section:plugins/editor.wysiwyg -->
+                                            </div>
+
+                                            <div class="hr hr-18 dotted"></div>
+                                            <div id="my_file_show">隐藏/显示</div>
+                                            <div class="form-group">
+                                                <div class="col-sm-1 control-label no-padding-right"></div>
+                                                <div id="my_file_area"  class="col-sm-10"></div>
+                                            </div>
+
+                                            <div id="my_file_area_url" class="hide"></div>
+
+                                            <div class="space"></div>
+
+                                            <div class="form-group">
+                                                <div>
+                                                    <div class="col-sm-4 control-label no-padding-right" ></div>
+                                                    <label id="buttom_send_btn" class="col-sm-5 center btn btn-primary">发送</label>
+                                                    <div class="col-sm-3"></div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div  class="col-sm-2">
+                                            <ul class='bigger-110' style="text-align: center">通讯录</ul>
+                                            <ul class="nav nav-list" id="mail_membersList" style="overflow: auto; max-height: 1000px " ></ul>
+                                        </div>
+                                    </div>
+									<!-- #section:pages/inbox.compose -->
+									<!-- /section:pages/inbox.compose -->
+								</form>
+
+								<div class="hide message-content" id="id-message-content">
+									<div class="message-header clearfix">
+										<div class="pull-left">
+											<span class="blue bigger-125">邮件标题</span>
+
+											<div class="space-4"></div>
+
+											<i class="ace-icon fa fa-star orange2"></i>
+
+											&nbsp;
+											<img class="middle" alt="John's Avatar" src="$contextPath/static/ace/avatars/avatar.png" width="32" />
+											&nbsp;
+											<a href="#" class="sender">发送者</a>
+
+											&nbsp;
+											<i class="ace-icon fa fa-clock-o bigger-110 orange middle"></i>
+											<span class="time grey">接收时间</span>
+										</div>
+
+										<div class="pull-right action-buttons">
+											<a  href="#">
+												<i class="ace-icon fa fa-reply green icon-only bigger-130"> 回复 </i>
+											</a>
+
+											<a href="#">
+												<i class="ace-icon fa fa-mail-forward blue icon-only bigger-130"> 转发 </i>
+											</a>
+
+											<a href="#">
+												<i class="ace-icon fa fa-trash-o red icon-only bigger-130"> 删除 </i>
+											</a>
+										</div>
+									</div>
+
+									<!-- /section:pages/inbox.message-header -->
+									<div class="hr hr-double"></div>
+
+									<!-- #section:pages/inbox.message-body -->
+									<div class="message-body"></div>
+
+                                    <div class="message-attachment clearfix"></div>
+
+									<!-- /section:pages/inbox.message-body -->
+									<div class="hr hr-double"></div>
+
+								</div>
+								<!-- /.message-content -->
+
+								<!-- PAGE CONTENT ENDS -->
+							</div><!-- /.col -->
+						</div><!-- /.row -->
+
+					<a href="#" id="btn-scroll-up" class="btn-scroll-up btn btn-sm btn-inverse">
+						<i class="ace-icon fa fa-angle-double-up icon-only bigger-110"></i>
+					</a>
+
+				<script type="text/javascript">
+			if('ontouchstart' in document.documentElement) document.write("<script src='$contextPath/static/ace/js/jquery.mobile.custom.min.js'>"+"<"+"/script>");
+		</script>
+		<!-- page specific plugin scripts -->
+            <script src="$contextPath/static/ace/js/bootstrap-tag.min.js"></script>
+		    <script src="$contextPath/static/ace/js/jquery.hotkeys.min.js"></script>
+		    <script src="$contextPath/static/ace/js/ace/elements.onpage-help.js"></script>
+		    <script src="$contextPath/static/ace/js/ace/ace.onpage-help.js"></script>
+		<script src="$contextPath/static/ace/js/bootstrap-wysiwyg.min.js"></script>
+        <script src="$contextPath/static/ace/js/jquery.gritter.min.js"></script>
+        <script src="$contextPath/static/ace/js/fuelux/fuelux.tree.min.js"></script>
+        <script src="$contextPath/static/js/org_fueluxtree.js"></script>
+		<script src="$contextPath/static/ace/js_mod/inbox.js"></script>
+        <script src="$contextPath/static/ace/js/jquery-ui.min.js"></script>
+
+#parse("/common/south.html")

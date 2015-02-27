@@ -1,0 +1,111 @@
+
+
+<form action="" id="tab_sealmanager_form">
+
+    <dl class="dl-horizontal">
+        <dt>公章图片</dt>
+        <dd>
+            <div class="width-30">
+                <input type="file" id="seal_file"/>
+                <div class="progress pos-rel" id="progress_div" data-percent="0%" style="display: none;">
+                    <div class="progress-bar" style="width:0%;"></div>
+                </div>
+            </div>
+        </dd>
+
+        <dt class="padding-top20">公章名</dt>
+        <dd class="padding-top20">
+            <input type="text" class="input-sm" name="keytext" maxlength="32"/>
+            <div class="help-block col-xs-12 col-sm-reset inline"> 您可以为这个公章重命名，以方便管理！ </div>
+        </dd>
+
+    </dl>
+
+    <div class="clearfix form-actions">
+        <div class="col-md-offset-3 col-md-9">
+            <button class="btn btn-info" type="button" onclick="saveSeal();" id="on_upload_btn">
+                <i class="ace-icon fa fa-floppy-o "></i>
+                确认上传
+            </button>
+        </div>
+    </div>
+
+    <input type="hidden" id="upload_file_filename" name="filename"/>
+    <input type="hidden" id="upload_file_filepath" name="filepath"/>
+    <input type="hidden" id="upload_file_filesize"/>
+</form>
+
+<script src="$contextPath/static/js/upload_file.js"></script>
+<script src="$contextPath/static/ace/js/jquery.gritter.min.js"></script>
+
+<script type="text/javascript">
+    var working = false;
+
+    var uploadtool ;
+    function saveSeal(){
+        $("#on_upload_btn").attr("disabled","disabled");
+        working = true;
+        uploadtool.upload();
+    }
+
+    function saveSealStep2 (data){
+        working = false;
+        if(!data){
+            myGritterError('您还没有选择任何公章图片文件！');
+            $("#on_upload_btn").removeAttr("disabled");
+            return false;
+        }
+
+        $("#upload_file_filename").val( data.filename);
+        $("#upload_file_filepath").val( data.filepath);
+        $("#upload_file_filesize").val( data.filesize);
+
+        $.ajax({
+            url: '$contextPath/sealManager/saveseal',
+            type: 'POST',
+            data: $("#tab_sealmanager_form").serialize() ,
+            dataType: 'json',
+            async:false,
+            success : function(response) {
+                if(response.code == 200){
+                    load_sealList();
+                    $('#uploadseal_div').html('');
+                }
+            },
+            error: function(response) {
+            }
+        })
+    }
+
+    $(function (){
+        var form = $("#tab_sealmanager_form");
+        var file_input = form.find('input[type=file]');
+        file_input.ace_file_input({
+            style:'well',
+            btn_choose:'点击或者将图片文件拖到这儿',
+            btn_change:null,
+            droppable:true,
+            no_icon:'ace-icon fa fa-picture-o',
+            thumbnail:'small',
+            before_remove: function() {
+                //don't remove/reset files while being uploaded
+                return !working;
+            },
+            maxSize: 1048576,// ( 1024*1024 )bytes
+            allowExt: ['jpg', 'jpeg', 'png', 'gif'],
+            allowMime: ['image/jpg', 'image/jpeg', 'image/png', 'image/gif']
+        });
+        file_input.on('file.error.ace', function(ev, info) {
+            if(info.error_count['ext'] || info.error_count['mime']) myGritterError('无效的文件类型！请选择一个图片文件！');
+            if(info.error_count['size']) myGritterError('图片文件太大了! 请选择 1M 以下的图片文件！');
+        });
+
+        uploadtool = new UploadTool({
+            uploadPath:'$!{nginx_upload4ck}',
+            progressPath:'$!{nginx_uploadprogress}',
+            fileInput:file_input,
+            form:form,
+            progressDivId:'progress_div'
+        },saveSealStep2 );
+    })
+</script>

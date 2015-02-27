@@ -1,0 +1,83 @@
+#parse("/common/north.html")
+
+<div class="page-header">
+    <h1 class="no-margin col-sm-8 left page-header-h1">
+        通知
+        <small>
+            <i class="ace-icon fa fa-angle-double-right"></i>
+            <a href="$contextPath/oa/notification/display">通知列表</a>
+        </small>
+        <small>
+            <i class="ace-icon fa fa-angle-double-right"></i>
+            查看通知
+        </small>
+    </h1>
+
+    <div class="input-group col-sm-4" >
+        <input type="text" id="condition" class="form-control search-query" style="border: 0px;width: 0px;">
+    </div>
+
+</div>
+
+<div class="widget-box transparent ui-sortable-handle">
+    <div class="row">
+        <div class="col-sm-6 widget-container-col ui-sortable" style="width:100%;">
+            <div class="widget-box transparent ui-sortable-handle" style="opacity: 1; z-index: 0;">
+
+                <div class="widget-body">
+                    #foreach($!notification in $!list)
+                    <input type="hidden" name="isread" value="$!notification.isread">
+                    <input type="hidden" name="notid" value="$!notification.id">
+                    <!--<div class="widget-main padding-6 no-padding-left no-padding-right" style="width:80%;text-align: center;">
+                        <span style="text-align: center;margin-left: 25%;">
+                            <b>$!notification.title</b>
+                        </span>
+
+                        <br><br>
+                        <div style="text-align: center;margin-left: 25%;">
+                            $!notification.content
+                        </div>
+                        <br>
+                        <span style="text-align: center;margin-left: 45%;">
+                            $!notification.username
+                        </span>&nbsp;&nbsp;
+                        <span style="margin-right:-30%;">$!notification.timeStr</span>-->
+                        <dl class="dl-horizontal"style="margin-right:10%;">
+                            <dt  style="margin-left: 25%;">标题</dt>
+                            <dd style="padding-left: 25%">$!notification.title</dd>
+                            <br><br><br>
+                            <dt  style="margin-left: 25%;">通知内容</dt>
+                            <dd style="padding-left: 25%"> $!notification.content</dd>
+                            <br><br>
+                            <dt></dt>
+                            <dd style="margin-left: 60%;"> $!notification.username&nbsp;&nbsp;$!notification.timeStr</dd>
+
+                        </dl>
+
+                    <!--</div>-->
+                    #end
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    $(function(){
+        var isread=$('input[name=isread]').val()==''?0:$('input[name=isread]').val();
+        var notid=$('input[name=notid]').val()
+        if(isread<1&&notid!=null&& $.trim(notid)!=''){
+            $.ajax({
+                url: "$contextPath/oa/notification/updateRead?notid="+notid,
+                dataType: 'json',
+                success: function (data) {
+                    if(data&&data>0){
+                        unReadNotification();
+                    }
+                }
+            });
+        }
+    });
+</script>
+
+#parse("/common/south.html")

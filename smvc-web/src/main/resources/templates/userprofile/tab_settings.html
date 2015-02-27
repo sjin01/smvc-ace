@@ -1,0 +1,13 @@
+<div id="form_content_div"></div>
+
+<script type="text/javascript">
+
+    function loadForm(v){
+        if(v) $('#form_content_div').load('$contextPath/userprofile/tab_settings_form?flag=' + v)
+    }
+
+
+    $(function (){
+        loadForm(1);
+    })
+</script>

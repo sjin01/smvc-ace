@@ -1,0 +1,223 @@
+#parse("/common/north.html")
+<div class="page-header">
+	<div class="input-group col-sm-4">
+		<h1 class="no-margin col-sm-8 left page-header-h1">
+			通讯录 <small> <i class="ace-icon fa fa-angle-double-right"></i>
+			<a href="$contextPath/oa/addressBook">通讯薄</a>
+			 <i class="ace-icon fa fa-angle-double-right"></i>
+				#if($vo.id)编辑 #else新增#end
+			</small>
+		</h1>
+	</div>
+</div>
+<div class="row">
+	<div class="col-xs-12">
+		<!-- PAGE CONTENT BEGINS -->
+		<form class="form-horizontal" role="form" id="addressBook_form">
+			<!-- #section:elements.form -->
+			<div class="form-group">
+				<label class="col-sm-3 control-label no-padding-right" for=""> 
+				<span style="color: red">*</span>
+				姓名 </label>
+				<div class="col-sm-9">
+					<input type="hidden" value="$!vo.id" name="id" />
+					<input type="text" id="name" placeholder="联系人姓名" value="$!vo.name"
+						name="name" class="col-xs-10 col-sm-5" />
+				</div>
+			</div>
+			<div class="form-group">
+				<label class="col-sm-3 control-label no-padding-right"
+					for=""> 个人电话 </label>
+				<div class="col-sm-9">
+					<input type="text" id="phone" placeholder="手机号码" value="$!vo.phone"
+						name="phone" class="col-xs-10 col-sm-5" />
+				</div>
+			</div>
+			<div class="form-group">
+				<label class="col-sm-3 control-label no-padding-right"
+					for=""> 办公电话 </label>
+				<div class="col-sm-9">
+					<input type="text" id="officephone" placeholder="如：0731-88882233,13388889999" value="$!vo.officephone"
+						name="officephone" class="col-xs-10 col-sm-5" />
+				</div>
+			</div>
+			<div class="form-group">
+				<label class="col-sm-3 control-label no-padding-right"
+					for=""> 个人邮箱 </label>
+				<div class="col-sm-9">
+					<input type="text" id="email" placeholder="个人邮箱" value="$!vo.email"
+						name="email" class="col-xs-10 col-sm-5" />
+				</div>
+			</div>
+			<div class="form-group">
+				<label class="col-sm-3 control-label no-padding-right"
+					for=""> QQ </label>
+				<div class="col-sm-9">
+					<input type="text" id="qq" placeholder="QQ号码" name="qq" value="$!vo.qq"
+						class="col-xs-10 col-sm-5" maxlength="16" />
+				</div>
+			</div>
+			<!-- #section:plugins/date-time.datepicker -->
+			<div class="form-group" id="lastdate_div" style="">
+				<label class="col-xs-3 control-label no-padding-right"> 出生日期
+				</label>
+				<div class="col-xs-9">
+					<div class="input-group col-xs-3">
+						<input class="form-control date-picker input-sm" id="birthdaystr" value="$!vo.birthdaystr"
+							name="birthdaystr" type="text" data-date-format="yyyy-mm-dd"
+							value="" /> <span class="input-group-addon"> <i
+							class="fa fa-calendar bigger-110"></i>
+						</span>
+					</div>
+				</div>
+			</div>
+
+			<div class="form-group">
+				<label class="col-sm-3 control-label no-padding-right"
+					for=""> 备注 </label>
+				<div class="col-xs-9">
+						<textarea class="col-xs-10 col-sm-5" id="remark " name="remark" maxlength="300" 
+							placeholder="备注说明">$!vo.remark</textarea>
+				</div>
+			</div>
+
+			<div class="clearfix form-actions">
+				<div class="col-md-offset-4 col-md-9">
+					<button class="btn btn-info" type="button" onclick="save();">
+						<i class="ace-icon fa fa-check bigger-110"></i> 提交
+					</button>
+					&nbsp; &nbsp; &nbsp;
+					<button class="btn" type="reset">
+						<i class="ace-icon fa fa-undo bigger-110"></i> 重置
+					</button>
+				</div>
+			</div>
+		</form>
+	</div>
+</div>
+<script type="text/javascript">
+	jQuery(function($) {
+        $("div#main-container").css("width","96%");
+		$('.date-picker').datepicker({
+			format : "yyyy-mm-dd",
+			autoclose : true,
+			todayHighlight : true
+		})
+		//show datepicker when clicking on the icon
+		.next().on(ace.click_event, function() {
+			$(this).prev().focus();
+		});
+
+		init_validate();
+	})
+
+	function save() {
+		if (!addressBook_form_vali.form()) {
+			return false;
+		}
+		var parm = $("#addressBook_form").serialize();
+		//return;
+		myConfirm("是否确认提交？", function(){
+            $.ajax({
+                url:"$contextPath/oa/addressBook/saveOrUpdate",
+                type:'POST',
+                data: $("#addressBook_form").serialize(),
+                dataType:'json',
+                success:function( result ){
+//                	console.log(result);
+                    if(result > 0){
+                        // 成功  TODO 跳转到成功页面
+                        myFinishAndTurn('操作成功','已成功添加到通讯薄中！' ,'$contextPath/oa/addressBook');
+                    }else{
+                        // 失败
+                    }
+                }
+            });
+        });
+		
+	}
+
+	/**
+	 * init Validate form
+	 */
+	var addressBook_form_vali;
+	function init_validate() {
+		/**
+		 *  自定义 最后日期 属性 验证方式
+		 */
+		 $.validator.addMethod("vali_phone",function(value,element,params){
+		     var patrn = /^(13[0-9]|14[5|7]|15[0-9]|17[0|6|7|8]|18[0-9])\d{8}$/;
+		     if(value){
+		    	 if(patrn.test(value)){
+		    		 return true;
+		    	 }else{
+		    		 return false;
+		    	 }
+		     }
+		     return true;
+		},"请输入有效的手机号码！"); 
+		
+		$.validator.addMethod("vali_officephone",function(value,element,params){
+		     var patrn = /^(13[0-9]|14[5|7]|15[0-9]|17[0|6|7|8]|18[0-9])\d{8}$/;
+		     var par = /^0[1-9]{2,3}-[1-9]\d{5,8}$/;
+		     if(value){
+		    	 if(patrn.test(value)||par.test(value)){
+		    		 return true;
+		    	 }else{
+		    		 return false;
+		    	 }
+		     }
+		     return true;
+		},"请输入有效的联系号码！"); 
+		
+		$.validator.addMethod("vali_qq",function(value,element,params){
+			var re=/^[1-9]\d{4,15}$/;
+		     if(value){
+		    	 if(re.test(value)){
+		    		 return true;
+		    	 }else{
+		    		 return false;
+		    	 }
+		     }
+		     return true;
+		},"请输入有效的qq号码！"); 
+
+		addressBook_form_vali = $("#addressBook_form").validate({
+			rules : {
+				name : {
+					required : true,
+					minlength : 2,
+					maxlength : 8
+				}, 
+				remark : {
+					maxlength : 300
+				}, 
+				phone : {
+					vali_phone : true
+				}, 
+				qq : {
+					vali_qq : true
+				}, 
+				officephone : {
+					vali_officephone : true
+				}, 
+				email : {
+					email : true,
+					maxlength : 128
+				}
+			},
+			messages : {
+				name : {
+                    required : "请输入联系人姓名！",
+					minlength : "名字过短,请重新输入！",
+					maxlength : "名字过长,请重新输入！"
+				},
+				remark : {
+					maxlength : "内容过长,请重新输入！"
+				}
+			}
+		})
+	}
+</script>
+
+#parse("/common/south.html")

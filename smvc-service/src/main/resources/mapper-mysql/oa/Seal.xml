@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="Seal" >
+  <resultMap id="BaseResultMap" type="net.hunanst.eduz100.api.oa.Seal" >
+    <id column="ID" property="id" jdbcType="INTEGER" />
+    <result column="FILEPATH" property="filepath" jdbcType="VARCHAR" />
+    <result column="FILENAME" property="filename" jdbcType="VARCHAR" />
+    <result column="KEYTEXT" property="keytext" jdbcType="VARCHAR" />
+    <result column="USERID" property="userid" jdbcType="INTEGER" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    ID, FILEPATH, FILENAME, KEYTEXT, USERID
+  </sql>
+
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from t_oa_seal
+    where ID = #{value}
+  </select>
+
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from t_oa_seal
+    where ID = #{value}
+  </delete>
+
+  <insert id="insert" parameterType="net.hunanst.eduz100.api.oa.Seal" >
+    insert into t_oa_seal (ID, FILEPATH, FILENAME, 
+      KEYTEXT, USERID)
+    values (#{id,jdbcType=INTEGER}, #{filepath,jdbcType=VARCHAR}, #{filename,jdbcType=VARCHAR}, 
+      #{keytext,jdbcType=VARCHAR}, #{userid,jdbcType=INTEGER})
+  </insert>
+
+  <insert id="insertSelective" parameterType="net.hunanst.eduz100.api.oa.Seal" >
+    insert into t_oa_seal
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        ID,
+      </if>
+      <if test="filepath != null" >
+        FILEPATH,
+      </if>
+      <if test="filename != null" >
+        FILENAME,
+      </if>
+      <if test="keytext != null" >
+        KEYTEXT,
+      </if>
+      <if test="userid != null" >
+        USERID,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="filepath != null" >
+        #{filepath,jdbcType=VARCHAR},
+      </if>
+      <if test="filename != null" >
+        #{filename,jdbcType=VARCHAR},
+      </if>
+      <if test="keytext != null" >
+        #{keytext,jdbcType=VARCHAR},
+      </if>
+      <if test="userid != null" >
+        #{userid,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+
+  <update id="updateByPrimaryKeySelective" parameterType="net.hunanst.eduz100.api.oa.Seal" >
+    update t_oa_seal
+    <set >
+      <if test="filepath != null" >
+        FILEPATH = #{filepath,jdbcType=VARCHAR},
+      </if>
+      <if test="filename != null" >
+        FILENAME = #{filename,jdbcType=VARCHAR},
+      </if>
+      <if test="keytext != null" >
+        KEYTEXT = #{keytext,jdbcType=VARCHAR},
+      </if>
+      <if test="userid != null" >
+        USERID = #{userid,jdbcType=INTEGER},
+      </if>
+    </set>
+    where ID = #{id,jdbcType=INTEGER}
+  </update>
+
+  <update id="updateByPrimaryKey" parameterType="net.hunanst.eduz100.api.oa.Seal" >
+    update t_oa_seal
+    set FILEPATH = #{filepath,jdbcType=VARCHAR},
+      FILENAME = #{filename,jdbcType=VARCHAR},
+      KEYTEXT = #{keytext,jdbcType=VARCHAR},
+      USERID = #{userid,jdbcType=INTEGER}
+    where ID = #{id,jdbcType=INTEGER}
+  </update>
+
+  <select id="select_page" resultMap="BaseResultMap" parameterType="net.hunanst.eduz100.api.oa.Seal" >
+    select
+    <include refid="Base_Column_List" />
+     from t_oa_seal
+    <where >
+      <if test="id!=null" >
+        AND ID=#{id}
+      </if>
+      <if test="filepath!=null" >
+        AND FILEPATH=#{filepath}
+      </if>
+      <if test="filename!=null" >
+        AND FILENAME=#{filename}
+      </if>
+      <if test="keytext!=null" >
+        AND KEYTEXT=#{keytext}
+      </if>
+      <if test="userid!=null" >
+        AND USERID=#{userid}
+      </if>
+    </where>
+  </select>
+
+</mapper>

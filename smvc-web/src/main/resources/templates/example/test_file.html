@@ -1,0 +1,93 @@
+
+#parse("/common/north.html")
+##$iDemand.addJs('dropzone')
+
+<link rel="stylesheet" href="$contextPath/static/ace/css/dropzone.css" />
+#*#if($iDemand.haveJs('dropzone'))
+<!-- page specific plugin styles -->
+#end*#
+
+
+
+
+
+<div class="page-header">
+    <h1>
+        Dropzone.js
+        <small>
+            <i class="ace-icon fa fa-angle-double-right"></i>
+            Drag &amp; drop file upload with image preview
+        </small>
+    </h1>
+    </div><!-- /.page-header -->
+
+    <div class="col-xs-12">
+        <!-- PAGE CONTENT BEGINS -->
+        <div>
+            <form action="$contextPath/upload/main" class="dropzone" id="dropzone">
+                <div class="fallback">
+                    <input name="file" type="file" multiple="" />
+                </div>
+            </form>
+        </div><!-- PAGE CONTENT ENDS -->
+    </div><!-- /.col -->
+
+
+
+<input type="button" value="get data" onclick="getFile();"/>
+
+
+
+<!-- page specific plugin scripts -->
+<script src="$contextPath/static/ace/js/dropzone.min.js"></script>
+
+
+
+<script type="text/javascript">
+    jQuery(function($){
+
+        Dropzone.autoDiscover = false;
+        try {
+            var myDropzone = new Dropzone("#dropzone" , {
+                paramName: "file", // The name that will be used to transfer the file
+                maxFilesize: 5, // MB
+
+                addRemoveLinks : true,
+                dictDefaultMessage :
+                        '<span class="bigger-150 bolder"><i class="ace-icon fa fa-caret-right red"></i> Drop files</span> to upload \
+                        <span class="smaller-80 grey">(or click)</span> <br /> \
+                        <i class="upload-icon ace-icon fa fa-cloud-upload blue fa-3x"></i>'
+                ,
+                dictResponseError: 'Error while uploading file!',
+
+                //change the previewTemplate to use Bootstrap progress bars
+                previewTemplate: "<div class=\"dz-preview dz-file-preview\">\n  " +
+                "<div class=\"dz-details\">\n    " +
+                "<div class=\"dz-filename\"><span data-dz-name></span></div>\n    " +
+                "<div class=\"dz-size\" data-dz-size></div>\n    " +
+                "<img data-dz-thumbnail />\n  </div>\n  " +
+                "<div class=\"progress progress-small progress-striped active\">" +
+                "<div class=\"progress-bar progress-bar-success\" data-dz-uploadprogress></div></div>\n  " +
+                "<div class=\"dz-success-mark\"><span></span></div>\n  <div class=\"dz-error-mark\"><span></span></div>\n  " +
+                "<div class=\"dz-error-message\"><span data-dz-errormessage></span></div>\n</div>"
+                ,
+                success: function (data) {
+                    /*console.log(data);
+                    console.log(data.xhr.response);  // 上传后 储存路径*/
+                    return data.previewElement ? data.previewElement.classList.add("dz-success") : void 0;
+                }
+            });
+        } catch(e) {
+            alert('Dropzone.js does not support older browsers!');
+        }
+
+    });
+
+    function getFile (){
+        var d = Dropzone.forElement("#dropzone");
+//        console.log(d.files);
+    }
+
+</script>
+
+#parse("/common/south.html")

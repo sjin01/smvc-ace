@@ -1,0 +1,33 @@
+<div class="well">
+    <dl style="padding-left: 50px; padding-right: 50px;">
+        <dt></dt>
+        <dd>
+            <h4 class="red" style="float: left">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;您发起的公文被驳回</h4>
+            <small style="float: left" class="grey">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;您可以通过修改后再一次提交</small>
+        </dd>
+    </dl>
+
+    <form id="to_editReject" action="$contextPath/oa/officialdocument/editreject" method="post">
+
+        <div class="clearfix form-actions">
+            <div class="col-md-offset-3 col-md-9">
+                <button class="btn btn-warning" type="button" onclick="$('#to_editReject').submit();">
+                    <i class="ace-icon fa fa-edit bigger-110"></i>
+##                    <i class="ace-icon fa fa-edit bigger-130"></i>
+                    修 改
+                </button>
+            </div>
+        </div>
+
+        <input type="hidden" name="odid" id="officialDocumentId" value="$!{officialDocumentId}"/>
+
+    </form>
+</div>
+
+#*
+<script type="text/javascript">
+
+    function toEditReject (){
+
+    }
+</script>*#

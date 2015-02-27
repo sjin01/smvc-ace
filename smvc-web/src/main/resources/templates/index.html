@@ -1,0 +1,418 @@
+#parse("/common/north.html")
+
+<div class="col-xs-12">
+    <div class="row">
+        <div class="alert alert-block alert-success">
+            <i class="ace-icon fa fa-check green"></i>
+            欢迎来到<strong class="green"> 临澧县教育平台 </strong>OA系统！
+        </div>
+    </div>
+
+
+    <div class="row">
+        <div class="col-xs-6">
+
+            <div class="widget-box transparent">
+                <div class="widget-header widget-header-flat">
+                    <h4 class="widget-title lighter">
+                        <i class="ace-icon fa fa-bell orange"></i>
+                        通知
+                    </h4>
+
+                    <div class="widget-toolbar">
+                        <a title="快速新增通知" href="$contextPath/oa/notification/toNoti" data-rel="tooltip"
+                           data-placement="bottom">
+                            <i class="ace-icon fa fa-plus"></i>
+                        </a>
+                        <a href="javascript:void(0);" data-action="fullscreen" class="" title="" data-rel="tooltip"
+                           data-placement="bottom" data-original-title="全屏查看">
+                            <i class="ace-icon fa fa-expand"></i>
+                        </a>&nbsp;
+                        <a href="javascript:void(0);" data-action="collapse" class="" title="" data-rel="tooltip"
+                           data-placement="bottom" data-original-title="收起">
+                            <i class="ace-icon fa fa-chevron-up"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <div id="notifical_nodata" style="display: none; margin-top: 10px; margin-left: 10px;">暂无数据！</div>
+
+                <div class="widget-body" id="notifical_content">
+                    <div class="widget-main no-padding">
+                        <table class="table table-bordered table-striped">
+                            <thead class="thin-border-bottom">
+                            <tr>
+                                <th>
+                                    <i class="ace-icon fa fa-caret-right blue"></i>通知标题
+                                </th>
+
+                                <th>
+                                    <i class="ace-icon fa fa-caret-right blue"></i>发布时间
+                                </th>
+
+                                <th class="hidden-480">
+                                    <i class="ace-icon fa fa-caret-right blue"></i>状态
+                                </th>
+                            </tr>
+                            </thead>
+
+                            <tbody id="notifical">
+
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                        <a href="$contextPath/oa/notification/display" style="float: right;padding-right: 30px;">更多&gt;&gt;</a>
+
+                        <div class="space-18"></div>
+                    </div>
+                    <br>
+                    <!-- /.widget-main -->
+                </div>
+                <!-- /.widget-body -->
+            </div>
+
+        </div>
+
+        <div class="col-xs-6" id="od_div">
+
+        </div>
+    </div>
+
+
+    <div class="row">
+        <div class="col-xs-6">
+            <div class="widget-box transparent" id="recent-box1">
+                <div class="widget-header">
+                    <h4 class="widget-title lighter">
+                        <i class="ace-icon fa fa-envelope bigger-120 pink"></i>
+                        邮件
+                    </h4>
+
+                    <div class="widget-toolbar">
+                        <a title="快速新增邮件" href="$contextPath/oa/email/inbox?flag=write" data-rel="tooltip"
+                           data-placement="bottom">
+                            <i class="ace-icon fa fa-plus"></i>
+                        </a>
+                        <a href="javascript:void(0);" data-action="fullscreen" class="" title="" data-rel="tooltip"
+                           data-placement="bottom" data-original-title="全屏查看">
+                            <i class="ace-icon fa fa-expand"></i>
+                        </a>&nbsp;
+                        <a href="javascript:void(0);" data-action="collapse" class="" title="" data-rel="tooltip"
+                           data-placement="bottom" data-original-title="收起">
+                            <i class="ace-icon fa fa-chevron-up"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <div class="widget-body">
+                    <div class="widget-main padding-4">
+                        <div class="tab-content padding-8">
+                            <div id="mail_div" class="tab-pane active">
+
+                            </div>
+                        </div>
+                    </div>
+                    <!-- /.widget-main -->
+                </div>
+                <!-- /.widget-body -->
+            </div>
+        </div>
+
+        <div class="col-xs-6">
+            <div class="widget-box transparent" id="recent-box">
+                <div class="widget-header">
+                    <h4 class="widget-title lighter">
+                        <!--<i class="ace-icon fa fa-file-text orange"></i>-->
+                        <i class="blue ace-icon fa fa-users bigger-120"></i>
+                        通讯录
+                    </h4>
+
+                    <div class="widget-toolbar">
+                        <a title="快速新增联系人" href="$contextPath/oa/addressBook/addOrEdit" data-placement="bottom"
+                           data-rel="tooltip">
+                            <i class="ace-icon fa fa-plus"></i>
+                        </a>
+                        <a href="javascript:void(0);" data-action="fullscreen" class="" title="" data-rel="tooltip"
+                           data-placement="bottom" data-original-title="全屏查看">
+                            <i class="ace-icon fa fa-expand"></i>
+                        </a>&nbsp;
+                        <a href="javascript:void(0);" data-action="collapse" class="" title="" data-rel="tooltip"
+                           data-placement="bottom" data-original-title="收起">
+                            <i class="ace-icon fa fa-chevron-up"></i>
+                        </a>
+                    </div>
+
+                </div>
+
+                <div class="widget-body">
+                    <div class="widget-main padding-4">
+                        <div class="tab-content padding-8">
+
+                            <div id="user_div" class="tab-pane active">
+
+                            </div>
+                            <!-- /.#member-tab -->
+                        </div>
+                    </div>
+                    <!-- /.widget-main -->
+                </div>
+                <!-- /.widget-body -->
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="message_div" class="hide" style="height: 100px;">
+    <div style="height: 100%;">
+        <input type="hidden" name="recipient" class="recipient"/>
+        <input type="hidden" name="remindtype" class="remindtype"/>
+        <textarea id="content" name="content" class="limited" maxlength="512"
+                  style="height: 100%; width: 98%"></textarea>
+    </div>
+</div>
+
+<br style="clear:both;">
+
+<script src="$contextPath/static/ace/js/jquery.gritter.min.js"></script>
+<script src="$contextPath/static/plugins/ckeditor/ckeditor.js"></script>
+<script type="text/javascript">
+/**
+ * 1 手机短信  2短消息
+ * @param type
+ * @param recieve
+ * @param recieveName
+ * @param imgurl
+ */
+function send(recieve, recieveName, type,imgurl) {
+    if (type == 1) {
+        mailBox(recieve, recieveName);
+    } else if (type == 2) {
+        /*sendBox(recieve, recieveName, "短消息");
+        $("#message_div").find("textarea").html('');
+        $("#message_div").find("input[name=remindtype]").val(type);
+        $("#message_div").find("input[name=recipient]").val(recieve);*/
+        if(imgurl==''||imgurl==null){
+            imgurl="$contextPath/static/ace/avatars/avatar2.png"
+        }else{
+            imgurl= '$!{nginx_filepath}'+imgurl;
+        }
+
+        onLineMessage(recieve,recieveName,imgurl);
+    }
+
+}
+
+
+/*//邮箱弹窗
+ function mailBox(recieve,name) {
+ $("#recievename").html(name);
+ $('#sendMail_form').find("input[name=userids]").val(recieve);
+ $("#sendMail_div").modal("show");
+ }*/
+
+//聊天弹窗
+function sendBox(recieve, name, typeStr) {
+
+    bootbox.dialog({
+        title: '正在给' + name + '发送' + typeStr,
+        message: $("#message_div").html(),
+        buttons: {
+            "success": {
+                "label": "<i class='ace-icon fa fa-check'></i>发送",
+                "className": "btn-sm btn-success",
+                "callback": function () {
+                    var content = $("textarea.limited[name=content]").eq(1).val();
+                    var recipient = $("input.recipient").eq(0).val();
+                    var remindtype = $("input.remindtype").eq(0).val();
+                    if ($.trim(content) != '') {
+                        $.ajax({
+                            url: "$contextPath/index/send",
+                            data: {
+                                recipient: recieve, remindtype: remindtype,
+                                content: content
+                            },
+                            datatype: 'json',
+                            success: function (data) {
+                                if (data && data > 0) {
+                                    myGritterSuccess("发送成功!", "提示", 1000);
+                                    $(this).dialog("close");
+                                    dialog = null;
+                                    $("#message_div").find("textarea").val('');
+                                }
+                            }
+                        });
+                    }
+                }
+            },
+
+            "click": {
+                "label": "关闭",
+                "className": "btn-sm btn-primary",
+                "callback": function () {
+
+                }
+            }
+        }
+    });
+
+    $("#message_div").css("height", "150px");
+    $("#message_div").prev("div").css("height", "45px").find("span").css("margin-left", "2%").css("margin-bottom", "10%");
+    $("#message_div").addClass("modal-content");
+}
+
+/**
+ * 加载通知
+ */
+function notifical() {
+    $.ajax({
+        url: "$contextPath/index/notify",
+        data: {limit: 5},
+        dataType: "json",
+        success: function (data) {
+            $("#notifical").html("");
+            if (data && data.length > 0) {
+                for (a in data) {
+                    if (a > 4) {
+                        break;
+                    }
+                    var title=data[a].title;
+                    if(null!=title&& $.trim(title)!=''&&title.length>10)
+                        title=title.substring(0,10)+"…";
+
+                    var trs = "<tr>";
+                    trs += "<td><a name='title' data_id=" + data[a].id + " data_read=" + data[a].isread + " " +
+                            "href='javascript:toread(" + data[a].id + "," + a + ");' >" +
+                            title + "</a></td>";
+                    trs += "<td>" + data[a].timeStr + "</td>";
+
+                    if (data[a].isread != null) {
+                        trs += "<td class='hidden-480'>" +
+                                "<span class='label label-success arrowed-right arrowed-in'>已读</span>" +
+                                "</td>";
+                    } else {
+                        trs += "<td class='hidden-480'>" +
+                                "<span class='label label-info arrowed-right arrowed-in'>未读</span>" +
+                                "</td>";
+                    }
+                    trs += "</tr>";
+                    $("#notifical").append(trs);
+                }
+            }else{
+                $('#notifical_content').hide();
+                $('#notifical_nodata').show();
+            }
+        }
+    });
+}
+/**
+ * 通知跳转
+ * @param notid
+ * @param index
+ */
+function toread(notid, index) {
+    /*if (index != undefined) {
+        var htmls = "<span class='label label-success arrowed-right arrowed-in'>已读</span>";
+        $("#notifical tr").eq(index).find("td").last().html(htmls);
+    }*/
+
+    if (notid != null && $.trim(notid) != '') {
+        //seeNoti(notid, index);
+        oneNoti(notid);
+        //window.location.href="$contextPath/oa/notification/notiById?id=" + notid;
+    }
+}
+
+
+$(function () {
+    //清楚浏览器缓存
+    jQuery.ajaxSetup ({cache:false});
+
+    notifical();
+    $("#mail_div").load("$contextPath/index/email", {limit: 5});
+
+    $("#user_div").load("$contextPath/index/addressBook", {limit: 6});
+
+    $('textarea.limited').inputlimiter({
+        remText: '您还能输入 %n 个字符，',
+        limitText: '最多能输入 : %n 字符。'
+    });
+
+    $("#od_div").load("$contextPath/index/officialdocument", {limit: 6})
+
+});
+
+
+function seeNoti(notid, index) {
+
+    $.ajax({
+        url: "$contextPath/oa/notification/notiByIdForIndex?id=" + notid,
+        dataType: "json",
+        success: function (data) {
+            var isRead = $("#notifical tr").eq(index).find("a").eq(0).attr("data_read");
+            if (isRead == null || isRead == 'null' || isRead == undefined) {
+                isRead = 0;
+            }
+
+            if (isRead < 1 && notid != null && $.trim(notid) != '') {
+                $.ajax({
+                    url: "$contextPath/oa/notification/updateRead?notid=" + notid,
+                    dataType: 'json',
+                    success: function (data) {
+                        if (data && data > 0) {
+                            notifical();
+                        }
+                    }
+                });
+            }
+
+            if (data && data.length > 0) {
+                $('#notice_textarea').html(data[0].content);
+                $("#sendNoti").html(data[0].username);
+                $("#sendtimeStr").html(data[0].timeStr);
+
+                var settings = {
+                    title: '正在查看通知：' + data[0].title,
+                    message: $("#noti_div").html(),
+                    buttons: {
+                        "click": {
+                            "label": "确定",
+                            "className": "btn-sm btn-primary",
+                            "callback": function () {
+
+                            }
+                        }
+                    }
+                };
+                if (index != 4) {
+                    settings.buttons.success={
+                            "label": "<i class='ace-icon fa fa-check'></i><span id='next_noti'>下一条</span>",
+                            "className": "btn-sm btn-success next-btn",
+                            "callback": function () {
+                                var nid=$("#notifical tr").eq(index+1).find("a").eq(0).attr("data_id");
+                                seeNoti(nid,index+1);
+                            }
+                        };
+                }
+                bootbox.dialog(settings);
+            }
+        }
+    });
+}
+</script>
+
+<div id="noti_div" class="hide" style="height: 100px;">
+    <div style="height: 100%;" id="notice_textarea">
+
+    </div>
+    <br>
+    <span style="text-align: center;margin-left: 45%;" id="sendNoti">
+
+    </span>
+    &nbsp;&nbsp;
+    <span style="margin-right:-30%;" id="sendtimeStr"></span>
+</div>
+
+
+#parse("/common/south.html")
+

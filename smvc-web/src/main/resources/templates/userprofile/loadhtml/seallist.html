@@ -1,0 +1,67 @@
+<ul class="ace-thumbnails">
+
+    #if(!$!sealList || $sealList.size() <= 0)
+        <div class="alert alert-warning">
+            您还没有上传任何公章图片文件，请点击下面按钮上传！
+            <br>
+        </div>
+    #end
+
+    #foreach($sealObj in $sealList)
+        <li>
+            <a href="javascript:void(0);" data-rel="colorbox">
+                <img alt="150x150" src="$!{nginx_filepath}$!{sealObj.filepath}" width="150" height="150">
+                <div class="text">
+                    <div class="inner">$!{sealObj.filename}</div>
+                </div>
+            </a>
+
+            <div class="tools tools-bottom">
+                #*<a href="#">
+                    <i class="ace-icon fa fa-link"></i>
+                </a>
+
+                <a href="#">
+                    <i class="ace-icon fa fa-paperclip"></i>
+                </a>
+
+                <a href="#">
+                    <i class="ace-icon fa fa-pencil"></i>
+                </a>*#
+
+                <a href="javascript:void(0);" onclick="delSeal($!{sealObj.id});" data-rel="tooltip" title="删除">
+                    <i class="ace-icon fa fa-times red"></i>
+                </a>
+            </div>
+        </li>
+    #end
+
+</ul>
+
+<script>
+
+    function delSeal (id) {
+        if(id){
+            myConfirm('您确定要删除这个公章文件吗？' , function (){
+                $.ajax({
+                    url: '$contextPath/sealManager/delseal',
+                    type: 'POST',
+                    data: { "id" : id } ,
+                    dataType: 'json',
+                    async:false,
+                    success : function(response) {
+                        if(response.code == 200){
+                            load_sealList();
+                        }
+                    },
+                    error: function(response) {
+                    }
+                })
+            })
+        }
+    }
+
+    $(function (){
+        $('[data-rel=tooltip]').tooltip();
+    })
+</script>

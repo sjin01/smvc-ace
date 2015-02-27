@@ -1,0 +1,471 @@
+<div id="user-profile-3" class="user-profile row">
+<div class="col-sm-offset-1 col-sm-10">
+
+<div class="tabbable">
+<ul class="nav nav-tabs padding-16">
+    <li class="active">
+        <a data-toggle="tab" href="#">
+            <i class="green ace-icon fa fa-pencil-square-o bigger-125"></i>
+            基本信息
+        </a>
+    </li>
+
+
+    <li class="">
+        <a data-toggle="tab" href="#" onclick="loadForm(2);">
+            <i class="blue ace-icon fa fa-key bigger-125"></i>
+            修改密码
+        </a>
+    </li>
+</ul>
+
+<div class="tab-content profile-edit-tab-content">
+
+    <div id="" class="tab-pane active">
+        <form class="form-horizontal" id="tab_settings_form">
+            <h4 class="header blue bolder smaller">一般信息</h4>
+
+            <div class="row">
+                <div class="col-xs-12 col-sm-4">
+                    <label class="ace-file-input ace-file-multiple">
+                        <!--<input type="file">-->
+                        <span style="margin-left: 25%;display: none;" id=goback>
+                            <a href="javascript:preparetoup(2);">取消</a>
+                        </span>
+                        <!--<span class="ace-file-container" data-title="更变头像">
+                            <span class="ace-file-name" data-title="No File ...">
+                                <i class=" ace-icon ace-icon fa fa-picture-o"></i>
+                            </span>
+                        </span>
+                        <a class="remove"  class=" ace-icon fa fa-times"></i></a>-->
+
+                        <span class="profile-picture" id="preview_img">
+                            <img class="editable" alt="Alex's Avatar" width="180px" height="200px"
+                                 id="avatar2"
+                                 src="#if($!loginUser.imgurl && $!loginUser.imgurl !='')${nginx_filepath}$!{loginUser.imgurl} #else $contextPath/static/ace/avatars/default.jpg #end">
+                        </span>
+                        <br>
+                        <span style="margin-left: 25%;" id="changeImg">
+                            <a href="javascript:preparetoup(1);">更换头像</a>
+                        </span>
+                    </label>
+                </div>
+
+                <!--<div class="col-xs-12 col-sm-4">
+                    <input type="file"/>
+                </div>-->
+
+                <div class="vspace-12-sm"></div>
+
+                <div class="col-xs-12 col-sm-8">
+                    <div class="form-group">
+                        <label class="col-sm-4 control-label no-padding-right" for="form-field-username">真实姓名</label>
+
+                        <div class="col-sm-8">
+                            <input class="col-xs-12 col-sm-10" type="text" name="username" id="form-field-username" maxlength="64"
+                                   placeholder="姓名" value="$!userInfo.username" onblur="checkName();">
+                            <div class="help-block col-xs-12 col-sm-reset inline">
+                                <i class="ace-icon fa fa-times-circle" style="color: #d68273;display: none;"></i>
+                                <i class="ace-icon fa fa-check-circle" style="color: #8bad4c;display: none;"></i>
+                                <span style="color: red;font-size: xx-small;"></span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="space-4"></div>
+
+                    <div class="form-group">
+                        <label class="col-sm-4 control-label no-padding-right"
+                               for="form-field-first">昵称</label>
+
+                        <div class="col-sm-8">
+                            <input class="col-xs-12 col-sm-10" type="text" id="form-field-first"
+                                   readonly="readonly" placeholder="昵称" value="$!userInfo.usercode">
+
+                        </div>
+                    </div>
+
+                    <!--<dv><img alt="150x150" id="tupian" src="$!{ nginx_filepath}" width="150" height="150"></dv>-->
+                </div>
+            </div>
+
+            <!--#*<hr>
+            <div class="form-group">
+                <label class="col-sm-3 control-label no-padding-right" for="form-field-date">Birth
+                    Date</label>
+
+                <div class="col-sm-9">
+                    <div class="input-medium">
+                        <div class="input-group">
+                            <input class="input-medium date-picker" id="form-field-date" type="text"
+                                   data-date-format="dd-mm-yyyy" placeholder="dd-mm-yyyy">
+                                                                <span class="input-group-addon">
+                                                                    <i class="ace-icon fa fa-calendar"></i>
+                                                                </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="space-4"></div>
+
+            <div class="form-group">
+                <label class="col-sm-3 control-label no-padding-right">Gender</label>
+
+                <div class="col-sm-9">
+                    <label class="inline">
+                        <input name="form-field-radio" type="radio" class="ace">
+                        <span class="lbl middle"> Male</span>
+                    </label>
+
+                    &nbsp; &nbsp; &nbsp;
+                    <label class="inline">
+                        <input name="form-field-radio" type="radio" class="ace">
+                        <span class="lbl middle"> Female</span>
+                    </label>
+                </div>
+            </div>
+
+            <div class="space-4"></div>
+
+            <div class="form-group">
+                <label class="col-sm-3 control-label no-padding-right"
+                       for="form-field-comment">Comment</label>
+
+                <div class="col-sm-9">
+                    <textarea id="form-field-comment"></textarea>
+                </div>
+            </div>*#-->
+
+            <div class="space"></div>
+            <h4 class="header blue bolder smaller">联系方式</h4>
+
+            <div class="form-group">
+                <label class="col-sm-3 control-label no-padding-right" for="form-field-email">Email</label>
+
+                <div class="col-sm-9">
+                    <span class="input-icon input-icon-right">
+                        <input type="email" id="form-field-email"
+                               name="email" value="$!userInfo.email" onchange="checkMail();">
+                        <i class="ace-icon fa fa-envelope"></i>
+                    </span>
+                    <div class="help-block col-xs-12 col-sm-reset inline" id="checkMail_div">
+                        <i class="ace-icon fa fa-times-circle" style="color: #d68273;display: none;"></i>
+                        <i class="ace-icon fa fa-check-circle" style="color: #8bad4c;display: none;"></i>
+                        <span style="color: red;font-size: xx-small;"></span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="space-4"></div>
+
+            <div class="form-group">
+                <label class="col-sm-3 control-label no-padding-right" for="telnumber">手机号码</label>
+
+                <div class="col-sm-9">
+                    <span class="input-icon input-icon-right">
+                        <input class=" input-mask-phone"
+                                onkeydown="telCheck(event);" name="telnumber" onblur="checkMobile()"
+                               type="text" id="telnumber" value="$!userInfo.telnumber">
+                        <i class="ace-icon fa fa-phone fa-flip-horizontal"></i>
+                    </span>
+                    <div class="help-block col-xs-12 col-sm-reset inline" id="checkMobile_div">
+                        <i class="ace-icon fa fa-times-circle" style="color: #d68273;display: none;"></i>
+                        <i class="ace-icon fa fa-check-circle" style="color: #8bad4c;display: none;"></i>
+                        <span style="color: red;font-size: xx-small;"></span>
+                    </div>
+                    <p></p>
+                    <span style="color: gray; margin-left: -10%;">
+                        不填，或未订购将无法收到系统短信；主要用于公文和通知的消息提醒！订购方式如下:<br>
+                        <ul style="color: gray; margin-left: -5%;">
+                            <li>中国移动:发送10到1065856205(10元/月)</li>
+                            <li>中国联通:发送dg03到106592472700(10元/月)</li>
+                            <li>中国电信:请前往营业厅柜台办理<span class="blue">“翼机通中小学版”</span>业务</li>
+                        </ul>
+                    </span>
+                </div>
+            </div>
+
+            <input type="hidden" id="upload_file_filepath" name="imgurl"/>
+        </form>
+    </div>
+
+
+</div>
+</div>
+
+<div class="clearfix form-actions">
+    <div class="col-md-offset-3 col-md-9">
+        <button class="btn btn-info btn-save" type="button">
+            <i class="ace-icon fa fa-check bigger-110"></i>
+            保存
+        </button>
+
+        &nbsp; &nbsp;
+        <button class="btn" type="reset" onclick="formReset();">
+            <i class="ace-icon fa fa-undo bigger-110"></i>
+            重置
+        </button>
+    </div>
+</div>
+
+
+</div>
+<!-- /.span -->
+</div>
+
+<script src="$contextPath/static/js/upload_file.js"></script>
+<script src="$contextPath/static/ace/js/jquery.gritter.min.js"></script>
+<script>
+
+    function formReset (){
+//        $("#tab_settings_form").reset();
+        $('#tab_settings_form')[0].reset()
+    }
+
+    var working = false;
+    var uploadtool ;
+    $(function () {
+        var imgurl="$!userInfo.imgurl";
+        if(imgurl!=null&& $.trim(imgurl)!=''){
+            imgurl="$!{nginx_filepath}"+imgurl;
+            $("#preview_img").find("img").attr("src",imgurl);
+        }
+
+        $("#telnumber").attr("style","ime-mode:disabled;");
+        $('.input-mask-phone').mask('999 9999 9999');
+
+
+    });
+
+    /**
+     *
+     * @param type 1 添加  2返回
+     */
+    function preparetoup(type){
+        var form = $("#tab_settings_form");
+        var file;
+        if(type==1){
+            $("span.ace-file-container").show();
+            $("#preview_img").hide();
+            $("#changeImg").hide();
+            $("#goback").show();
+            $("<input type='file'>").insertBefore("#goback");
+
+            file = form.find('input[type=file]').eq(0);
+            file.ace_file_input({
+                style: 'well',
+                btn_choose: 'Click to choose new avatar',
+                btn_change: null,
+                no_icon: 'ace-icon fa fa-picture-o',
+                thumbnail: 'small',
+                before_remove: function () {
+                    return !working;
+                },
+                allowExt: ['jpg', 'jpeg', 'png', 'gif'],
+                allowMime: ['image/jpg', 'image/jpeg', 'image/png', 'image/gif']
+            });
+            file.on('file.error.ace', function(ev, info) {
+                if(info.error_count['ext'] || info.error_count['mime']) myGritterError('无效的文件类型！请选择一个图片文件！');
+                if(info.error_count['size']) myGritterError('图片文件太大了! 请选择 1M 以下的图片文件！');
+            });
+
+            uploadtool = new UploadTool({
+                uploadPath:'$!{nginx_upload4ck}',
+                progressPath:'$!{nginx_uploadprogress}',
+                fileInput:file,
+                form:form
+            },saveImg );
+        }else if(type==2){
+            $("#upload_file_filepath").val('');
+            $('a.remove').remove();
+            $("span.ace-file-multiple").find('input[type=file]').eq(0).remove();
+            $("span.ace-file-multiple").remove();
+            $("#preview_img").show();
+            $("#changeImg").show();
+            $("#goback").hide();
+        }
+
+    }
+
+
+    /**
+     * 保存头像方法
+     * @param data
+     */
+    function saveImg (data){
+        if(data){
+            $("#upload_file_filepath").val(data.filepath);
+        }
+        $.ajax({
+            url: '$contextPath/userprofile/saveInfo',
+            type: 'POST',
+            data: $("#tab_settings_form").serialize() ,
+            dataType: 'json',
+            async:false,
+            success : function(data) {
+                if(data&&data>0){
+                    myFinishAndTurnFn("提示","保存成功!",function(){
+                        location.reload();
+                    });
+                }
+            },
+            error: function(response) {
+
+            }
+        });
+    }
+
+    /**
+     * 邮箱验证
+     * @returns {boolean}
+     */
+    function checkMail(){
+        var flag=false;
+        var search_str = /^[\w\-\.]+@[\w\-\.]+(\.\w+)+$/;
+        var email_val = $("#form-field-email").val();
+
+        if(email_val!=null&& $.trim(email_val)!=''&&!search_str.test(email_val)){
+            $("#checkMail_div").find("i.fa-times-circle").show();
+            $("#checkMail_div").find("i.fa-check-circle").hide();
+            $("#checkMail_div").find("span").text("邮箱格式不正确!");
+            $("#form-field-email").focus();
+        }else{
+            $("#checkMail_div").find("i.fa-times-circle").hide();
+            $("#checkMail_div").find("i.fa-check-circle").show();
+            $("#checkMail_div").find("span").text("");
+            flag=true;
+        }
+        return flag;
+    }
+
+    /**
+     * 对电话号码输入限制
+     * @param e
+     */
+    function telCheck(e) {
+        var key = window.event ? e.keyCode : e.which;
+        if (((key >= 48) && (key <= 57)) || key == 8 || key == 0||(key > 95 && key < 106)) {
+
+        } else {
+            if (window.event) {//for IE
+                window.event.returnValue = false;
+            }
+            else {
+                e.preventDefault(); //for fireFox
+            }
+        }
+    }
+
+
+    /**
+     * 手机号码的验证
+     * @returns {boolean}
+     */
+    function checkMobile(){
+        var mobile=$("#telnumber").val();
+
+        var flag=false;
+
+        if(mobile!=undefined&&mobile!=null&&$.trim(mobile)!=''){
+            var isMobile=/^1[3|4|5|8][0-9]\d{4,8}$/;
+            mobile=mobile.replace(/[ ]/g,"");
+//            alert(mobile);
+            if(!isMobile.test(mobile)&&'___________'!=mobile){
+                $("#checkMobile_div").find("i.fa-times-circle").show();
+                $("#checkMobile_div").find("i.fa-check-circle").hide();
+                $("#checkMobile_div").find("span").text("手机号码格式不正确!");
+                $("#telnumber").focus();
+                flag=false;
+            }else{
+                $("#checkMobile_div").find("i.fa-times-circle").hide();
+                $("#checkMobile_div").find("i.fa-check-circle").show();
+                $("#checkMobile_div").find("span").text("");
+                flag=true;
+            }
+        }
+        return flag;
+    }
+
+
+    /**
+     * 对真是姓名的为空验证
+     * @returns {boolean}
+     */
+    function checkName(){
+        var flag=false;
+        var name=$('#form-field-username').val();
+        if(name==undefined|| $.trim(name)==''){
+            $("#form-field-username").next().find("i.fa-times-circle").show();
+            $("#form-field-username").next().find("i.fa-check-circle").hide();
+            $("#form-field-username").next().find("span").text("真是姓名不能为空!");
+            $("#form-field-username").focus();
+            flag=false;
+        }else{
+            $("#form-field-username").next().find("i.fa-times-circle").hide();
+            $("#form-field-username").next().find("i.fa-check-circle").show();
+            $("#form-field-username").next().find("span").text("");
+            flag=true;
+        }
+        return flag;
+    }
+
+
+    /**
+     * 点击保存按钮调用方法
+     */
+    $(".btn-save").on('click',function(){
+        var form = $("#tab_settings_form");
+        var file = form.find('input[type=file]').eq(0);
+        var url=file.val();
+
+        /**
+         * 保存时  再次对页面进行验证
+         * @type {*|jQuery}
+         */
+        var email_val = $("#form-field-email").val();
+        if(email_val!=null&& $.trim(email_val)!=''&&!checkMail()){
+//            myGritterError("请正确输入邮箱格式","提示",1000);
+            return false;
+        }
+
+        var mobile=$("#telnumber").val();
+        if(mobile!=undefined&&mobile!=null&&$.trim(mobile)!=''){
+            if(!checkMobile()){
+//                myGritterError("请正确邮输手机号码格式","提示",1000);
+                return false;
+            }
+        }
+
+        if(!checkName()){
+//            myGritterError("请输入真是姓名","提示",1000);
+            return false;
+        }
+
+        /**
+         * 对页面数据进行保存
+         */
+        if(url==null|| $.trim(url)==''){
+            $.ajax({
+                url: '$contextPath/userprofile/saveInfo',
+                type: 'POST',
+                data: $("#tab_settings_form").serialize() ,
+                dataType: 'json',
+                async:false,
+                success : function(data) {
+                    if(data&&data>0){
+                        myFinishAndTurnFn("提示","保存成功!",function(){
+                            location.reload();
+                        });
+                    }
+                },
+                error: function(response) {
+
+                }
+            });
+        }else{
+            uploadtool.upload();
+        }
+    });
+</script>
+

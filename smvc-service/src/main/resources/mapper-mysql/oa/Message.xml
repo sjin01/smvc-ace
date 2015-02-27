@@ -1,0 +1,276 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="Message">
+    <resultMap id="BaseResultMap" type="net.hunanst.eduz100.api.oa.Message">
+        <id column="ID" property="id" jdbcType="INTEGER"/>
+        <result column="ADDRESSER" property="addresser" jdbcType="INTEGER"/>
+        <result column="ADDRESSERORGID" property="addresserorgid" jdbcType="INTEGER"/>
+        <result column="RECIPIENT" property="recipient" jdbcType="INTEGER"/>
+        <result column="RECIPIENTORGID" property="recipientorgid" jdbcType="INTEGER"/>
+        <result column="DATE" property="date" jdbcType="TIMESTAMP"/>
+        <result column="CONTENT" property="content" jdbcType="VARCHAR"/>
+        <result column="READFLAG" property="readflag" jdbcType="INTEGER"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        ID, ADDRESSER, ADDRESSERORGID, RECIPIENT, RECIPIENTORGID, DATE, CONTENT, READFLAG
+      </sql>
+
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+        select
+        <include refid="Base_Column_List"/>
+        from t_oa_message
+        where ID = #{value}
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from t_oa_message
+    where ID = #{value}
+  </delete>
+    <insert id="insert" parameterType="net.hunanst.eduz100.api.oa.Message">
+    insert into t_oa_message (ID, ADDRESSER, ADDRESSERORGID, 
+      RECIPIENT, RECIPIENTORGID, DATE, 
+      CONTENT, READFLAG)
+    values (#{id,jdbcType=INTEGER}, #{addresser,jdbcType=INTEGER}, #{addresserorgid,jdbcType=INTEGER}, 
+      #{recipient,jdbcType=INTEGER}, #{recipientorgid,jdbcType=INTEGER}, #{date,jdbcType=TIMESTAMP}, 
+      #{content,jdbcType=VARCHAR}, #{readflag,jdbcType=INTEGER})
+  </insert>
+
+    <!--  insertList 批量插入  mysql 主键需要自增 -->
+    <insert id="insertList" parameterType="java.util.List">
+        insert into t_oa_message
+        ( ADDRESSER, ADDRESSERORGID,
+        RECIPIENT, RECIPIENTORGID, DATE,
+        CONTENT, READFLAG )
+        values
+        <foreach collection="list" item="item" index="index" separator=",">
+            (
+            #{item.addresser},
+            #{item.addresserorgid},
+            #{item.recipient},
+            #{item.recipientorgid},
+
+            #{item.date},
+            #{item.content},
+            #{item.readflag}
+            )
+        </foreach>
+    </insert>
+
+    <insert id="insertSelective" parameterType="net.hunanst.eduz100.api.oa.Message">
+        insert into t_oa_message
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                ID,
+            </if>
+            <if test="addresser != null">
+                ADDRESSER,
+            </if>
+            <if test="addresserorgid != null">
+                ADDRESSERORGID,
+            </if>
+            <if test="recipient != null">
+                RECIPIENT,
+            </if>
+            <if test="recipientorgid != null">
+                RECIPIENTORGID,
+            </if>
+            <if test="date != null">
+                DATE,
+            </if>
+            <if test="content != null">
+                CONTENT,
+            </if>
+            <if test="readflag != null">
+                READFLAG,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{id,jdbcType=INTEGER},
+            </if>
+            <if test="addresser != null">
+                #{addresser,jdbcType=INTEGER},
+            </if>
+            <if test="addresserorgid != null">
+                #{addresserorgid,jdbcType=INTEGER},
+            </if>
+            <if test="recipient != null">
+                #{recipient,jdbcType=INTEGER},
+            </if>
+            <if test="recipientorgid != null">
+                #{recipientorgid,jdbcType=INTEGER},
+            </if>
+            <if test="date != null">
+                #{date,jdbcType=TIMESTAMP},
+            </if>
+            <if test="content != null">
+                #{content,jdbcType=VARCHAR},
+            </if>
+            <if test="readflag != null">
+                #{readflag,jdbcType=INTEGER},
+            </if>
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective" parameterType="net.hunanst.eduz100.api.oa.Message">
+        update t_oa_message
+        <set>
+            <if test="addresser != null">
+                ADDRESSER = #{addresser,jdbcType=INTEGER},
+            </if>
+            <if test="addresserorgid != null">
+                ADDRESSERORGID = #{addresserorgid,jdbcType=INTEGER},
+            </if>
+            <if test="recipient != null">
+                RECIPIENT = #{recipient,jdbcType=INTEGER},
+            </if>
+            <if test="recipientorgid != null">
+                RECIPIENTORGID = #{recipientorgid,jdbcType=INTEGER},
+            </if>
+            <if test="date != null">
+                DATE = #{date,jdbcType=TIMESTAMP},
+            </if>
+            <if test="content != null">
+                CONTENT = #{content,jdbcType=VARCHAR},
+            </if>
+            <if test="readflag != null">
+                READFLAG = #{readflag,jdbcType=INTEGER},
+            </if>
+        </set>
+        where ID = #{id,jdbcType=INTEGER}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="net.hunanst.eduz100.api.oa.Message">
+    update t_oa_message
+    set ADDRESSER = #{addresser,jdbcType=INTEGER},
+      ADDRESSERORGID = #{addresserorgid,jdbcType=INTEGER},
+      RECIPIENT = #{recipient,jdbcType=INTEGER},
+      RECIPIENTORGID = #{recipientorgid,jdbcType=INTEGER},
+      DATE = #{date,jdbcType=TIMESTAMP},
+      CONTENT = #{content,jdbcType=VARCHAR},
+      READFLAG = #{readflag,jdbcType=INTEGER}
+    where ID = #{id,jdbcType=INTEGER}
+  </update>
+    <select id="select_page" resultMap="BaseResultMap" parameterType="net.hunanst.eduz100.api.oa.Message">
+        select
+        <include refid="Base_Column_List"/>
+        from t_oa_message
+        <where>
+            <if test="id!=null">
+                AND ID=#{id}
+            </if>
+            <if test="addresser!=null">
+                AND ADDRESSER=#{addresser}
+            </if>
+            <if test="addresserorgid!=null">
+                AND ADDRESSERORGID=#{addresserorgid}
+            </if>
+            <if test="recipient!=null">
+                AND RECIPIENT=#{recipient}
+            </if>
+            <if test="recipientorgid!=null">
+                AND RECIPIENTORGID=#{recipientorgid}
+            </if>
+            <if test="date!=null">
+                AND DATE=#{date}
+            </if>
+            <if test="content!=null">
+                AND CONTENT=#{content}
+            </if>
+            <if test="readflag!=null">
+                AND READFLAG=#{readflag}
+            </if>
+        </where>
+    </select>
+
+    <select id="getUnreadMessageByID" parameterType="Map" resultType="net.hunanst.eduz100.dto.MessageVo">
+        SELECT m.ID,m.CONTENT,o.USERNAME addressername,t.USERNAME recipientname,
+        DATE_FORMAT(m.DATE,'%Y-%m-%d %H:%i%s') dateformat,IF(m.ADDRESSER = ${addresser},1,0) state
+        FROM t_oa_message m
+        LEFT JOIN ac_operator o ON m.ADDRESSER = o.ID
+        LEFT JOIN ac_operator t ON m.RECIPIENT = t.ID
+        <where>
+            AND m.ADDRESSER = #{recipient}
+            AND m.RECIPIENT = #{addresser}
+            AND m.READFLAG = 0
+        </where>
+        ORDER BY m.ID DESC
+    </select>
+
+    <select id="getUnreadMessageMinId" parameterType="Map" resultType="int">
+		SELECT IFNULL(MIN(id),0) FROM t_oa_message 
+		WHERE  
+		ADDRESSER = #{recipient} 
+		AND RECIPIENT = #{addresser} 
+		AND READFLAG = 0
+    </select>
+
+    <select id="getMessageByID" parameterType="Map" resultType="net.hunanst.eduz100.dto.MessageVo">
+        SELECT m.ID,m.CONTENT,o.USERNAME addressername,t.USERNAME recipientname,
+        DATE_FORMAT(m.DATE,'%Y-%m-%d %H:%i%s') dateformat,IF(m.ADDRESSER = ${addresser},1,0) state
+        FROM t_oa_message m
+        LEFT JOIN ac_operator o ON m.ADDRESSER = o.ID
+        LEFT JOIN ac_operator t ON m.RECIPIENT = t.ID
+        <where>
+            AND (m.ADDRESSER = #{addresser} AND m.RECIPIENT = #{recipient})
+            OR (m.ADDRESSER = #{recipient} AND m.RECIPIENT = #{addresser})
+        </where>
+        ORDER BY m.ID DESC
+        LIMIT 0,5
+    </select>
+
+    <update id="updateReadFlag" parameterType="Map">
+        UPDATE t_oa_message SET READFLAG = 1 WHERE ID in
+        <foreach collection="list" close=")" item="message" separator="," open="(">
+            #{message.id}
+        </foreach>
+    </update>
+
+    <select id="listByUserId_page" parameterType="net.hunanst.eduz100.api.oa.vo.Chat"
+            resultType="net.hunanst.eduz100.api.oa.vo.Chat">
+
+        SELECT b.id,b.addresser,b.recipient,ao.USERNAME recipientname,b.content,b.date FROM (
+        SELECT MAX(ID) ID,
+        IF(ADDRESSER=#{addresser},RECIPIENT,ADDRESSER) OTHER
+        FROM t_oa_message
+        WHERE ADDRESSER =#{addresser} OR RECIPIENT = #{addresser}
+        GROUP BY OTHER
+        ) a LEFT JOIN
+        t_oa_message b ON a.ID = b.ID
+        left join ac_operator ao on a.OTHER=ao.ID where b.recipient &lt;&gt; #{addresser} and ao.USERNAME is not null
+        order by date desc
+
+        <!--SELECT id,addresser,addressername,recipient,recipientname,content,date from t_oa_message_one
+        where (addresser=#{addresser}) or (recipient=#{addresser})
+        <if test="condition!=null and condition!=''">
+            and (addressername like CONCAT('%',#{condition},'%')) or
+            (recipientname like CONCAT('%',#{condition},'%')) or
+            (content like CONCAT('%',#{condition},'%'))
+        </if>
+        order by date desc-->
+    </select>
+
+    <!--<select id="callChat" parameterType="java.lang.Integer" resultType="java.lang.Integer">
+        call chat(#{0});
+    </select>-->
+
+
+    <select id="chatonelist_page" parameterType="net.hunanst.eduz100.api.oa.vo.Chat"
+            resultType="net.hunanst.eduz100.api.oa.vo.Chat">
+
+        SELECT m.ID,m.CONTENT,m.addresser,o.USERNAME addressername,m.recipient,t.USERNAME recipientname,
+        m.date
+        FROM t_oa_message m
+        LEFT JOIN ac_operator o ON m.ADDRESSER = o.ID
+        LEFT JOIN ac_operator t ON m.RECIPIENT = t.ID
+        <where>
+            <if test="condition!=null and condition!=''">
+                AND (o.USERNAME like CONCAT('%',#{condition},'%') or
+                t.USERNAME like CONCAT('%',#{condition},'%') or
+                m.content like CONCAT('%',#{condition},'%'))
+            </if>
+            AND ((m.ADDRESSER = #{addresser} AND m.RECIPIENT = #{recipient})
+            OR (m.ADDRESSER = #{recipient} AND m.RECIPIENT = #{addresser}))
+        </where>
+        ORDER BY m.ID DESC
+
+    </select>
+</mapper>

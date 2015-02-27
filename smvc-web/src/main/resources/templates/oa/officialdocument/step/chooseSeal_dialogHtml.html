@@ -1,0 +1,28 @@
+<div class="widget-box transparent ui-sortable-handle">
+    <div class="widget-header">
+        <h4 class="widget-title lighter">选择公章图片文件</h4>
+    </div>
+    <div class="widget-body">
+      #if(!$!sealList || $sealList.size() <= 0)
+          <div class="alert alert-warning">
+              您还没有上传任何公章图片文件，请前往个人设置上传！<a href="$contextPath/userprofile?flag=3" target="_blank">点击前往</a>
+              <br>
+          </div>
+      #end
+        <ul class="ace-thumbnails">
+          #foreach($sealObj in $sealList)
+              <li>
+                  <a href="javascript:void(0);" data-rel="colorbox" onclick="chooseSeal($sealObj.id,'$!{sealObj.filepath}')">
+                      <img alt="150x150" src="$!{nginx_filepath}$!{sealObj.filepath}" width="150" height="150">
+                      <div class="text">
+                          <div class="inner">$!{sealObj.filename}</div>
+                      </div>
+                  </a>
+
+              </li>
+          #end
+
+        </ul>
+    </div>
+    <br style="clear:both;">
+</div>

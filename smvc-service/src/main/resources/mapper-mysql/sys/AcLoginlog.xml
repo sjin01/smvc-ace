@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="net.hunanst.eduz100.api.sys.AcLoginlog" >
+  <resultMap id="BaseResultMap" type="net.hunanst.eduz100.api.sys.AcLoginlog" >
+    <id column="ID" property="id" jdbcType="INTEGER" />
+    <result column="USERNAME" property="username" jdbcType="VARCHAR" />
+    <result column="USERCODE" property="usercode" jdbcType="VARCHAR" />
+    <result column="OPERID" property="operid" jdbcType="INTEGER" />
+    <result column="LOGINTIME" property="logintime" jdbcType="TIMESTAMP" />
+    <result column="LOGOUTTIME" property="logouttime" jdbcType="TIMESTAMP" />
+    <result column="LOGIP" property="logip" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    ID, USERNAME, USERCODE, OPERID, LOGINTIME, LOGOUTTIME, LOGIP
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from ac_loginlog
+    where ID = #{value}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from ac_loginlog
+    where ID = #{value}
+  </delete>
+  <insert id="insert" parameterType="net.hunanst.eduz100.api.sys.AcLoginlog" >
+    <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER" >
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into ac_loginlog (USERNAME, USERCODE, OPERID, 
+      LOGINTIME, LOGOUTTIME, LOGIP
+      )
+    values (#{username,jdbcType=VARCHAR}, #{usercode,jdbcType=VARCHAR}, #{operid,jdbcType=INTEGER}, 
+      #{logintime,jdbcType=TIMESTAMP}, #{logouttime,jdbcType=TIMESTAMP}, #{logip,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="net.hunanst.eduz100.api.sys.AcLoginlog" >
+    <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER" >
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into ac_loginlog
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="username != null" >
+        USERNAME,
+      </if>
+      <if test="usercode != null" >
+        USERCODE,
+      </if>
+      <if test="operid != null" >
+        OPERID,
+      </if>
+      <if test="logintime != null" >
+        LOGINTIME,
+      </if>
+      <if test="logouttime != null" >
+        LOGOUTTIME,
+      </if>
+      <if test="logip != null" >
+        LOGIP,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="username != null" >
+        #{username,jdbcType=VARCHAR},
+      </if>
+      <if test="usercode != null" >
+        #{usercode,jdbcType=VARCHAR},
+      </if>
+      <if test="operid != null" >
+        #{operid,jdbcType=INTEGER},
+      </if>
+      <if test="logintime != null" >
+        #{logintime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="logouttime != null" >
+        #{logouttime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="logip != null" >
+        #{logip,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="net.hunanst.eduz100.api.sys.AcLoginlog" >
+    update ac_loginlog
+    <set >
+      <if test="username != null" >
+        USERNAME = #{username,jdbcType=VARCHAR},
+      </if>
+      <if test="usercode != null" >
+        USERCODE = #{usercode,jdbcType=VARCHAR},
+      </if>
+      <if test="operid != null" >
+        OPERID = #{operid,jdbcType=INTEGER},
+      </if>
+      <if test="logintime != null" >
+        LOGINTIME = #{logintime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="logouttime != null" >
+        LOGOUTTIME = #{logouttime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="logip != null" >
+        LOGIP = #{logip,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where ID = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="net.hunanst.eduz100.api.sys.AcLoginlog" >
+    update ac_loginlog
+    set USERNAME = #{username,jdbcType=VARCHAR},
+      USERCODE = #{usercode,jdbcType=VARCHAR},
+      OPERID = #{operid,jdbcType=INTEGER},
+      LOGINTIME = #{logintime,jdbcType=TIMESTAMP},
+      LOGOUTTIME = #{logouttime,jdbcType=TIMESTAMP},
+      LOGIP = #{logip,jdbcType=VARCHAR}
+    where ID = #{id,jdbcType=INTEGER}
+  </update>
+  <select id="select_page" resultMap="BaseResultMap" parameterType="net.hunanst.eduz100.api.sys.AcLoginlog" >
+    select
+    <include refid="Base_Column_List" />
+     from ac_loginlog
+    <where >
+      <if test="id!=null" >
+        AND ID=#{id}
+      </if>
+      <if test="username!=null" >
+        AND USERNAME=#{username}
+      </if>
+      <if test="usercode!=null" >
+        AND USERCODE=#{usercode}
+      </if>
+      <if test="operid!=null" >
+        AND OPERID=#{operid}
+      </if>
+      <if test="logintime!=null" >
+        AND LOGINTIME=#{logintime}
+      </if>
+      <if test="logouttime!=null" >
+        AND LOGOUTTIME=#{logouttime}
+      </if>
+      <if test="logip!=null" >
+        AND LOGIP=#{logip}
+      </if>
+    </where>
+  </select>
+</mapper>

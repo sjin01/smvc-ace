@@ -1,0 +1,260 @@
+#parse("/common/north.html")
+
+<script src="$contextPath/static/js/org_fueluxtree.js"></script>
+<div class="page-header">
+    <h1 class="page-header-h1">数据
+        <small>
+            <i class="ace-icon fa fa-angle-double-right"></i>
+            <a href="$contextPath/data/collect">数据标准列表</a>
+        </small>
+        <small>
+            <i class="ace-icon fa fa-angle-double-right"></i>
+            <a href="#">数据完成情况</a>
+        </small>
+    </h1>
+</div>
+
+<div class="row">
+    <div class="col-xs-12">
+        <form class="form-horizontal" id="myform" name="myform" method="post"
+              action="$contextPath/data/collect/subDetail">
+            <div style="display: none;">
+                #foreach( $user in $!users)
+                <input type="hidden" name="user" value="$!user.username" data_id="$!user.id">
+                #end
+            </div>
+            <div class="row">
+                <div class="col-xs-12">
+                    <div class="row">
+                        <div style="text-align: center;">
+                            <h3>$!{temp.title}</h3>
+                        </div>
+                        <div class="col-xs-12">
+                            <div id="hidden_div" style="display: none;">
+                                <input type="hidden" name="tempinfoid" value="$!{temp.id}">
+                                <input type="hidden" name="orgid" value="$!{temp.orgid}">
+                            </div>
+                            <!--class="table table-striped table-bordered table-hover"-->
+                            <table id="sample-table-1" class="table table-striped">
+                                <thead>
+                                <tr id="head_th">
+                                    <th style="text-align: center;width:8%;">
+                                        姓名
+                                    </th>
+                                    #set($nums=0)
+                                    #foreach($!details in $!{temp.tempInfoDetails} )
+                                    <th style="text-align: center; ">
+                                        <input type="hidden" name="dataCollectInfoDetailList[$nums].tempdetailid" value="$!details.id">
+                                        $!details.detail
+                                        #set($nums=$nums+1)
+                                    </th>
+                                    #end
+                                </tr>
+                                </thead>
+                                <tbody id="body_data">
+
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <span style="margin-left: 1%;">
+                <span style="color: gray;font-size: xx-small;">说明：</span>
+                <span style="color: red;font-size: xx-small;">$!{temp.remark}</span>
+            </span>
+        </form>
+
+        <br>
+        <div class="row" id="undone" >
+            <div class="col-xs-12" id="undone_user">
+                #if($!persons)
+                <span style="color: red;margin-left: 1%;" id="undata">没有提交数据的人员:</span>
+                #end
+                #foreach($!person in $!persons)
+                    <input type="hidden" name="userid" value="$!person.id">
+                    <input type="hidden" name="orgid" value="$!person.orgid">
+                    <span id="$!person.id">$!person.username</span>
+                    &nbsp;&nbsp;
+                #end
+            </div>
+            <br><br>
+            <div class="col-xs-12" id="notice_div">
+                <input type="checkbox" name="remine" style="margin-left: 1%;">
+                <span >是否短信提醒未提交人员</span>
+                <div id="remindtype_div" style="display: none;">
+                    <span style="color: gray;font-size: xx-small;">选择提醒类型：</span>
+                    <input type="radio" name="remindtype" value="1">手机短信
+                    <input type="radio" name="remindtype" value="2">短消息
+                    <input type="radio" name="remindtype" value="3">两个都发
+                </div>
+                <div id="remine_div" style="display: none;">
+                    <textarea  name="content" class="form-control limited" maxlength="64" rows="5">
+
+                    </textarea>
+                    <br>
+                    <button class="btn btn-primary remind_btn" >发送提醒</button>
+                </div>
+            </div>
+        </div>
+        <div class="clearfix form-actions no-margin-bottom">
+            <div class="center">
+                <a class="btn btn-info " onclick="excel()">
+                    <i class="ace-icon fa fa-check bigger-110"></i>Excel
+                </a>
+                &nbsp; &nbsp; &nbsp;
+                <a class="btn" href="$contextPath/data/collect">
+                    <i class="ace-icon fa fa-undo bigger-110"></i>
+                    返回
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="$contextPath/static/ace/js/jquery.gritter.min.js"></script>
+<script type="text/javascript">
+    $("input[name=remine]").click(function(){
+        if($(this).get(0).checked){
+            $("#remine_div").show();
+            $("#remindtype_div").show();
+        }else{
+            $("#remine_div").hide();
+            $("#remindtype_div").hide();
+        }
+    });
+
+    jQuery(".remind_btn").on("click",function(){
+        var remindtype=0;
+        if($("input[name=remindtype]").is(':checked')){
+            remindtype=$('input:radio:checked').val();
+        }
+        if(remindtype<1){
+            myGritterError("请选择提醒类型");
+            return false;
+        }
+
+        var content=$("textarea[name=content]").val();
+        if($.trim(content)==''){
+            myGritterError("请输入提醒内容");
+            return false;
+        }
+
+        userIds="";
+        var names="";
+        $("input[name=userid]").each(function(index){
+            var userId=$(this).val();
+            names+=$("span[id="+userId+"]").html()+",";
+            userIds+=userId+","
+        });
+        if(userIds!=""){
+            userIds=userIds.substring(0,userIds.length-1);
+            names=names.substring(0,names.length-1);
+        }
+
+
+        myConfirm("是否发送提醒信息?",function(){
+            jQuery.ajax({
+                url: "$contextPath/data/collect/remind",
+                data:{remindtype:remindtype,content:content,userids:userIds,names:names},
+                async:false,
+                dataType: "JSON",
+                success: function (data) {
+                    if(data&&data>0){
+                        myGritterSuccess("提醒成功!!!");
+                        $("input[name=remine]").attr("checked",false);
+                        $("#remine_div").hide();
+                        $("#remindtype_div").hide();
+                        $("textarea[name=content]").val("");
+                    }
+                }
+            });
+        });
+
+    });
+
+    var userIds='';
+    $(function () {
+        if($("#undone_user").find("input").length<1){
+            $("#notice_div").hide();
+            $("#undone").hide();
+        }
+
+
+        $("input[name=user]").each(function(index){
+            var userId=$(this).attr("data_id");
+            var userName=$(this).val();
+            getSubmitData(userId,userName);
+        });
+
+        $("input[name=userid]").each(function(index){
+            userIds=$(this).val()+","
+        });
+
+        if(userIds.length<1)
+            $("undone").hide();
+
+        $("textarea[name=content]").html('');
+
+        $('textarea.limited').inputlimiter({
+            remText: '您还能输入 %n 个字符，',
+            limitText: '最多能输入 : %n 字符。'
+        });
+    });
+
+    function getSubmitData(userId,userName){
+        jQuery.ajax({
+            url: "$contextPath/data/collect/getSubmitData",
+            data:{tempinfoid:$("input[name=tempinfoid]").val(),userid:userId,type:0},
+            async:false,
+            dataType: "JSON",
+            success: function (data) {
+                if(data&&data.length>0){
+                    var trs="<tr><td>"+userName+"</td>";
+                    $("#head_th").find("th").each(function(index){
+                        var detailid= $(this).find("input").eq(0).val();
+                        for(a in data){
+                            if(data[a].tempdetailid==detailid)
+                                trs+="<td style='text-align: center;'>"+
+                                        "<input type='hidden' name='dataCollectInfoDetailList["+a+"].infoid' value='"+data[a].infoid+"'>"+
+                                        data[a].detail+
+                                        "</td>";
+                        }
+                    });
+                    trs+="</tr>"
+                    $("#body_data").append(trs);
+                    $("#hidden_div").append("<input type='hidden' name='id' value='"+data[0].infoid+"'>");
+
+                }
+            }
+        });
+    }
+
+    function excel() {
+        window.open("$!{contextPath}/data/collect/export?tempInfoId="+ jQuery(':input[name=tempinfoid]').val());
+    }
+
+    function checkLen(e) {
+        var title = e.value;
+        if (title.length >= 512) {
+            $(e).parent().next().find("i").not(".red").hide();
+            $(e).parent().next().find("i.red").show();
+            $(e).parent().next().find("span").text("通知内容最多只能输入512个汉字或字母");
+            return false;
+        } else if (title.length == 0) {
+
+            if ($.trim(e.id) == "title") {
+                $(e).parent().next().find("i").not(".red").hide();
+                $(e).parent().next().find("i.red").show();
+                $(e).parent().next().find("span").text("请输入通知内容");
+                return false;
+            }
+
+        } else {
+            $(e).parent().next().find("i.red").hide();
+            $(e).parent().next().find("i").not(".red").show();
+            $(e).parent().next().find("span").text("");
+        }
+    }
+
+</script>
+#parse("/common/south.html")

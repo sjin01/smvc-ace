@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="net.hunanst.eduz100.api.sys.AcOperOrg" >
+  <resultMap id="BaseResultMap" type="net.hunanst.eduz100.api.sys.AcOperOrg" >
+    <id column="ID" property="id" jdbcType="INTEGER" />
+    <result column="ORGID" property="orgid" jdbcType="INTEGER" />
+    <result column="OPERID" property="operid" jdbcType="INTEGER" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    ID, ORGID, OPERID
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from ac_oper_org
+    where ID = #{value}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from ac_oper_org
+    where ID = #{value}
+  </delete>
+  <insert id="insert" parameterType="net.hunanst.eduz100.api.sys.AcOperOrg" >
+    <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER" >
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into ac_oper_org (ORGID, OPERID)
+    values (#{orgid,jdbcType=INTEGER}, #{operid,jdbcType=INTEGER})
+  </insert>
+  <insert id="insertSelective" parameterType="net.hunanst.eduz100.api.sys.AcOperOrg" >
+    <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER" >
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into ac_oper_org
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="orgid != null" >
+        ORGID,
+      </if>
+      <if test="operid != null" >
+        OPERID,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="orgid != null" >
+        #{orgid,jdbcType=INTEGER},
+      </if>
+      <if test="operid != null" >
+        #{operid,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="net.hunanst.eduz100.api.sys.AcOperOrg" >
+    update ac_oper_org
+    <set >
+      <if test="orgid != null" >
+        ORGID = #{orgid,jdbcType=INTEGER},
+      </if>
+      <if test="operid != null" >
+        OPERID = #{operid,jdbcType=INTEGER},
+      </if>
+    </set>
+    where ID = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="net.hunanst.eduz100.api.sys.AcOperOrg" >
+    update ac_oper_org
+    set ORGID = #{orgid,jdbcType=INTEGER},
+      OPERID = #{operid,jdbcType=INTEGER}
+    where ID = #{id,jdbcType=INTEGER}
+  </update>
+  <select id="select_page" resultMap="BaseResultMap" parameterType="net.hunanst.eduz100.api.sys.AcOperOrg" >
+    select
+    <include refid="Base_Column_List" />
+     from ac_oper_org
+    <where >
+      <if test="id!=null" >
+        AND ID=#{id}
+      </if>
+      <if test="orgid!=null" >
+        AND ORGID=#{orgid}
+      </if>
+      <if test="operid!=null" >
+        AND OPERID=#{operid}
+      </if>
+    </where>
+  </select>
+</mapper>

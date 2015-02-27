@@ -1,0 +1,157 @@
+#parse("/common/north.html")
+<script src="$contextPath/static/ace/js/fuelux/fuelux.tree.min.js"></script>
+
+<div class="col-xs-12">
+    <div class="row">
+        <div class="col-sm-6">
+            <div class="widget-box widget-color-blue2">
+                <div class="widget-header">
+                    <h4 class="widget-title lighter smaller"> 组织机构</h4>
+                </div>
+
+                <div class="widget-body">
+                    <div class="widget-main padding-8">
+                        <div id="treeview" class="tree"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <button id="submit-button" type="button" class="btn btn-sm btn-primary pull-right">
+            <i class="ace-icon fa fa-check"></i>
+            Submit
+        </button>
+    </div>
+
+    <div class="row">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="bootbox-close-button close" data-dismiss="modal" aria-hidden="true">×
+                </button>
+                <h4 class="modal-title green">操作成功</h4></div>
+            <div class="modal-body">
+                <div class="bootbox-body">
+                    您已成功发布该公文，请耐心等待审批！您可以去跟踪列表中查看！<span class="red2" id="">5</span> 秒后跳转...
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+</div>
+
+<input type="hidden" id="tree_blur" onfocus=""/>
+
+
+<script type="text/javascript">
+
+
+
+    $(function() {
+        $("#myFinishAndTurn").click(function (){
+            myFinishAndTurn('操作成功','您已成功发布该公文，请耐心等待审批！您可以去跟踪列表中查看！' ,'$contextPath/oa/officialdocument');
+        })
+
+
+
+
+        // js 递归出 Tree 数据
+        function DataSourceTree(options) {
+
+            this.url = options.url;
+
+            this.data = function(options, callback) {
+//                console.log(options);
+                var parent_id = null
+                if( !('name' in options || 'type' in options) ){
+                    parent_id = 0;// 第一次加载
+                }
+                else if('type' in options && options['type'] == 'folder') {// 有子节点
+                    if('additionalParameters' in options && 'children' in options.additionalParameters)
+                        parent_id = options.id;
+                }
+
+                if(parent_id !== null) {
+                    $.ajax({
+                        url: this.url,
+                        data: 'pid='+parent_id,
+                        type: 'POST',
+                        dataType: 'json',
+                        success : function(response) {
+                            if(response.code == 200)
+                                callback({ data: response.data })
+                        },
+                        error: function(response) {
+                            //console.log(response);
+                        }
+                    })
+                }
+            }
+        };
+        $('#treeview').ace_tree({
+            dataSource: new DataSourceTree({url: '$contextPath/sys/organization/orgFueluxTreeData'}) ,
+            multiSelect: true,
+            loadingHTML: '<div class="tree-loading"><i class="ace-icon fa fa-refresh fa-spin blue"></i></div>',
+            'open-icon' : 'tree-minus',
+            'close-icon' : 'tree-plus',
+            'selectable' : true,
+            'selected-icon' : 'fa fa-check',
+            'unselected-icon' : 'fa fa-check',
+            'nodeclick' : getTreeVal
+        });
+
+
+        //show selected items inside a modal
+        $('#submit-button').on('click', function() {
+            getTreeVal();
+        });
+
+
+        /*$('#treeview')
+                .on('updated', function(e, result) {
+                    //result.info  >> an array containing selected items
+                    //result.item
+                    //result.eventType >> (selected or unselected)
+                })
+                .on('selected', function(e) {
+                    console.log(e);
+                })
+                .on('unselected', function(e) {
+                })
+                .on('opened', function(e) {
+                })
+                .on('closed', function(e) {
+                });*/
+
+
+
+        /**
+         $('#tree1').on('loaded', function (evt, data) {
+		});
+
+         $('#tree1').on('opened', function (evt, data) {
+		});
+
+         $('#tree1').on('closed', function (evt, data) {
+		});
+
+         $('#tree1').on('selected', function (evt, data) {
+		});
+         */
+
+    });
+
+    function getTreeVal(){
+        var tree = $('#treeview').data('tree');
+
+        var output = '';
+        var items = tree.selectedItems();
+        for(var i in items) if (items.hasOwnProperty(i)) {
+            var item = items[i];
+            output += item.id + ":"+ item.name+"\n";
+        }
+//        $('#tree-value').css({'width':'98%', 'height':'200px'}).val(output);
+//        console.log(output);
+    }
+</script>
+#parse("/common/south.html")

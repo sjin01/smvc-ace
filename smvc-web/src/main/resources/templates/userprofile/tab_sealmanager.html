@@ -1,0 +1,36 @@
+<style>
+    .padding-top20{
+        padding-top: 20px;
+    }
+</style>
+
+
+<div class="col-xs-12">
+    <div class="row" id="sealList_div"></div>
+
+    <hr/>
+
+    <div class="row">
+        <a href="javascript:void(0);" onclick="load_uploadseal();">我要上传</a>
+    </div>
+
+    <div class="row" style="padding-top: 20px;" id="uploadseal_div"></div>
+</div>
+
+
+
+<script type="text/javascript">
+
+    function load_sealList(){
+        $('#sealList_div').load('$contextPath/sealManager/loadSealList');
+    }
+    function load_uploadseal (){
+        $('#uploadseal_div').load('$contextPath/sealManager/loadUploadseal');
+    }
+
+    $(function (){
+        load_sealList();
+
+    })
+
+</script>

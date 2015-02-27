@@ -1,0 +1,92 @@
+#parse("/common/north.html")
+
+<script type="text/javascript">
+
+$(function(){
+	jQuery.ajax({
+		type:"post",
+		url:"$contextPath/sys/operator/getrolerelation",
+		data:{operid: $!model.id},
+		dataType: "json",
+		success:function(data){
+			var arr = data.data;
+			for(var i=0; i<arr.length; i++){
+				$("#roles-main").append(
+					'<label style="width: 24%; margin: 10px 0;">'+
+					'<input name="form-field-checkbox" class="ace ace-checkbox-2" type="checkbox" '+arr[i].checked+' value="'+arr[i].id+'">'+
+					'<span class="lbl"> '+arr[i].rolename+' </span>'+
+					'</label>'
+				);
+			}
+		}
+	});
+});
+
+function save(target){
+	var selectedboxes =  $("#validation-form :checkbox:checked");
+	if(selectedboxes.length==0){
+		var bl = confirm("没有选择角色，之前关联的角色将被删除！");
+		if(!bl) return;
+	}
+	
+	$(target).attr("disabled", "disabled");
+	var relations = [{ operid: $!model.id }];
+	selectedboxes.each(function(){
+		relations.push({operid: $!model.id, roleid: this.value});
+    });
+	
+	jQuery.ajax({
+		type:"post",
+		url:"$contextPath/sys/operator/saverolerelation",
+		contentType: 'application/json',
+		data:JSON.stringify(relations),
+		dataType: "json",
+		success:function(data){
+			location.href = "$contextPath/sys/operator";
+		}
+	});
+}
+
+</script>
+
+<div class="page-header">
+    <h1 class="page-header-h1">用户管理
+        <small>
+            <i class="ace-icon fa fa-angle-double-right"></i> 为 “$model.username” 设置角色
+        </small>
+    </h1>
+</div>
+
+<div class="row">
+	<div class="col-sm-12">
+		<div class="widget-box transparent ui-sortable-handle">
+		    <div class="widget-header">
+		        <h5 class="widget-title"> 已关联的角色 </h5>
+		        <div class="widget-toolbar">
+		            <a href="#" data-action="fullscreen"><i class="ace-icon fa fa-expand"></i>&nbsp;全屏</a>
+		            &nbsp;&nbsp;
+		            <a href="#" data-action="collapse"><i class="ace-icon fa fa-chevron-up"></i>&nbsp;折叠</a>
+		        </div>
+		        <div class="widget-toolbar no-border">
+		        	<button class="btn btn-xs btn-light bigger" onclick='location.href="$contextPath/sys/operator"'>
+						<i class="ace-icon fa fa-arrow-left"></i> 返回
+					</button>
+					&nbsp;&nbsp;
+					<button class="btn btn-xs btn-info bigger" onclick="save(this)">
+						<i class="ace-icon fa fa-check"></i> 保存
+					</button>
+				</div>
+		    </div>
+		
+		    <div class="widget-body">
+		        <div class="widget-main">
+		        	<form id="validation-form">
+		        		<div id="roles-main"></div>
+		        	</form>
+		        </div>
+		    </div>
+		</div>
+	</div>
+</div>
+
+#parse("/common/south.html")

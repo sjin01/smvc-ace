@@ -1,0 +1,153 @@
+#parse("/common/north.html")
+
+<div class="page-header">
+    <h1 class="page-header-h1">角色管理
+        <small>
+            <i class="ace-icon fa fa-angle-double-right"></i>  $!{dual.operationname}
+        </small>
+    </h1>
+</div>
+
+<div class="row">
+    <div class="col-xs-12">
+        <form class="form-horizontal" id="validation-form" name="validation-form" method="post" action="$contextPath/sys/application/save">
+            <input type="hidden" id="id" name="id" value="$!{model.id}" />
+            
+            <div class="form-group">
+                <label class="col-sm-3 control-label no-padding-right"> 角色名称： </label>
+                <div class="col-sm-4">
+                    <input type="text" id="rolename" name="rolename" $!dual.disabled value="$!{model.rolename}" class="form-control" />
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="col-sm-3 control-label no-padding-right"> 角色代码： </label>
+                <div class="col-sm-4">
+                    <input type="text" id="rolecode" name="rolecode" $!dual.disabled value="$!{model.rolecode}" class="form-control" />
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <label class="col-sm-3 control-label no-padding-right"> 所属机构： </label>
+                <div class="col-sm-4">
+                	<!-- <label>
+						<input id="switch-field-1" class="ace ace-switch ace-switch-5" 
+								type="checkbox" onclick="chooseOrg(this)">
+						<span class="lbl" data-lbl="是&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;否"></span>
+					</label> -->
+					<select class="form-control" id="belongorgid" name="belongorgid" $!dual.disabled ></select>
+                </div>
+            </div>
+           				
+            
+            <div class="clearfix form-actions no-margin-bottom">
+                <div class="center">
+                    <button class="btn btn-info $!dual.hide" type="button" onclick="save(this)" style="margin: 0 10px">
+                        <i class="ace-icon fa fa-check bigger-110"></i>保存
+                    </button>
+                    
+                    <a class="btn" href="$contextPath/sys/role" style="margin: 0 10px">
+                        <i class="ace-icon fa fa-undo bigger-110"></i>$!dual.goback
+                    </a>
+                </div>
+            </div>
+        </form>
+
+    </div>
+</div>
+
+<script type="text/javascript">
+    
+    function chooseOrg(t){
+    	if(t.checked) $("#belongorgid").removeAttr("disabled").show();
+    	else $("#belongorgid").attr("disabled", "disabled").hide();
+    }
+    
+    $(function(){
+    	jQuery.ajax({
+			type:"get",
+			url:"$contextPath/sys/organization/schoolOrg",
+			dataType: "json",
+			success:function(data){
+				#if($dual.operationtype=='insert')
+					#if($loginUser.usercode=='admin')
+						$.each(data.data, function (i, d){
+							$("#belongorgid").append('<option value="'+d.id+'">'+d.orgname+'</option>');
+						});
+					#else
+						$.each(data.data, function (i, d){
+							if(d.id=='$!{loginUser.belongorgid}'){
+								$("#belongorgid").append('<option value="'+d.id+'">'+d.orgname+'</option>');
+								return false;
+							}
+						});
+					#end
+				#else
+					$.each(data.data, function (i, d){
+						if(d.id=='$!{model.belongorgid}'){
+							$("#belongorgid").append('<option value="'+d.id+'">'+d.orgname+'</option>');
+							return false;
+						}
+					});
+				#end
+			}
+		});
+    	
+    	$('#validation-form').validate({
+			errorElement: 'div',
+			errorClass: 'help-block',
+			focusInvalid: false,
+			rules: {
+				rolename: {
+					required: true,
+					maxlength: 40
+				},
+				rolecode: {
+					required: true,
+					maxlength: 20
+				}
+			},
+			messages: {
+				rolename: {
+					required: "请填写角色名称",
+					maxlength: "角色名称不能多余40个字符"
+				},
+				rolecode: {
+					required: "请填写角色代码",
+					maxlength: "角色代码不能多余20个字符"
+				}
+			},
+			highlight: function (e) {
+				$(e).closest('.form-group').removeClass('has-info').addClass('has-error');
+			},
+			success: function (e) {
+				$(e).closest('.form-group').removeClass('has-error');//.addClass('has-info');
+				$(e).remove();
+			},
+			errorPlacement: function (error, element) {
+				element.closest("div.form-group").append(error);
+			}
+		});
+    });
+    
+    function save(target){
+    	if($('#validation-form').valid()){
+    		$(target).attr("disabled", "disabled");
+    		jQuery.ajax({
+    			type:"post",
+    			url:"$contextPath/sys/role/save",
+    			data:$('#validation-form').serialize(),
+    			dataType: "json",
+    			success:function(data){
+    				if(data.code==530){
+    					$(target).removeAttr("disabled");
+    					alert("角色系统代码已经存在！");
+    				}else{
+    					location.href = "$contextPath/sys/role";
+    				}
+    			}
+    		});
+    	}
+    }
+</script>
+#parse("/common/south.html")

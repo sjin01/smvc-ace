@@ -1,0 +1,13 @@
+#!/usr/bin/env node
+var debug = require('debug')('push_ax');
+var app = require('../app');
+var domain = require('domain');
+var logger = require('../libs/log').logger;
+
+/**
+ * 不能正常捕获的异常最后进行捕获：异常捕获
+ */
+process.on('uncaughtException', function (err) {
+    logger.error("uncaughtException::"+err);
+    console.error("uncaughtException::"+err);
+});

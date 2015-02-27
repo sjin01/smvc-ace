@@ -1,0 +1,161 @@
+#parse("/common/north.html")
+
+<div class="page-header">
+    <h1 class="no-margin col-sm-8 left page-header-h1">
+        <!--通讯
+        <small>
+            <i class="ace-icon fa fa-angle-double-right"></i>
+            通讯记录
+        </small>-->
+    </h1>
+    <div class="input-group col-sm-4">
+        <input type="text" id="condition" class="form-control search-query" placeholder="请输入关键字">
+        <span class="input-group-btn">
+            <button id="btnselect" type="button" class="btn btn-purple btn-sm">
+                查询
+                <i class="ace-icon fa fa-search icon-on-right bigger-110"></i>
+            </button>
+        </span>
+    </div>
+</div>
+
+<div class="widget-box transparent ui-sortable-handle">
+    <div class="widget-header">
+        <h5 class="widget-title">短消息记录列表</h5>
+
+        <div class="widget-toolbar">
+            <!--<div class="action-buttons inline">
+                <a id="show-modal" role="button" href="#" class="green" data-toggle="modal" onclick="detail(0,-1);"><i
+                        class="ace-icon fa fa-plus-square-o bigger-130"></i>&nbsp;添加</a>
+                &nbsp;&nbsp;
+                <a class="red" href="#" onclick="deletes()"><i class="ace-icon fa fa-trash-o bigger-130"></i>&nbsp;批量删除</a>
+            </div>
+            &nbsp;&nbsp;-->
+            <a href="#" data-action="fullscreen"><i class="ace-icon fa fa-expand"></i>&nbsp;全屏</a>
+            &nbsp;&nbsp;
+            <a href="#" data-action="collapse"><i class="ace-icon fa fa-chevron-up"></i>&nbsp;折叠</a>
+        </div>
+    </div>
+
+    <div class="widget-body">
+        <div class="widget-main">
+            <input type="hidden" id="userId" name="$!userId">
+            <table class="table table-striped table-hover" id="datatable">
+                <thead>
+                <tr>
+                    <th>通讯人</th>
+                    <th>最后通讯内容</th>
+                    <th>最后通讯时间</th>
+                    <th>操作</th>
+                </tr>
+                </thead>
+            </table>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+    var datatable;
+
+    function initDataTable() {
+        datatable = $('#datatable').advancedDataTable({
+            "sAjaxSource": '$contextPath/oa/chat/listByUserId',
+            "aoColumns": [
+                {"mDataProp": function (source, type, val) {
+                    /*var loginUserId='$!acOperator.userId';
+                    if(source.addresser==loginUserId){
+                        return '<a href="$contextPath/oa/chat/chatone?recipient='+source.recipient+'">'+source.recipientname+'</a>';
+                    }else{
+                        return '<a href="$contextPath/oa/chat/chatone?recipient='+source.addresser+'">$!acOperator.username</a>';
+                    }*/
+                    return '<a href="$contextPath/oa/chat/chatone?recipient='+source.recipient+'">'+source.recipientname+'</a>';
+                }},
+                {"mDataProp": function (source, type, val) {
+                    var userId='$!acOperator.id';
+
+                    var content=source.content;
+                    if(null!=content&& $.trim(content)!=''&&content.length>20){
+                        content=content.substring(0,20)+"…";
+                    }
+
+                    if(source.addresser==userId){
+                        return "您说:"+content;
+                    }else{
+                        return "ta说:"+content;
+                    }
+                }},
+                {"mDataProp": function (source, type, val) {
+                    return source.date;
+                }},
+                {"mDataProp": function (source, type, val) {
+                    var userId='$!acOperator.id';
+                    if(source.addresser==userId){
+                        //return "<a href=\"javascript:startChat(\""+source.recipient+"\");\">发起对话</a>";
+                        return '<a href="javascript:startChat('+source.recipient+');">发起对话</a>';
+                    }else{
+                        return '<a href="javascript:startChat('+source.addresser+');">发起对话</a>';
+                    }
+
+                }}
+            ],
+            "fnServerParams": function (aoData) {
+                if ($("#condition").val() != '')
+                    aoData.push({ "name": "condition", "value": $("#condition").val()});
+            },
+            "oLanguage": {
+                "sUrl": "$contextPath/static/ace/js/jquery.dataTables.lang.zh-CN.txt"
+            }
+        });
+    }
+
+    function getdata() {
+        datatable.fnPageChange("first", true);
+    }
+
+    function getdataForChat() {
+        datatable.fnPageChange("first", true);
+    }
+
+
+    /**
+     * flag 0 add  1 detail
+     * @param flag
+     * @param id
+     */
+    function detail(flag, id) {
+        window.location.href="$contextPath/oa/notification/toNoti?id="+id;
+    }
+
+    $(function () {
+        initDataTable();
+        $("#condition").bind("change", getdata);
+        $("#btnselect").bind("click", getdata);
+
+    });
+
+    function startChat(talk_man_Id){
+        if(talk_man_Id!=null&&talk_man_Id!=''){
+            $.ajax({
+                async:false,
+                url:"$contextPath/oa/chat/getUserInfoById",
+                data : {'userId' : talk_man_Id },
+                type:'POST',
+                dataType:'json',
+                success:function( data ){
+                    if(data){
+                        var imgurl=data.imgurl;
+                        if(imgurl==''||imgurl==null){
+                            imgurl="$contextPath/static/ace/avatars/avatar2.png"
+                        }else{
+                            imgurl= '$!{nginx_filepath}'+imgurl;
+                        }
+                        onLineMessage(data.id,data.username,imgurl,999);
+                    }
+                }
+            });
+        }
+    }
+
+
+</script>
+#parse("/common/south.html")

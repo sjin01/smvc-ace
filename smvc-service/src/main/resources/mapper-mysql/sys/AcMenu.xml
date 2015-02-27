@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="net.hunanst.eduz100.api.sys.AcMenu" >
+  <resultMap id="BaseResultMap" type="net.hunanst.eduz100.api.sys.AcMenu" >
+    <id column="ID" property="id" jdbcType="INTEGER" />
+    <result column="APPID" property="appid" jdbcType="INTEGER" />
+    <result column="MENUNAME" property="menuname" jdbcType="VARCHAR" />
+    <result column="PARENTID" property="parentid" jdbcType="INTEGER" />
+    <result column="MENUSEQ" property="menuseq" jdbcType="VARCHAR" />
+    <result column="SORTID" property="sortid" jdbcType="INTEGER" />
+    <result column="FUNCID" property="funcid" jdbcType="INTEGER" />
+    <result column="MENUICON" property="menuicon" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    ID, APPID, MENUNAME, PARENTID, MENUSEQ, SORTID, FUNCID, MENUICON
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from ac_menu
+    where ID = #{value}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from ac_menu
+    where ID = #{value}
+  </delete>
+  <insert id="insert" parameterType="net.hunanst.eduz100.api.sys.AcMenu" >
+    <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER" >
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into ac_menu (APPID, MENUNAME, PARENTID, 
+      MENUSEQ, SORTID, FUNCID, 
+      MENUICON)
+    values (#{appid,jdbcType=INTEGER}, #{menuname,jdbcType=VARCHAR}, #{parentid,jdbcType=INTEGER}, 
+      #{menuseq,jdbcType=VARCHAR}, #{sortid,jdbcType=INTEGER}, #{funcid,jdbcType=INTEGER}, 
+      #{menuicon,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="net.hunanst.eduz100.api.sys.AcMenu" >
+    <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER" >
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into ac_menu
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="appid != null" >
+        APPID,
+      </if>
+      <if test="menuname != null" >
+        MENUNAME,
+      </if>
+      <if test="parentid != null" >
+        PARENTID,
+      </if>
+      <if test="menuseq != null" >
+        MENUSEQ,
+      </if>
+      <if test="sortid != null" >
+        SORTID,
+      </if>
+      <if test="funcid != null" >
+        FUNCID,
+      </if>
+      <if test="menuicon != null" >
+        MENUICON,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="appid != null" >
+        #{appid,jdbcType=INTEGER},
+      </if>
+      <if test="menuname != null" >
+        #{menuname,jdbcType=VARCHAR},
+      </if>
+      <if test="parentid != null" >
+        #{parentid,jdbcType=INTEGER},
+      </if>
+      <if test="menuseq != null" >
+        #{menuseq,jdbcType=VARCHAR},
+      </if>
+      <if test="sortid != null" >
+        #{sortid,jdbcType=INTEGER},
+      </if>
+      <if test="funcid != null" >
+        #{funcid,jdbcType=INTEGER},
+      </if>
+      <if test="menuicon != null" >
+        #{menuicon,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="net.hunanst.eduz100.api.sys.AcMenu" >
+    update ac_menu
+    <set >
+      <if test="appid != null" >
+        APPID = #{appid,jdbcType=INTEGER},
+      </if>
+      <if test="menuname != null" >
+        MENUNAME = #{menuname,jdbcType=VARCHAR},
+      </if>
+      <if test="parentid != null" >
+        PARENTID = #{parentid,jdbcType=INTEGER},
+      </if>
+      <if test="menuseq != null" >
+        MENUSEQ = #{menuseq,jdbcType=VARCHAR},
+      </if>
+      <if test="sortid != null" >
+        SORTID = #{sortid,jdbcType=INTEGER},
+      </if>
+      <if test="funcid != null" >
+        FUNCID = #{funcid,jdbcType=INTEGER},
+      </if>
+      <if test="menuicon != null" >
+        MENUICON = #{menuicon,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where ID = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="net.hunanst.eduz100.api.sys.AcMenu" >
+    update ac_menu
+    set APPID = #{appid,jdbcType=INTEGER},
+      MENUNAME = #{menuname,jdbcType=VARCHAR},
+      PARENTID = #{parentid,jdbcType=INTEGER},
+      MENUSEQ = #{menuseq,jdbcType=VARCHAR},
+      SORTID = #{sortid,jdbcType=INTEGER},
+      FUNCID = #{funcid,jdbcType=INTEGER},
+      MENUICON = #{menuicon,jdbcType=VARCHAR}
+    where ID = #{id,jdbcType=INTEGER}
+  </update>
+  <select id="select_page" resultMap="BaseResultMap" parameterType="net.hunanst.eduz100.api.sys.AcMenu" >
+    select
+    <include refid="Base_Column_List" />
+     from ac_menu
+    <where >
+      <if test="id!=null" >
+        AND ID=#{id}
+      </if>
+      <if test="appid!=null" >
+        AND APPID=#{appid}
+      </if>
+      <if test="menuname!=null" >
+        AND MENUNAME=#{menuname}
+      </if>
+      <if test="parentid!=null" >
+        AND PARENTID=#{parentid}
+      </if>
+      <if test="menuseq!=null" >
+        AND MENUSEQ=#{menuseq}
+      </if>
+      <if test="sortid!=null" >
+        AND SORTID=#{sortid}
+      </if>
+      <if test="funcid!=null" >
+        AND FUNCID=#{funcid}
+      </if>
+      <if test="menuicon!=null" >
+        AND MENUICON=#{menuicon}
+      </if>
+    </where>
+  </select>
+</mapper>

@@ -1,0 +1,414 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="TempInfo">
+    <resultMap id="BaseResultMap" type="net.hunanst.eduz100.api.data.vo.TempInfoVo">
+        <id column="ID" property="id" jdbcType="INTEGER"/>
+        <result column="USERID" property="userid" jdbcType="INTEGER"/>
+        <result column="USERNAME" property="username" jdbcType="VARCHAR"/>
+        <result column="ORGID" property="orgid" jdbcType="INTEGER"/>
+        <result column="ORGNAME" property="orgname" jdbcType="VARCHAR"/>
+
+        <result column="FINISH" property="finish" jdbcType="INTEGER"/>
+        <result column="UNFINISH" property="unfinish" jdbcType="INTEGER"/>
+
+        <result column="TITLE" property="title" jdbcType="VARCHAR"/>
+        <result column="REMARK" property="remark" jdbcType="VARCHAR"/>
+        <result column="CREATEDATE" property="createdate" jdbcType="TIMESTAMP"/>
+
+        <collection property="tempInfoDetails" column="ID"
+                    select="TempInfo.selectDetailByPid"/>
+        <!--<collection property="receives" column="ID"
+                    select="TempInfo.selectInfoUserByPid"/>-->
+    </resultMap>
+
+
+    <select id="select_page" resultMap="BaseResultMap" parameterType="net.hunanst.eduz100.api.data.vo.TempInfoVo">
+        SELECT ti.id,ti.title,ti.remark,ti.createdate,ti.userid,ti.orgid,
+        ao.username AS username,org.orgname AS orgname,
+        (SELECT count(DISTINCT userid) FROM t_data_info WHERE TEMPINFOID = ti.id ) AS finish,
+        (SELECT count(DISTINCT userid) FROM t_data_info_user WHERE tempinfoid = ti.id)
+          -
+        (SELECT count(DISTINCT userid) FROM t_data_info WHERE TEMPINFOID = ti.id ) AS unfinish
+        FROM t_data_temp_info ti left join ac_operator ao on ti.userid=ao.id
+        left join ac_org org on ti.orgid=org.id
+        where ti.userid=#{userid}
+        <if test="condition!=null and condition!=''">
+            AND (
+            ti.title like CONCAT('%',#{condition},'%') or ao.username like CONCAT('%',#{condition},'%')
+            or org.orgname like CONCAT('%',#{condition},'%')
+            )
+        </if>
+        order by ti.createdate desc
+
+    </select>
+
+    <select id="selectZtree" parameterType="net.hunanst.eduz100.api.data.vo.TreeData" resultType="net.hunanst.eduz100.api.data.vo.TreeData">
+        select * from
+        (
+          select id ,CONCAT(orgname,'(部门)') as name,PARENTID as pid,'org' as type from ac_org
+            <if test="pid!=null and pid>0">
+              where id=#{pid} or parentid=#{pid}
+            </if>
+            union all
+          select CONCAT('u',operid)as id,ao.USERNAME name,orgid pid,'user' as type from ac_oper_org_relation rela
+        left join ac_operator ao on rela.OPERID=ao.id
+            <if test="pid!=null and pid>0">
+              where orgid=#{pid}
+            </if>
+        ) a
+        where a.name is not null
+        <if test="type!=null and type!=''">
+          and a.type=#{type}
+        </if>
+        order by type,id
+    </select>
+
+    <select id="selectZtreeOrgs" parameterType="net.hunanst.eduz100.api.data.vo.TreeData" resultType="net.hunanst.eduz100.api.data.vo.TreeData">
+        <!--select id ,CONCAT(orgname,'(部门)') as name,PARENTID as pid,'org' as type from ac_org
+        where (id=belongorgid or belongorgid=0)
+        <if test="pid!=null">
+         and    parentid=#{pid}
+        </if>
+        and  orgname is not null  order by id-->
+        call findOrgs(#{pid},'20')
+    </select>
+
+    <select id="selectZtreeSchools" parameterType="net.hunanst.eduz100.api.data.vo.TreeData" resultType="net.hunanst.eduz100.api.data.vo.TreeData">
+        select id ,CONCAT(orgname,'(部门)') as name,PARENTID as pid,'org' as type from ac_org
+        where (id=belongorgid or belongorgid=0)
+        <if test="pid!=null">
+            and  id=#{pid}
+        </if>
+        and  orgname is not null  order by id
+    </select>
+
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+      delete from t_data_temp_info where ID = #{value}
+    </delete>
+
+    <delete id="deleteInfoUserByPId" parameterType="java.lang.Integer">
+      delete from t_data_info_user where tempinfoid = #{value}
+    </delete>
+
+    <delete id="deleteInfoDetailByPId" parameterType="java.lang.Integer">
+      delete from t_data_temp_info_detail where tempinfoid = #{value}
+    </delete>
+
+
+    <insert id="insertSelective" parameterType="net.hunanst.eduz100.api.data.vo.TempInfoVo" useGeneratedKeys="true" keyProperty="id">
+        insert into t_data_temp_info
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                ID,
+            </if>
+            <if test="title != null and title!=''">
+                TITLE,
+            </if>
+            <if test="remark != null and remark!=''">
+                remark,
+            </if>
+            <if test="createdate != null and createdate!=''">
+                CREATEDATE,
+            </if>
+            <if test="userid != null">
+                USERID,
+            </if>
+            <if test="orgid != null">
+                ORGID,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{id,jdbcType=INTEGER},
+            </if>
+            <if test="title != null and title!=''">
+                #{title,jdbcType=VARCHAR},
+            </if>
+            <if test="remark != null and remark!=''">
+                #{remark,jdbcType=VARCHAR},
+            </if>
+            <if  test="createdate != null and createdate!=''">
+                #{createdate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="userid != null">
+                #{userid,jdbcType=INTEGER},
+            </if>
+            <if test="orgid != null">
+                #{orgid,jdbcType=INTEGER},
+            </if>
+        </trim>
+    </insert>
+
+    <insert id="insertTempDetal" parameterType="net.hunanst.eduz100.api.data.TempInfoDetail">
+        insert into t_data_temp_info_detail
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                ID,
+            </if>
+            <if test="tempinfoid != null ">
+                tempinfoid,
+            </if>
+            <if test="detail != null and detail!=''">
+                detail,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{id,jdbcType=INTEGER},
+            </if>
+            <if test="tempinfoid != null ">
+                #{tempinfoid},
+            </if>
+            <if test="detail != null and detail!=''">
+                #{detail,jdbcType=VARCHAR},
+            </if>
+        </trim>
+    </insert>
+
+    <insert id="insertInfouser" parameterType="net.hunanst.eduz100.api.data.DataInfoUser">
+        insert into t_data_info_user
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                ID,
+            </if>
+            <if test="tempinfoid != null ">
+                tempinfoid,
+            </if>
+            <if test="userid != null ">
+                userid,
+            </if>
+            <if test="orgid != null ">
+                orgid,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{id,jdbcType=INTEGER},
+            </if>
+            <if test="tempinfoid != null ">
+                #{tempinfoid,jdbcType=INTEGER},
+            </if>
+            <if test="userid != null ">
+                #{userid,jdbcType=INTEGER},
+            </if>
+            <if test="orgid != null ">
+                #{orgid,jdbcType=INTEGER},
+            </if>
+        </trim>
+    </insert>
+    
+    
+    <select id="person_page" parameterType="net.hunanst.eduz100.api.data.vo.PersonView" resultType="net.hunanst.eduz100.api.data.vo.PersonView">
+        select diu.id,diu.TEMPINFOID,dti.title,dti.USERID,ao.USERNAME,diu.orgid,org.ORGNAME,
+        dti.createdate,di.CREATEDATE as subdate from t_data_info_user diu
+        left join t_data_info di on diu.TEMPINFOID=di.TEMPINFOID and diu.USERID=di.USERID /*and diu.orgid=di.orgid*/
+        left join t_data_temp_info dti on dti.id=diu.TEMPINFOID
+        left join ac_operator ao on ao.id=dti.USERID
+        left join ac_org org on org.id=diu.ORGID
+      where diu.USERID=#{userid}
+      <if test="title!=null and title!=''">
+        and dti.title like CONCAT('%',#{title},'%')
+      </if>
+        group by diu.TEMPINFOID
+        order by dti.createdate desc
+    </select>
+
+    <select id="selectById" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+      select id,title,remark,createdate,userid,orgid from t_data_temp_info where id=#{0}
+    </select>
+    
+    <select id="selectDetailByPid" parameterType="java.lang.Integer" resultType="net.hunanst.eduz100.api.data.TempInfoDetail">
+        select id,tempinfoid,detail from t_data_temp_info_detail where tempinfoid=#{0} order by id
+    </select>
+
+    <select id="selectInfoUserByPid" parameterType="java.lang.Integer" resultType="net.hunanst.eduz100.api.data.DataInfoUser">
+        select id,tempinfoid,userid,orgid from t_data_info_user where tempinfoid=#{0}
+    </select>
+
+    <insert id="insertDataInfo" parameterType="net.hunanst.eduz100.api.data.DataCollectInfo"
+            useGeneratedKeys="true" keyProperty="id">
+
+      insert into t_data_info
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                ID,
+            </if>
+            <if test="tempinfoid != null ">
+                tempinfoid,
+            </if>
+            <if test="userid != null ">
+                userid,
+            </if>
+            <if test="orgid != null ">
+                orgid,
+            </if>
+            <if test="createdate != null and createdate!='' ">
+                createdate,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{id,jdbcType=INTEGER},
+            </if>
+            <if test="tempinfoid != null ">
+                #{tempinfoid,jdbcType=INTEGER},
+            </if>
+            <if test="userid != null ">
+                #{userid,jdbcType=INTEGER},
+            </if>
+            <if test="orgid != null ">
+                #{orgid,jdbcType=INTEGER},
+            </if>
+            <if test="createdate != null and createdate!='' ">
+                #{createdate,jdbcType=TIMESTAMP},
+            </if>
+        </trim>
+    </insert>
+
+    <insert id="insertDataInfoDetail" parameterType="net.hunanst.eduz100.api.data.DataCollectInfoDetail">
+        insert into t_data_info_detail
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                ID,
+            </if>
+            <if test="infoid != null ">
+                infoid,
+            </if>
+            <if test="tempdetailid != null ">
+                tempdetailid,
+            </if>
+            <if test="detail != null and detail!='' ">
+                detail,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{id,jdbcType=INTEGER},
+            </if>
+            <if test="infoid != null ">
+                #{infoid,jdbcType=INTEGER},
+            </if>
+            <if test="tempdetailid != null ">
+                #{tempdetailid,jdbcType=INTEGER},
+            </if>
+            <if test="detail != null and detail!='' ">
+                #{detail,jdbcType=VARCHAR},
+            </if>
+        </trim>
+    </insert>
+    
+    <select id="getDataByTempId" resultType="net.hunanst.eduz100.api.data.DataCollectInfoDetail"
+            parameterType="net.hunanst.eduz100.api.data.DataCollectInfo">
+        select did.id,did.infoid,did.tempdetailid,ifnull(did.detail,'')detail from t_data_info_detail did
+        left join t_data_info di on did.infoid=di.id
+        where di.TEMPINFOID=#{tempinfoid}
+        <if test="userid!=null">
+            and di.USERID=#{userid}
+        </if>
+
+    </select>
+    
+    <delete id="deleteDataByPid" parameterType="java.lang.Integer">
+        delete from t_data_info_detail where infoid=#{0}
+    </delete>
+    
+    <update id="updateDataInfo" parameterType="net.hunanst.eduz100.api.data.DataCollectInfo">
+        update t_data_info set createdate=#{createdate}
+        where userid=#{userid} and tempinfoid=#{tempinfoid} and id=#{id} and orgid=#{orgid}
+    </update>
+    
+    <update id="updateTempInfo" parameterType="net.hunanst.eduz100.api.data.TempInfo">
+        update t_data_temp_info set remark=#{remark} where id=#{id}
+    </update>
+    
+    <select id="getsubDataUsers" resultType="net.hunanst.eduz100.api.sys.AcOperator" parameterType="java.lang.Integer">
+        select ac_operator.ID,ac_operator.USERNAME from t_data_info left join ac_operator on t_data_info.userid=ac_operator.id
+        where tempinfoid=#{0} order by ac_operator.ID
+    </select>
+
+    <select id="undoneUsers" resultType="net.hunanst.eduz100.api.sys.vo.AcOperatorVo" parameterType="java.lang.Integer">
+        select diu.USERID as id,ao.USERNAME/*,org.orgname,diu.ORGID*/ from t_data_info_user diu
+        left join t_data_info di on
+        /*diu.ORGID=di.ORGID and*/ diu.USERID=di.USERID and diu.TEMPINFOID=di.TEMPINFOID
+        left join ac_operator ao on diu.USERID=ao.ID
+        /*left join ac_org org on org.id=diu.ORGID*/
+        where di.id is null and ao.USERNAME is not null and diu.TEMPINFOID=#{0}
+        group by diu.USERID
+    </select>
+    
+    <insert id="addRemind" parameterType="net.hunanst.eduz100.api.oa.Remind">
+        insert into t_oa_remind
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                ID,
+            </if>
+            <if test="remindtype != null">
+                REMINDTYPE,
+            </if>
+            <if test="operatoruserid != null">
+                OPERATORUSERID,
+            </if>
+            <if test="recipientuserid != null">
+                RECIPIENTUSERID,
+            </if>
+            <if test="content != null and content!=''">
+                CONTENT,
+            </if>
+            <if test="status != null ">
+                status,
+            </if>
+            <if test="type != null">
+                TYPE,
+            </if>
+            <if test="senddate != null and senddate!=''">
+                SENDDATE,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{id,jdbcType=INTEGER},
+            </if>
+            <if test="remindtype != null">
+                #{remindtype,jdbcType=INTEGER},
+            </if>
+            <if test="operatoruserid != null ">
+                #{operatoruserid,jdbcType=INTEGER},
+            </if>
+            <if  test="recipientuserid != null">
+                #{recipientuserid,jdbcType=INTEGER},
+            </if>
+            <if test="content != null and content!=''">
+                #{content,jdbcType=VARCHAR},
+            </if>
+            <if test="status != null ">
+                #{status,jdbcType=INTEGER},
+            </if>
+            <if test="type != null">
+                #{type,jdbcType=INTEGER},
+            </if>
+            <if test="senddate != null and senddate!=''">
+                #{senddate,jdbcType=TIMESTAMP},
+            </if>
+        </trim>
+    </insert>
+
+    <select id="selectBelongsByUserId" parameterType="java.lang.Integer" resultType="net.hunanst.eduz100.api.sys.vo.AcOperOrgRelationVo">
+        select org.BELONGORGID from ac_oper_org_relation relation
+        left join ac_org org on relation.ORGID=org.id
+        where  org.BELONGORGID is not null and OPERID=#{0}
+        group by org.BELONGORGID
+    </select>
+    
+    <select id="rootNode" resultType="java.lang.Integer" parameterType="java.lang.Integer">
+        select count(1) from ac_org org where belongorgid=#{0} and id=#{0}
+    </select>
+
+    <select id="getUserByorgIds"  resultType="net.hunanst.eduz100.api.sys.AcOperator" parameterType="java.lang.Integer">
+        select ao.id ,ao.USERNAME,ao.TELNUMBER
+        from ac_operator ao
+        where ao.TELNUMBER &lt;&gt;'' and ao.TELNUMBER is not null and  ao.id =#{0}
+        group by ao.id
+        limit 1
+    </select>
+
+</mapper>

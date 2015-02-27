@@ -1,0 +1,98 @@
+<div class="widget-header">
+	<h4 class="widget-title lighter">
+		<!--<i class="ace-icon fa fa-file-text orange"></i>-->
+		<i class="blue ace-icon fa fa-users bigger-120"></i>人员信息
+	</h4>
+
+</div>
+
+<div class="widget-body">
+	<div class="widget-main padding-4">
+		<div class="tab-content padding-8">
+
+			<div id="user_div" class="tab-pane active">
+				<div class="clearfix">
+					#if($!userList.size()>0)
+					#foreach($user in $!userList)
+					<div class="itemdiv memberdiv">
+						<div class="user">
+							#if($!user.imgurl)
+							<img alt="图像" height="42px" width="42px" src="$!{nginx_filepath}$!user.imgurl">
+							#else
+							<img alt="图像" src="$contextPath/static/ace/avatars/avatar2.png">
+							#end
+						</div>
+						<div class="body">
+							<div class="name">
+								<a href="#" title="$!user.userName" style="cursor:default; color: #999;">$!user.userName</a>
+							</div>
+							<div class="name">
+								<a href="#" title="$!user.userCode" style="cursor:default; color: #999;">$!user.userCode</a>
+							</div>
+							<div class="name">
+								<label> 
+								#if($!user.flag == 1)
+								<a title="加入通讯录" href="#" onclick="addUser($!user.id);"
+									data-placement="bottom" data-rel="tooltip"> <i
+										class="ace-icon fa fa-plus"></i>添加
+								</a>
+								#else
+								已添加
+								#end
+								</label>
+								
+							</div>
+						</div>
+					</div>
+					#end
+					<div class="col-xs-12" style="padding-top: 20px;" align="center">
+						<ul>
+	                        <li class='dropdown-header' style="font-size: 15px;">
+	                        	<i class='ace-icon fa fa-question-circle'></i>
+	                        	不是我想要找的人?&nbsp;&nbsp;<a href="#" onclick="loadUserEdit()">创&nbsp;建</a>&nbsp;&nbsp;新用户
+	                        </li>
+	                    </ul>
+                    </div>
+					#else
+					<div class="col-xs-12" style="padding-top: 20px;" align="center">
+						<ul>
+	                        <li class='dropdown-header' style="font-size: 15px;">
+	                        	<i class='ace-icon fa fa-exclamation-triangle'></i>
+	                        	未找到相关的人员信息或您搜索的是自己！是否&nbsp;&nbsp;&nbsp;<a href="#" onclick="loadUserEdit()">创&nbsp;&nbsp;建</a>&nbsp;&nbsp;&nbsp;新用户？
+	                        </li>
+	                    </ul>
+                    </div>
+					<!-- <i class="ace-icon fa fa-exclamation-triangle"></i>未找到相关的人员信息！ -->
+					#end
+				</div>
+			</div>
+			<!-- /.#member-tab -->
+		</div>
+	</div>
+	<!-- /.widget-main -->
+</div>
+
+<script type="text/javascript">
+function addUser(id) {
+	$.ajax({
+		url : "$contextPath/oa/addressBook/addUser",
+		type : 'POST',
+		data : {
+			id : id
+		},
+		dataType : 'json',
+		success : function(data) {
+			myGritterError("已成功添加到通讯薄中","提示",1000);
+			var str = $("#usercode").val();
+			$("#recent-box").load("$contextPath/oa/addressBook/findUser", {name: str});
+			//myFinishAndTurn('操作成功', '已成功添加到通讯薄中！','$contextPath/oa/addressBook');
+		}
+	});
+}
+
+function loadUserEdit(){
+	$("#find").attr("style","display:none");
+	var str = $("#usercode").val();
+	$("#recent-box").load("$contextPath/sys/operator/detail", {flag: str,id:0});
+}
+</script>

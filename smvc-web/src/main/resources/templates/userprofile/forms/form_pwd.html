@@ -1,0 +1,165 @@
+<div id="user-profile-3" class="user-profile row">
+    <div class="col-sm-offset-1 col-sm-10">
+
+        <div class="tabbable">
+            <ul class="nav nav-tabs padding-16">
+                <li class="">
+                    <a data-toggle="tab" href="#" onclick="loadForm(1);">
+                        <i class="green ace-icon fa fa-pencil-square-o bigger-125"></i>
+                        基本信息
+                    </a>
+                </li>
+
+                <li class="active">
+                    <a data-toggle="tab" href="#">
+                        <i class="blue ace-icon fa fa-key bigger-125"></i>
+                        修改密码
+                    </a>
+                </li>
+            </ul>
+
+            <div class="tab-content profile-edit-tab-content">
+
+                <div id="" class="tab-pane active">
+                    <form class="form-horizontal" id="tab_settings_form">
+                        <div class="space-10"></div>
+
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label no-padding-right" for="old-pwd">原 密码</label>
+                            <div class="col-sm-9">
+                                <input type="password" id="old-pwd" class="input-sm" onpaste="return false;">
+                            </div>
+
+                            <div class="help-block col-xs-12 col-sm-reset inline">
+                                <i class="ace-icon fa fa-times-circle red" style="display: none;"></i>
+                                <i class="ace-icon fa fa-check-circle" style="display: none;"></i>
+                                <span style="color: red;font-size: xx-small;"></span>
+                            </div>
+                        </div>
+
+
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label no-padding-right" for="new-pwd">新 密码</label>
+
+                            <div class="col-sm-9">
+                                <input type="password" id="new-pwd" class="input-sm"onpaste="return false;" maxlength="20">
+                            </div>
+
+                            <div class="help-block col-xs-12 col-sm-reset inline">
+                                <i class="ace-icon fa fa-times-circle red" style="display: none;"></i>
+                                <i class="ace-icon fa fa-check-circle" style="display: none;"></i>
+                                <span style="color: red;font-size: xx-small;"></span>
+                            </div>
+                        </div>
+
+                        <div class="space-4"></div>
+
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label no-padding-right" for="confirm-pwd">确认 新密码</label>
+                            <div class="col-sm-9">
+                                <input type="password" id="confirm-pwd" class="input-sm" onpaste="return false;" maxlength="20">
+                            </div>
+                        </div>
+
+                        <div class="help-block col-xs-12 col-sm-reset inline">
+                            <i class="ace-icon fa fa-times-circle red" style="display: none;"></i>
+                            <i class="ace-icon fa fa-check-circle" style="display: none;"></i>
+                            <span style="color: red;font-size: xx-small;"></span>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <div class="clearfix form-actions">
+            <div class="col-md-offset-3 col-md-9">
+                <button class="btn btn-info save" type="button">
+                    <i class="ace-icon fa fa-check bigger-110"></i>
+                    保存
+                </button>
+                &nbsp; &nbsp;
+                <button class="btn reset" type="reset">
+                    <i class="ace-icon fa fa-undo bigger-110"></i>
+                    重置
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    $(".save").click(function(){
+        if(check()){
+            $.ajax({
+                url:"$contextPath/userprofile/savePwd",
+                data:{newPwd: $.trim($("#new-pwd").val()),oldPwd:$.trim($("#old-pwd").val())},
+                datatype:"json",
+                success:function(data){
+                    if(data&&data>0){
+                        alert("密码重置成功!");
+                    }else if(data&&data<0){
+                        alert("原密码不正确!");
+                    }else{
+                        alert("密码重置失败!");
+                    }
+                    $("input[type=password]").val('');
+                }
+            });
+        }
+        /**
+         * 屏蔽输入框的复制  剪切
+         */
+        $("input:password").bind("copy cut",function(e){
+            return false;
+        });
+    });
+
+    $(".reset").click(function(){
+        $("input[type=password]").val('');
+    });
+
+    function check(){
+        var flag =true;
+
+        var old=$("#old-pwd").val();
+        if(old==null|| $.trim(old)==''){
+            flag=false;
+            $("#old-pwd").focus();
+            alert("请输入原密码");
+        }
+
+        var newpwd=$("#new-pwd").val();
+        if(flag){
+            if(newpwd==null|| $.trim(newpwd)==''){
+                flag=false;
+                $("#new-pwd").focus();
+                alert("请输入新密码");
+            }
+
+            if(newpwd.length <6){
+                flag=false;
+                $("#new-pwd").focus();
+                alert("密码最少输入6位");
+            }
+        }
+
+        var confirmpwd=$("#confirm-pwd").val();
+        if(flag){
+            if(confirmpwd==null|| $.trim(confirmpwd)==''){
+                flag=false;
+                $("#confirm-pwd").focus();
+                alert("请再输入一次新的密码");
+            }
+        }
+
+        if(flag){
+            if($.trim(confirmpwd) != $.trim(newpwd)){
+                flag=false;
+                $("#confirm-pwd").focus();
+                alert("新密码和确认密码不一致,请重新输入!");
+            }
+        }
+
+        return flag;
+    }
+</script>
+

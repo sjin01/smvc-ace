@@ -1,0 +1,184 @@
+#parse("/common/north.html")
+
+<div class="page-header">
+    <h1 class="page-header-h1">用户管理
+        <small>
+            <i class="ace-icon fa fa-angle-double-right"></i>  $!{dual.operationname}
+        </small>
+    </h1>
+</div>
+
+<div class="row">
+    <div class="col-xs-12">
+        <form class="form-horizontal" id="validation-form" name="validation-form" method="post" action="$contextPath/sys/operator/save">
+			<input type="hidden" id="id" name="id" value="$!{model.id}" />
+			<input type="hidden" id="authmode" name="authmode" value="1" />
+			
+            <div class="form-group">
+                <label class="col-sm-3 control-label no-padding-right"> 登录名 </label>
+                <div class="col-sm-4">
+                    <input type="text" id="usercode" name="usercode" $!dual.disabled value="$!{model.usercode}" class="form-control" />
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="col-sm-3 control-label no-padding-right"> 用户名 </label>
+                <div class="col-sm-4">
+                    <input type="text" id="username" name="username" $!dual.disabled value="$!{model.username}" class="form-control" />
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="col-sm-3 control-label no-padding-right"> 用户状态 </label>
+                <div class="col-sm-4">
+                    <select class="form-control" $!dual.disabled id="status" name="status">
+                        #foreach($item in $sysdicts.operator_status.dicts)
+                            <option value="$item.tvalue" #if($item.tvalue==$model.status) selected #end>$item.tname</option>
+                        #end
+                    </select>
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <label class="col-sm-3 control-label no-padding-right"> 所属机构： </label>
+                <div class="col-sm-4">
+                    <select class="form-control" id="belongorgid" name="belongorgid" $!dual.disabled ></select>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="col-sm-3 control-label no-padding-right"> 联系电话 </label>
+                <div class="col-sm-4">
+                    <input type="text" id="telnumber" name="telnumber" $!dual.disabled value="$!{model.telnumber}" class="form-control" />
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="col-sm-3 control-label no-padding-right"> 邮箱 </label>
+                <div class="col-sm-4">
+                    <input type="text" id="email" name="email" $!dual.disabled value="$!{model.email}" class="form-control" />
+                </div>
+            </div>
+            
+            <div class="clearfix form-actions no-margin-bottom">
+                <div class="center">
+                    <button class="btn btn-info $!dual.hide" type="button" onclick="save(this)" style="margin: 0 10px">
+                        <i class="ace-icon fa fa-check bigger-110"></i>保存
+                    </button>
+                    
+                    <a class="btn" href="$contextPath/sys/operator" style="margin: 0 10px">
+                        <i class="ace-icon fa fa-undo bigger-110"></i>$!dual.goback
+                    </a>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+						
+<script type="text/javascript">
+
+$(function(){
+	jQuery.ajax({
+		type:"get",
+		url:"$contextPath/sys/organization/schoolOrg",
+		dataType: "json",
+		success:function(data){
+			#if($dual.operationtype=='insert')
+				#if($loginUser.usercode=='admin')
+					$.each(data.data, function (i, d){
+						$("#belongorgid").append('<option value="'+d.id+'">'+d.orgname+'</option>');
+					});
+				#else
+					$.each(data.data, function (i, d){
+						if(d.id=='$!{loginUser.belongorgid}'){
+							$("#belongorgid").append('<option value="'+d.id+'">'+d.orgname+'</option>');
+							return false;
+						}
+					});
+				#end
+			#else
+				$.each(data.data, function (i, d){
+					if(d.id=='$!{model.belongorgid}'){
+						$("#belongorgid").append('<option value="'+d.id+'">'+d.orgname+'</option>');
+						return false;
+					}
+				});
+			#end
+		}
+	});
+	
+  	$('#validation-form').validate({
+		errorElement: 'div',
+		errorClass: 'help-block',
+		focusInvalid: false,
+		rules: {
+			usercode: {
+				required: true,
+				maxlength: 20
+			},
+			telnumber: {
+				digits: true,
+				maxlength: 20
+			},
+			username: {
+				required: true,
+				maxlength: 20
+			},
+			email: {
+				email: true,
+				maxlength: 40
+			}
+		},
+		messages: {
+			usercode: {
+				required: "请填写用户登录名称",
+				maxlength: "用户登录名称不能多余20个字符"
+			},
+			telnumber: {
+				digits: "电话号码只能为数字",
+				maxlength: "电话号码不能多余20个字符"
+			},
+			username: {
+				required: "请填写用户姓名",
+				maxlength: "用户姓名不能多余20个字符"
+			},
+			email: {
+				email: "请输入正确格式的电子邮件",
+				maxlength: "电子邮件不能多余40个字符"
+			}
+		},
+		highlight: function (e) {
+			$(e).closest('.form-group').removeClass('has-info').addClass('has-error');
+		},
+		success: function (e) {
+			$(e).closest('.form-group').removeClass('has-error');//.addClass('has-info');
+			$(e).remove();
+		},
+		errorPlacement: function (error, element) {
+			element.closest("div.form-group").append(error);
+		}
+	});
+});
+  
+function save(target){
+  	if($('#validation-form').valid()){
+  		$(target).attr("disabled", "disabled");
+  		jQuery.ajax({
+  			type:"post",
+  			url:"$contextPath/sys/operator/save",
+  			data:$('#validation-form').serialize(),
+  			dataType: "json",
+  			success:function(data){
+  				if(data.code==530){
+  					$(target).removeAttr("disabled");
+  					alert("用户登录名称已经存在！");
+  				}else{
+  					location.href = "$contextPath/sys/operator";
+  				}
+  			}
+  		});
+  	}
+}
+</script>
+
+#parse("/common/south.html")

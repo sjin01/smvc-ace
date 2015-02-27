@@ -1,0 +1,231 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="OfficialdocumentDeliver">
+    <resultMap id="BaseResultMap" type="net.hunanst.eduz100.api.oa.OfficialdocumentDeliver">
+        <id column="ID" property="id" jdbcType="INTEGER"/>
+        <result column="OFFICIALDOCUMENTID" property="officialdocumentid" jdbcType="INTEGER"/>
+        <result column="USERID" property="userid" jdbcType="INTEGER"/>
+        <result column="ORGID" property="orgid" jdbcType="INTEGER"/>
+        <result column="DELIVERID" property="deliverid" jdbcType="INTEGER"/>
+        <result column="DELIVERTYPE" property="delivertype" jdbcType="INTEGER"/>
+        <result column="DELIVERDATE" property="deliverdate" jdbcType="TIMESTAMP"/>
+        <result column="CHANGEFLAG" property="changeflag" jdbcType="INTEGER"/>
+        <result column="CHANGESTATUS" property="changestatus" jdbcType="INTEGER"/>
+
+        <result column="postildate" property="postildate" jdbcType="VARCHAR"/>
+        <result column="postilcontent" property="postilcontent" jdbcType="VARCHAR"/>
+
+        <result column="USERNAME" property="username" jdbcType="VARCHAR"/>
+        <result column="ORGNAME" property="orgname" jdbcType="VARCHAR"/>
+        <result column="DELIVERORGNAME" property="deliverorgname" jdbcType="VARCHAR"/>
+        <result column="DELIVERUSERNAME" property="deliverusername" jdbcType="VARCHAR"/>
+
+    </resultMap>
+    <sql id="Base_Column_List">
+    ID, OFFICIALDOCUMENTID, USERID, ORGID, DELIVERID, DELIVERTYPE, DELIVERDATE, CHANGEFLAG, 
+    CHANGESTATUS
+  </sql>
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+        select
+        <include refid="Base_Column_List"/>
+        from t_oa_officialdocument_deliver
+        where ID = #{value}
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from t_oa_officialdocument_deliver
+    where ID = #{value}
+  </delete>
+    <insert id="insert" parameterType="net.hunanst.eduz100.api.oa.OfficialdocumentDeliver">
+    insert into t_oa_officialdocument_deliver (ID, OFFICIALDOCUMENTID, USERID, 
+      ORGID, DELIVERID, DELIVERTYPE, 
+      DELIVERDATE, CHANGEFLAG, CHANGESTATUS
+      )
+    values (#{id,jdbcType=INTEGER}, #{officialdocumentid,jdbcType=INTEGER}, #{userid,jdbcType=INTEGER}, 
+      #{orgid,jdbcType=INTEGER}, #{deliverid,jdbcType=INTEGER}, #{delivertype,jdbcType=INTEGER}, 
+      #{deliverdate,jdbcType=TIMESTAMP}, #{changeflag,jdbcType=INTEGER}, #{changestatus,jdbcType=INTEGER}
+      )
+  </insert>
+    <insert id="insertSelective" parameterType="net.hunanst.eduz100.api.oa.OfficialdocumentDeliver" useGeneratedKeys="true" keyProperty="id">
+        insert into t_oa_officialdocument_deliver
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                ID,
+            </if>
+            <if test="officialdocumentid != null">
+                OFFICIALDOCUMENTID,
+            </if>
+            <if test="userid != null">
+                USERID,
+            </if>
+            <if test="orgid != null">
+                ORGID,
+            </if>
+            <if test="deliverid != null">
+                DELIVERID,
+            </if>
+            <if test="delivertype != null">
+                DELIVERTYPE,
+            </if>
+            <if test="deliverdate != null">
+                DELIVERDATE,
+            </if>
+            <if test="changeflag != null">
+                CHANGEFLAG,
+            </if>
+            <if test="changestatus != null">
+                CHANGESTATUS,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{id,jdbcType=INTEGER},
+            </if>
+            <if test="officialdocumentid != null">
+                #{officialdocumentid,jdbcType=INTEGER},
+            </if>
+            <if test="userid != null">
+                #{userid,jdbcType=INTEGER},
+            </if>
+            <if test="orgid != null">
+                #{orgid,jdbcType=INTEGER},
+            </if>
+            <if test="deliverid != null">
+                #{deliverid,jdbcType=INTEGER},
+            </if>
+            <if test="delivertype != null">
+                #{delivertype,jdbcType=INTEGER},
+            </if>
+            <if test="deliverdate != null">
+                #{deliverdate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="changeflag != null">
+                #{changeflag,jdbcType=INTEGER},
+            </if>
+            <if test="changestatus != null">
+                #{changestatus,jdbcType=INTEGER},
+            </if>
+        </trim>
+    </insert>
+
+
+    <insert id="insertList" parameterType="java.util.List">
+        insert into t_oa_officialdocument_deliver
+        ( officialdocumentid, userid,
+        orgid, deliverid, delivertype,
+        deliverdate, changeflag, changestatus)
+        values
+        <foreach collection="list" item="item" index="index"  separator="," >
+            (
+                #{item.officialdocumentid},
+
+                #{item.userid},
+                #{item.orgid},
+
+                #{item.deliverid},
+                #{item.delivertype},
+                #{item.deliverdate},
+
+                #{item.changeflag},
+                #{item.changestatus}
+            )
+        </foreach>
+    </insert>
+
+    <update id="updateByPrimaryKeySelective" parameterType="net.hunanst.eduz100.api.oa.OfficialdocumentDeliver">
+        update t_oa_officialdocument_deliver
+        <set>
+            <if test="officialdocumentid != null">
+                OFFICIALDOCUMENTID = #{officialdocumentid,jdbcType=INTEGER},
+            </if>
+            <if test="userid != null">
+                USERID = #{userid,jdbcType=INTEGER},
+            </if>
+            <if test="orgid != null">
+                ORGID = #{orgid,jdbcType=INTEGER},
+            </if>
+            <if test="deliverid != null">
+                DELIVERID = #{deliverid,jdbcType=INTEGER},
+            </if>
+            <if test="delivertype != null">
+                DELIVERTYPE = #{delivertype,jdbcType=INTEGER},
+            </if>
+            <if test="deliverdate != null">
+                DELIVERDATE = #{deliverdate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="changeflag != null">
+                CHANGEFLAG = #{changeflag,jdbcType=INTEGER},
+            </if>
+            <if test="changestatus != null">
+                CHANGESTATUS = #{changestatus,jdbcType=INTEGER},
+            </if>
+        </set>
+        where ID = #{id,jdbcType=INTEGER}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="net.hunanst.eduz100.api.oa.OfficialdocumentDeliver">
+    update t_oa_officialdocument_deliver
+    set OFFICIALDOCUMENTID = #{officialdocumentid,jdbcType=INTEGER},
+      USERID = #{userid,jdbcType=INTEGER},
+      ORGID = #{orgid,jdbcType=INTEGER},
+      DELIVERID = #{deliverid,jdbcType=INTEGER},
+      DELIVERTYPE = #{delivertype,jdbcType=INTEGER},
+      DELIVERDATE = #{deliverdate,jdbcType=TIMESTAMP},
+      CHANGEFLAG = #{changeflag,jdbcType=INTEGER},
+      CHANGESTATUS = #{changestatus,jdbcType=INTEGER}
+    where ID = #{id,jdbcType=INTEGER}
+  </update>
+    <select id="select_page" resultMap="BaseResultMap"
+            parameterType="net.hunanst.eduz100.api.oa.OfficialdocumentDeliver">
+        select
+        <include refid="Base_Column_List"/>
+        from t_oa_officialdocument_deliver
+        <where>
+            <if test="id!=null">
+                AND ID=#{id}
+            </if>
+            <if test="officialdocumentid!=null">
+                AND OFFICIALDOCUMENTID=#{officialdocumentid}
+            </if>
+            <if test="userid!=null">
+                AND USERID=#{userid}
+            </if>
+            <if test="orgid!=null">
+                AND ORGID=#{orgid}
+            </if>
+            <if test="deliverid!=null">
+                AND DELIVERID=#{deliverid}
+            </if>
+            <if test="delivertype!=null">
+                AND DELIVERTYPE=#{delivertype}
+            </if>
+            <if test="deliverdate!=null">
+                AND DELIVERDATE=#{deliverdate}
+            </if>
+            <if test="changeflag!=null">
+                AND CHANGEFLAG=#{changeflag}
+            </if>
+            <if test="changestatus!=null">
+                AND CHANGESTATUS=#{changestatus}
+            </if>
+        </where>
+    </select>
+
+    <!-- 根据公文ID 查询 流转记录 -->
+    <select id="selectDeliverByOdId" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+        SELECT
+          t.*,
+          u.USERNAME  ,o.ORGNAME,
+          (select o1.ORGNAME  from ac_org o1 where o1.id = t.DELIVERID and t.DELIVERTYPE =2) as deliverOrgname ,
+          (select u1.USERNAME from ac_operator u1 where u1.id = t.DELIVERID and t.DELIVERTYPE =1) as deliverUsername ,
+
+          date_format(t.deliverdate ,'%Y-%m-%d') as postildate ,
+          p.content as postilcontent
+        from t_oa_officialdocument_deliver t
+        left join t_oa_officialdocument_postil p on t.ID = p.DELIVERID
+        left join ac_operator u on u.id=t.userid
+        left join ac_org o on o.id = t.orgid
+        where t.OFFICIALDOCUMENTID = #{odid}
+        and t.CHANGESTATUS !=0
+
+        order by t.deliverdate
+    </select>
+</mapper>

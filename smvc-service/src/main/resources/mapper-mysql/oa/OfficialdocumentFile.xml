@@ -1,0 +1,259 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="OfficialdocumentFile">
+    <resultMap id="BaseResultMap" type="net.hunanst.eduz100.api.oa.OfficialdocumentFile">
+        <id column="ID" property="id" jdbcType="INTEGER"/>
+        <result column="OFFICIALDOCUMENTID" property="officialdocumentid" jdbcType="INTEGER"/>
+        <result column="FILEPATH" property="filepath" jdbcType="VARCHAR"/>
+        <result column="SUFFIX" property="suffix" jdbcType="VARCHAR"/>
+        <result column="SIZE" property="size" jdbcType="DOUBLE"/>
+        <result column="FILENAME" property="filename" jdbcType="VARCHAR"/>
+        <result column="SOURCEFILEFLAG" property="sourcefileflag" jdbcType="INTEGER"/>
+        <result column="UPLOADDATE" property="uploaddate" jdbcType="TIMESTAMP"/>
+        <result column="USERID" property="userid" jdbcType="INTEGER"/>
+        <result column="ORGID" property="orgid" jdbcType="INTEGER"/>
+        <result column="DELIVERID" property="deliverid" jdbcType="INTEGER"/>
+        <result column="SEALPATH" property="sealpath" jdbcType="VARCHAR"/>
+
+    </resultMap>
+    <sql id="Base_Column_List">
+    ID, OFFICIALDOCUMENTID, FILEPATH, SUFFIX, SIZE, FILENAME, SOURCEFILEFLAG, UPLOADDATE,
+    USERID, ORGID ,DELIVERID ,SEALPATH
+  </sql>
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+        select
+        <include refid="Base_Column_List"/>
+        from t_oa_officialdocument_file
+        where ID = #{value}
+    </select>
+
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from t_oa_officialdocument_file
+    where ID = #{value}
+  </delete>
+
+    <delete id="deleteByIdList" parameterType="java.util.List">
+        delete from t_oa_officialdocument_file
+        where ID in (
+        <foreach collection="list" item="item" index="index"  separator="," >
+            #{item}
+        </foreach>
+        )
+    </delete>
+
+    <insert id="insert" parameterType="net.hunanst.eduz100.api.oa.OfficialdocumentFile">
+    insert into t_oa_officialdocument_file (ID, OFFICIALDOCUMENTID, FILEPATH, 
+      SUFFIX, SIZE, FILENAME, 
+      SOURCEFILEFLAG, UPLOADDATE, USERID, 
+      ORGID , DELIVERID ,SEALPATH )
+    values (#{id,jdbcType=INTEGER}, #{officialdocumentid,jdbcType=INTEGER}, #{filepath,jdbcType=VARCHAR}, 
+      #{suffix,jdbcType=VARCHAR}, #{size,jdbcType=DOUBLE}, #{filename,jdbcType=VARCHAR}, 
+      #{sourcefileflag,jdbcType=INTEGER}, #{uploaddate,jdbcType=TIMESTAMP}, #{userid,jdbcType=INTEGER}, 
+      #{orgid,jdbcType=INTEGER} , #{deliverid,jdbcType=INTEGER} ,#{sealpath,jdbcType=VARCHAR} )
+  </insert>
+    <insert id="insertSelective" parameterType="net.hunanst.eduz100.api.oa.OfficialdocumentFile">
+        insert into t_oa_officialdocument_file
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                ID,
+            </if>
+            <if test="officialdocumentid != null">
+                OFFICIALDOCUMENTID,
+            </if>
+            <if test="filepath != null and filepath!='' ">
+                FILEPATH,
+            </if>
+            <if test="suffix != null and suffix!='' ">
+                SUFFIX,
+            </if>
+            <if test="size != null">
+                SIZE,
+            </if>
+            <if test="filename != null and filename!='' ">
+                FILENAME,
+            </if>
+            <if test="sourcefileflag != null">
+                SOURCEFILEFLAG,
+            </if>
+            <if test="uploaddate != null">
+                UPLOADDATE,
+            </if>
+            <if test="userid != null">
+                USERID,
+            </if>
+            <if test="orgid != null">
+                ORGID,
+            </if>
+            <if test="deliverid != null">
+                DELIVERID,
+            </if>
+            <if test="sealpath != null">
+                SEALPATH,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{id,jdbcType=INTEGER},
+            </if>
+            <if test="officialdocumentid != null">
+                #{officialdocumentid,jdbcType=INTEGER},
+            </if>
+            <if test="filepath != null and filepath!='' ">
+                #{filepath,jdbcType=VARCHAR},
+            </if>
+            <if test="suffix != null and suffix!='' ">
+                #{suffix,jdbcType=VARCHAR},
+            </if>
+            <if test="size != null">
+                #{size,jdbcType=DOUBLE},
+            </if>
+            <if test="filename != null and filename!=''">
+                #{filename,jdbcType=VARCHAR},
+            </if>
+            <if test="sourcefileflag != null">
+                #{sourcefileflag,jdbcType=INTEGER},
+            </if>
+            <if test="uploaddate != null">
+                #{uploaddate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="userid != null">
+                #{userid,jdbcType=INTEGER},
+            </if>
+            <if test="orgid != null">
+                #{orgid,jdbcType=INTEGER},
+            </if>
+            <if test="deliverid != null">
+                #{deliverid,jdbcType=INTEGER},
+            </if>
+            <if test="sealpath != null">
+                #{sealpath,jdbcType=VARCHAR},
+            </if>
+        </trim>
+    </insert>
+
+    <!--  insertList 批量插入  mysql 主键需要自增 -->
+    <insert id="insertList" parameterType="java.util.List">
+        insert into t_oa_officialdocument_file
+            ( officialdocumentid, filepath,
+            suffix, size, filename,
+            sourcefileflag, uploaddate, userid,
+            orgid ,deliverid ,sealpath)
+        values
+        <foreach collection="list" item="item" index="index"  separator="," >
+            (
+                #{item.officialdocumentid},
+                #{item.filepath},
+                #{item.suffix},
+                #{item.size},
+
+                #{item.filename},
+                #{item.sourcefileflag},
+
+                #{item.uploaddate},
+                #{item.userid},
+                #{item.orgid},
+                #{item.deliverid},
+                #{item.sealpath}
+            )
+        </foreach>
+    </insert>
+
+
+    <update id="updateByPrimaryKeySelective" parameterType="net.hunanst.eduz100.api.oa.OfficialdocumentFile">
+        update t_oa_officialdocument_file
+        <set>
+            <if test="officialdocumentid != null">
+                OFFICIALDOCUMENTID = #{officialdocumentid,jdbcType=INTEGER},
+            </if>
+            <if test="filepath != null and filepath!='' ">
+                FILEPATH = #{filepath,jdbcType=VARCHAR},
+            </if>
+            <if test="suffix != null and suffix!='' ">
+                SUFFIX = #{suffix,jdbcType=VARCHAR},
+            </if>
+            <if test="size != null">
+                SIZE = #{size,jdbcType=DOUBLE},
+            </if>
+            <if test="filename != null and filename!='' ">
+                FILENAME = #{filename,jdbcType=VARCHAR},
+            </if>
+            <if test="sourcefileflag != null">
+                SOURCEFILEFLAG = #{sourcefileflag,jdbcType=INTEGER},
+            </if>
+            <if test="uploaddate != null">
+                UPLOADDATE = #{uploaddate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="userid != null">
+                USERID = #{userid,jdbcType=INTEGER},
+            </if>
+            <if test="orgid != null">
+                ORGID = #{orgid,jdbcType=INTEGER},
+            </if>
+            <if test="deliverid != null">
+                DELIVERID = #{deliverid,jdbcType=INTEGER},
+            </if>
+            <if test="sealpath != null">
+                SEALPATH = #{sealpath,jdbcType=INTEGER},
+            </if>
+        </set>
+        where ID = #{id,jdbcType=INTEGER}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="net.hunanst.eduz100.api.oa.OfficialdocumentFile">
+    update t_oa_officialdocument_file
+    set OFFICIALDOCUMENTID = #{officialdocumentid,jdbcType=INTEGER},
+      FILEPATH = #{filepath,jdbcType=VARCHAR},
+      SUFFIX = #{suffix,jdbcType=VARCHAR},
+      SIZE = #{size,jdbcType=DOUBLE},
+      FILENAME = #{filename,jdbcType=VARCHAR},
+      SOURCEFILEFLAG = #{sourcefileflag,jdbcType=INTEGER},
+      UPLOADDATE = #{uploaddate,jdbcType=TIMESTAMP},
+      USERID = #{userid,jdbcType=INTEGER},
+      ORGID = #{orgid,jdbcType=INTEGER},
+      DELIVERID = #{deliverid,jdbcType=INTEGER},
+      SEALPATH = #{sealpath,jdbcType=INTEGER}
+    where ID = #{id,jdbcType=INTEGER}
+  </update>
+    <select id="select_page" resultMap="BaseResultMap" parameterType="net.hunanst.eduz100.api.oa.OfficialdocumentFile">
+        select
+        <include refid="Base_Column_List"/>
+        from t_oa_officialdocument_file
+        <where>
+            <if test="id!=null">
+                AND ID=#{id}
+            </if>
+            <if test="officialdocumentid!=null">
+                AND OFFICIALDOCUMENTID=#{officialdocumentid}
+            </if>
+            <if test="filepath!=null and filepath!=''">
+                AND FILEPATH=#{filepath}
+            </if>
+            <if test="suffix!=null and suffix!=''">
+                AND SUFFIX=#{suffix}
+            </if>
+            <if test="size!=null">
+                AND SIZE=#{size}
+            </if>
+            <if test="filename!=null and filename!=''">
+                AND FILENAME=#{filename}
+            </if>
+            <if test="sourcefileflag!=null">
+                AND SOURCEFILEFLAG=#{sourcefileflag}
+            </if>
+            <if test="uploaddate!=null">
+                AND UPLOADDATE=#{uploaddate}
+            </if>
+            <if test="userid!=null">
+                AND USERID=#{userid}
+            </if>
+            <if test="orgid!=null">
+                AND ORGID=#{orgid}
+            </if>
+            <if test="deliverid != null">
+                AND DELIVERID = #{deliverid}
+            </if>
+            <if test="sealpath != null">
+                AND SEALPATH = #{sealpath}
+            </if>
+        </where>
+    </select>
+</mapper>

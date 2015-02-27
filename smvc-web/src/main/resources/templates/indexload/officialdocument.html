@@ -1,0 +1,145 @@
+<div class="widget-box transparent" id="recent-box">
+    <div class="widget-header">
+        <h4 class="widget-title lighter">
+            <i class="ace-icon fa fa-file-text orange"></i>
+            公文
+        </h4>
+
+        <div class="widget-toolbar">
+            <a href="javascript:void(0);" data-action="fullscreen" class="" title="全屏查看" data-rel="tooltip" data-placement="bottom">
+                <i class="ace-icon fa fa-expand"></i>
+            </a>&nbsp;
+            <a href="javascript:void(0);" data-action="collapse" class="" title="收起" data-rel="tooltip" data-placement="bottom">
+                <i class="ace-icon fa fa-chevron-up"></i>
+            </a>
+        </div>
+
+        <div class="widget-toolbar no-border">
+            <ul class="nav nav-tabs" id="recent-tab">
+                <li class="active">
+                    <a data-toggle="tab" href="#newest-tab">最新</a>
+                </li>
+                <li>
+                    <a data-toggle="tab" href="#monitor-tab">跟踪动态</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="widget-body">
+        <div class="widget-main padding-4">
+            <div class="tab-content padding-8">
+                <div id="newest-tab" class="tab-pane active">
+
+                    #if(!$!{newestList} || $!{newestList.size()}==0)
+                        暂无数据！
+                    #else
+                        #foreach($newestOd in $newestList)
+                            <ul id="tasks" class="item-list ui-sortable">
+                                <li class="clearfix ui-sortable-handle item-orange  "
+                                    #if($velocityCount==1)
+                                    style="border-top-width: 0px;"
+                                    #end
+                                    #if($velocityCount==${newestList.size()})
+                                    style="border-bottom-width: 0px;"
+                                    #end
+                                        >
+                                    <label class="inline">
+                                        <a href="$contextPath/oa/officialdocument/approve?odid=$!{newestOd.id}" target="" >$!{newestOd.title}</a>
+                                    ##                                    <span class="lbl" style="padding-left: 20px;"> $!{newestOd.content}</span>
+                                    </label>
+
+                                    <div class="pull-right">
+                                        &nbsp;
+                                    <span class="label label-warning">
+                                        #if($!{newestOd.orgname} && $!{newestOd.orgname} !='')
+                                            提交到 $!{newestOd.orgname}
+                                        #else
+                                            提交到 您
+                                        #end
+                                    </span>
+                                    </div>
+
+                                    <div class="time pull-right">
+                                        <i class="ace-icon fa fa-clock-o"></i>
+                                        <span class="grey">$!{newestOd.commitdateStr}</span>
+                                    </div>
+                                </li>
+                            </ul>
+                        #end
+                        <div>
+                            <a href="$contextPath/oa/officialdocument" style="float: right;padding-right: 30px;">更多 &gt;&gt;</a>
+                            <div class="space-18"></div>
+                        </div>
+                    #end
+
+
+                </div>
+
+                <div id="monitor-tab" class="tab-pane">
+                    #if(!$!{monitorList} || $!{monitorList.size()} == 0)
+                        暂无数据！
+                    #else
+                        #foreach($monitorOd in $monitorList)
+                            <ul id="tasks" class="item-list ui-sortable">
+                                <li class="clearfix ui-sortable-handle
+
+                              #if(${monitorOd.status} == 1)
+                                  item-orange
+                              #elseif(${monitorOd.status} == 2)
+                                  item-blue
+                              #elseif(${monitorOd.status} == 3)
+                                  item-pink
+                              #elseif(${monitorOd.status} == 4)
+                                  item-green
+                              #elseif(${monitorOd.status} == 5)
+                                  item-red
+                              #end
+                            "
+                                    #if($velocityCount==1)
+                                    style="border-top-width: 0px;"
+                                    #end
+                                    #if($velocityCount==${monitorList.size()})
+                                    style="border-bottom-width: 0px;"
+                                    #end
+                                        >
+                                    <label class="inline">
+                                        <a href="$contextPath/oa/officialdocument/approve?odid=$!{monitorOd.id}" target="_blank">$!{monitorOd.title}</a>
+                                    ##                                    <span class="lbl" style="padding-left: 20px;"> $!{monitorOd.content}</span>
+                                    </label>
+
+                                    <div class="pull-right">
+                                        #if(${monitorOd.status} == 1)
+                                            <span class="label label-warning arrowed-right arrowed-in"> 待审批 </span>
+                                        #elseif(${monitorOd.status} == 2)
+                                            <span class="label label-info arrowed-right arrowed-in"> 待签发 </span>
+                                        #elseif(${monitorOd.status} == 3)
+                                            <span class="label label-purple arrowed-right arrowed-in"> 待签收 </span>
+                                        #elseif(${monitorOd.status} == 4)
+                                            <span class="label label-success arrowed-in arrowed-in-right"> 已签收 </span>
+                                        #elseif(${monitorOd.status} == 5)
+                                            <span class="label label-danger arrowed arrowed-in-right"> 被驳回 </span>
+                                        #end
+                                    </div>
+                                </li>
+                            </ul>
+                        #end
+                        <div>
+                            <a href="$contextPath/oa/officialdocument/monitor" style="float: right;padding-right: 30px;">更多 &gt;&gt;</a>
+                            <div class="space-18"></div>
+                        </div>
+                    #end
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<script type="text/javascript">
+    $(function (){
+        $('[data-rel=tooltip]').tooltip({container:'body'});
+    })
+</script>

@@ -1,0 +1,635 @@
+#parse("/common/north.html")
+<script src="$contextPath/static/plugins/ckeditor/ckeditor.js"></script>
+<div class="page-header">
+    <h1 class="page-header-h1">通知
+        <small>
+            <i class="ace-icon fa fa-angle-double-right"></i> 添加通知
+        </small>
+    </h1>
+</div>
+
+<div class="row">
+    <div class="col-xs-12">
+        <form class="form-horizontal" id="myform"
+              action="">
+            <input type="hidden" name="flagId" value="$!flagId">
+
+            <div id="notificationFileList_hidden" style="display: none;"></div>
+            <div id="notificationFileList_del_hidden" style="display: none;"></div>
+            <div id="receives_div" style="display: none;"></div>
+
+            <div class="form-group">
+                <input type="hidden" value="$!{notification.id}" name="id">
+                <label for="title" class="col-xs-12 col-sm-3 control-label no-padding-right">
+                    <span style="color: red;">*</span>通知标题
+                </label>
+
+                <div class="col-xs-12 col-sm-5">
+                    <input id="title" name="title" value="$!{notification.title}" maxlength="64" style="width:100%;"
+                           onblur="checkTitle()"/>
+                </div>
+                <div class="help-block col-xs-12 col-sm-reset inline">
+                    <i class="ace-icon fa fa-times-circle" style="color: #d68273;display: none;"></i>
+                    <i class="ace-icon fa fa-check-circle" style="color: #8bad4c;display: none;"></i>
+                    <span style="color: red;font-size: xx-small;">最多可输入64个字母或汉字</span>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <input type="hidden" value="$!{notification.id}" name="id">
+                <label for="notiContent" class="col-xs-12 col-sm-3 control-label no-padding-right">
+                    <span style="color: red;">*</span>通知内容
+                </label>
+
+                <div class="col-xs-12 col-sm-5" id="drop_area">
+                    <!--<input type="hidden" name="notiContent">-->
+                    <textarea id="notiContent" name="notiContent" style="visibility: hidden; display: none;" maxlength="512">
+                        $!{notification.content}
+                    </textarea>
+                </div>
+                <div class="help-block col-xs-12 col-sm-reset inline" id="content_div">
+                    <i class="ace-icon fa fa-times-circle" style="color: #d68273;display: none;"></i>
+                    <i class="ace-icon fa fa-check-circle" style="color: #8bad4c;display: none;"></i>
+                    <span style="color: red;font-size: xx-small;"></span>
+                </div>
+            </div>
+            <div class="form-group" id="selectOrg_div">
+                <label class="col-xs-12 col-sm-3 control-label no-padding-right">
+                    选择您的机构
+                </label>
+
+                <div class="col-xs-12 col-sm-5">
+                    #if($!orgs.size()==1)
+                    #foreach($org in $orgs)
+                    <input type="hidden" name="orgid" value="$!{org.id}">
+                    <input type="text" value="$!{org.orgname}" readonly="true">
+                    #end
+                    #else
+                    <select class="form-control" name="orgid">
+                        #foreach($org in $orgs)
+                        <option value="$!{org.id}">$!{org.orgname}</option>
+                        #end
+                    </select>
+                    #end
+
+                </div>
+
+                <div class="help-block col-xs-12 col-sm-reset inline">
+                    <i class="ace-icon fa fa-times-circle" style="color: #d68273;display: none;"></i>
+                    <i class="ace-icon fa fa-check-circle" style="color: #8bad4c;display: none;"></i>
+                    <span style="color: red;font-size: xx-small;"></span>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="col-xs-12 col-sm-3 control-label no-padding-right">
+                    <span style="color: red;">*</span>可见范围
+                </label>
+
+                <div class="row">
+                    <div class="col-sm-6">
+                        <!--widget-box -->
+                        <div class="widget-color-grey">
+                            <ul id="knowsTree" class="ztree"></ul>
+                        </div>
+                    </div>
+                    <div class="help-block col-xs-12 col-sm-reset inline" style="margin-left: -9.4%;" id="tree_div">
+                        <i class="ace-icon fa fa-times-circle" style="color: #d68273;display: none;"></i>
+                        <i class="ace-icon fa fa-check-circle" style="color: #8bad4c;display: none;"></i>
+                        <span style="color: red;font-size: xx-small;"></span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="col-xs-12 col-sm-3 control-label no-padding-right">门户显示</label>
+
+                <div class="col-xs-12 col-sm-5">
+                    <select class="form-control" name="viewflag">
+                        <option value="1"
+                        #if($!{notification.viewflag}==1) selected="selected" #end>是</option>
+                        <option value="0"
+                        #if($!{notification.viewflag}==0) selected="selected" #end>否</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="col-xs-12 col-sm-3 control-label no-padding-right">是否提醒</label>
+
+                <div class="col-xs-12 col-sm-5">
+                    <label class="position-relative">
+                        <input type="checkbox" class="ace" id="notice">
+                        <span class="lbl">是</span>
+                    </label>
+                </div>
+            </div>
+
+            <div class="form-group" id="sendtype_div" style="display: none;">
+                <label class="col-xs-12 col-sm-3 control-label no-padding-right">
+                    <span style="color: red;">*</span>发送类型
+                </label>
+
+                <div class="col-xs-12 col-sm-5">
+                    <label class="position-relative">
+                        <input type="radio" class="ace" name="sendtype" value="1">
+                        <span class="lbl">手机短信</span>
+                    </label>
+                    <label class="position-relative">
+                        <input type="radio" class="ace" name="sendtype" value="2">
+                        <span class="lbl">短消息</span>
+                    </label>
+                    <label class="position-relative">
+                        <input type="radio" class="ace" name="sendtype" value="3">
+                        <span class="lbl">都发</span>
+                    </label>
+                </div>
+                <div class="help-block col-xs-12 col-sm-reset inline">
+                    <i class="ace-icon fa fa-times-circle" style="color: #d68273;display: none;"></i>
+                    <i class="ace-icon fa fa-check-circle" style="color: #8bad4c;display: none;"></i>
+                    <span style="color: red;font-size: xx-small;"></span>
+                </div>
+            </div>
+
+            <div class="form-group" id="message_div" style="display: none;">
+                <label class="col-xs-12 col-sm-3 control-label no-padding-right">手机短信或短消息内容</label>
+
+                <div class="col-xs-12 col-sm-5">
+                    <textarea id="extracontent" name="extracontent" class="form-control limited" maxlength="512"
+                              rows="5" style="height: 100px;">
+
+                    </textarea>
+                </div>
+                <div class="help-block col-xs-12 col-sm-reset inline">
+                    <span style="color: red;font-size: xx-small;">通知内容最多只能输入512个汉字或字母</span>
+                </div>
+            </div>
+        </form>
+        <div class="clearfix form-actions no-margin-bottom">
+            <div class="center">
+                <a class="btn btn-info " onclick="save()">
+                    <i class="ace-icon fa fa-check bigger-110"></i>发送
+                </a>
+                &nbsp; &nbsp; &nbsp;
+                <a class="btn" href="$contextPath/oa/notification">
+                    <i class="ace-icon fa fa-times bigger-125"></i>
+                    取消
+                </a>
+            </div>
+        </div>
+
+    </div>
+</div>
+<script src="$contextPath/static/ace/js/jquery.gritter.min.js"></script>
+<script type="text/javascript">
+$(function () {
+
+    $("div#main-container").css("width", "99%");
+
+
+
+    CKEDITOR.replace('notiContent', {
+        allowedContent: true,
+        height: 500//, width: '100%'
+    });
+
+    //对页面初始化处理  开始
+    var noticeId = "$!{notification.id}";
+    if (noticeId != "") {
+        $("input[name=id]").val(Number(noticeId));
+    } else {
+        $("input[name=id]").val(-1);
+    }
+
+    var orgid = "$!{notification.orgid}";
+    $('select[name=orgid]').val(orgid);
+
+
+    $("textarea[name=extracontent]").html('');
+
+    /**
+     * 对机构的判断
+     */
+    orgJudge();
+    // 获取机构树
+    getOrgs();
+    //对页面初始化处理  结束
+
+    $('textarea.limited').inputlimiter({
+        remText: '您还能输入 %n 个字符，',
+        limitText: '最多能输入 : %n 字符。'
+    });
+
+
+    /**
+     * 拖拽初始化 开始
+     */
+    $(document).on({
+        dragleave: function (e) {    //拖离
+            e.preventDefault();
+        },
+        drop: function (e) {  //拖后放
+            e.preventDefault();
+        },
+        dragenter: function (e) {    //拖进
+            e.preventDefault();
+        },
+        dragover: function (e) {    //拖来拖去
+            e.preventDefault();
+        }
+    });
+
+    if (CKEDITOR.instances['notiContent']) {//判断ckeditor是否初始化完成
+        var noticeContent = "$!{notification.content}";
+        if (noticeContent != "") {
+            CKEDITOR.instances["notiContent"].setData(noticeContent);
+        }
+
+        var box = document.getElementById('drop_area'); //拖拽区域  drop_area
+        if (navigator.userAgent.indexOf("MSIE") == -1) {
+            box.addEventListener("drop", uploadFile, false);
+        }
+
+        CKEDITOR.instances.notiContent.on('blur', function () {
+            contentCheck();
+        });
+    }
+    /**
+     * 拖拽初始化 结束
+     */
+});
+
+/**
+ * 拖拽上传图片
+ * @param e
+ * @returns {boolean}
+ */
+function uploadFile(e) {
+
+    e.preventDefault(); //取消默认浏览器拖拽效果
+    var fileList = e.dataTransfer.files; //获取文件对象
+    var fileNum = fileList.length;
+    //检测是否是拖拽文件到页面的操作
+    if (fileNum == 0) {
+        return false;
+    }
+
+    for (var i = 0; i < fileNum; i++) {
+        var fileUrl = '', fileType = "", filePath = '', filename = '', filesize = 0;
+        fileType = fileList[i].type;
+        filePath = window.webkitURL.createObjectURL(fileList[i]);
+        filename = fileList[i].name; //图片名称
+        filesize = Math.floor((fileList[i].size) / 1024);
+        if (fileType.indexOf('image') === -1) {//非图片文件
+            myGritterError("文件不是图片", "提示", 1000);
+            return false;
+        } else {
+            if (filesize > 1024) {
+                myGritterError("图片不能超过1M", "提示", 1000);
+                return false;
+            }
+            fileUrl = "<img src='" + filePath + "'>";
+            CKEDITOR.instances["notiContent"].insertHtml(fileUrl);
+        }
+    }
+}
+
+/**
+ * 对机构的判断
+ */
+function orgJudge() {
+    var len = $("select[name=orgid]").find("option").length;
+    if (len > 1) {
+        $("#selectOrg_div div").last().find("span").text("由于您属于多个机构,请选择一个机构。默认为选择框第一个");
+        $("select[name=orgid]").find("option").eq(0).attr("selected", true);
+    } else {
+        $("select[name=orgid]").find("option").eq(0).attr("selected", true);
+        $("select[name=orgid]").attr("readonly", true);
+    }
+}
+
+
+/**
+ * 点开提醒的事件
+ */
+$("#notice").on("click", function () {
+    if ($(this).get(0).checked) {
+        $("#sendtype_div").show();
+        $("#sendtype_div div").last().find("i").hide();
+        $("#org_div").show();
+        $("#org_div div").last().find("i").hide();
+        $("#message_div").show();
+    } else {
+        $("#sendtype_div").hide();
+        $("#org_div").hide();
+        $("#message_div").hide();
+
+    }
+});
+
+/**
+ * 点击发送类型的事件
+ */
+$("input[name=sendtype]").on("click", function () {
+    checkSendOptios();
+});
+
+/**
+ * 提交数据之前的验证
+ * @returns {boolean}
+ */
+function save() {
+
+    if(!contentCheck()){
+        CKEDITOR.instances['notiContent'].focus();
+        return false;
+    }
+
+    if(!checkTitle()){
+        $("#title").focus();
+        return false;
+    }
+    /**
+     * 选中接收人的验证
+     */
+    if(!recieveCheck()){
+        return false;
+    }
+
+    if ($("#notice").get(0).checked) {
+        if (checkSendOptios()) {
+            var userLen = $("input[name=usercode]").length;
+            if (userLen == 0) {
+                $("input[type=checkbox]").attr("checked", false);
+                $("#extracontent").html('');
+            }
+            myConfirm("是要发送这条通知么?", function () {
+                submitData();
+            })
+        }
+    } else {
+        /**
+         * 初始化发送类型和发送信息
+         */
+        $("textarea[name=extracontent]").val('');
+        $('input:radio[name="sendtype"]').attr("checked",false);
+
+        myConfirm("是要发送这条通知么?", function () {
+            submitData();
+        })
+    }
+}
+
+/**
+ * 提交数据保存到后台
+ */
+function submitData() {
+
+    jQuery.ajax({
+        url: "$contextPath/oa/notification/addOrUpdate?" + $("#myform").serialize(),
+        data: {content: CKEDITOR.instances["notiContent"].getData()},
+        type: 'post',
+        dataType: "JSON",
+        async: false,
+        success: function (data) {
+            if (data && data > 0) {
+                myFinishAndTurnFn("提示", "保存成功!", function () {
+                    window.location.href = "$contextPath/oa/notification";
+                });
+            } else {
+                myGritterError("发送失败!", "提示", 1000)
+            }
+        }
+    });
+}
+
+
+function preview(id, suffix) {
+    window.open('$!contextPath/oa/notification/fileView?fileid=' + id);
+}
+
+//知识点树树配置Start
+
+var knowsetting = {
+    async: {
+        enable: true
+    },
+    check: {
+        enable: true,
+        chkboxType: {"Y": "", "N": ""}
+    },
+    view: {
+        dblClickExpand: false
+    },
+    data: {
+        simpleData: {
+            enable: true,
+            idKey: "id",
+            pIdKey: "pid"
+        },
+        key: {
+            name: "name"
+        }
+    },
+    callback: {
+        //beforeClick: beforeKnowClick,
+        onCheck: onKnowCheck,
+        onClick: getDataByPid
+    }
+};
+
+function beforeKnowClick(treeId, treeNode) {
+    var zTree = $.fn.zTree.getZTreeObj("knowsTree");
+    zTree.checkNode(treeNode, !treeNode.checked, null, true);
+    return false;
+}
+
+/**
+ * 选中节点事件
+ * @param e
+ * @param treeId
+ * @param treeNode
+ * @returns {boolean}
+ */
+function onKnowCheck(e, treeId, treeNode) {
+    var zTree = $.fn.zTree.getZTreeObj("knowsTree");
+    checkZtreeChildren(treeId, treeNode);
+    var nodes = zTree.getCheckedNodes(true);
+
+    $("#receives_div").html('');
+
+    var a = 0;
+    for (var i = 0, l = nodes.length; i < l; i++) {
+        if (nodes[i].type == 'org') {
+            $("#receives_div").append("<input type='hidden' name='receives[" + a + "].id' value='" + nodes[i].id + "'/><br>")
+            a++;
+        }
+    }
+
+    recieveCheck();
+}
+
+/**
+ * 点击节点事件
+ * @param e
+ * @param treeId
+ * @param treeNode
+ * @param clickFlag
+ */
+function getDataByPid(e, treeId, treeNode, clickFlag) {
+    var pid = $("input[name=flagId]").val() == '' ? 0 : $("input[name=flagId]").val();
+    var treeObj = $.fn.zTree.getZTreeObj("knowsTree");
+    treeObj.removeChildNodes(treeNode);
+    if (pid == 0) {
+        jQuery.ajax({
+            url: "$contextPath/data/collect/getOrgsTreeByPid?type=org&pid=" + treeNode.id,
+            dataType: "JSON",
+            async: false,
+            success: function (data) {
+                if (data && data.length > 0) {
+                    var newNodes = null;
+                    for (var i = 0; i < data.length; i++) {
+                        newNodes = [
+                            {id: data[i].id, pid: data[i].pid, type: data[i].type, name: data[i].name}
+                        ];
+                        treeObj.addNodes(treeNode, data[i]);
+                    }
+                }
+            }
+        });
+    } else if (pid > 0) {
+        jQuery.ajax({
+            url: "$contextPath/data/collect/getSchoolTreeByPid?type=org&pid=" + treeNode.id,
+            dataType: "JSON",
+            async: false,
+            success: function (data) {
+                if (data && data.length > 0) {
+                    var newNodes = null;
+                    for (var i = 0; i < data.length; i++) {
+                        if (treeNode.id != data[i].id) {
+                            newNodes = [
+                                {id: data[i].id, pid: data[i].pid, type: data[i].type, name: data[i].name}
+                            ];
+                            treeObj.addNodes(treeNode, data[i]);
+                        }
+                    }
+                }
+            }
+        });
+    }
+    onKnowCheck(e, treeId, treeNode)
+}
+//知识点树配置End
+
+/**
+ * 获取机构
+ */
+function getOrgs() {
+
+    var type = "org";
+    var pid = $("input[name=flagId]").val() == '' ? 0 : $("input[name=flagId]").val();
+    jQuery.ajax({
+        url: "$contextPath/data/collect/getTree",
+        data: {type: type, pid: pid},
+        dataType: "JSON",
+        async: false,
+        success: function (data) {
+            jQuery.fn.zTree.init(jQuery("#knowsTree"), knowsetting, data);
+        }
+    });
+}
+
+
+///////////////////////////////////////////////////////页面验证////////////////
+
+/**
+ * 是否选中接收人
+ * @returns {boolean}
+ */
+function recieveCheck(){
+    var flag=false;
+    var recieves = $('#receives_div').find("input").length;
+    if (recieves < 1) {
+        $("#tree_div").find("i.fa-times-circle").show();
+        $("#tree_div").find("i.fa-check-circle").hide();
+        $("#tree_div").find("span").text("请至少勾选一个部门");
+        flag=false;
+    } else {
+        $("#tree_div").find("i.fa-times-circle").hide();
+        $("#tree_div").find("i.fa-check-circle").show();
+        $("#tree_div").find("span").text("");
+        flag=true;
+    }
+    return flag;
+}
+
+
+/**
+ * 通知内容的验证
+ * @returns {boolean}
+ */
+function contentCheck(){
+    var contents = CKEDITOR.instances['notiContent'].getData();
+    if (contents != undefined && contents != null && $.trim(contents).length > 0) {
+        $("#content_div").find("i.fa-times-circle").hide();
+        $("#content_div").find("i.fa-check-circle").show();
+        $("#content_div").find("span").text("");
+        return true;
+    } else if($.trim(contents).length>20000){
+        $("#content_div").find("i.fa-times-circle").show();
+        $("#content_div").find("i.fa-check-circle").hide();
+        $("#content_div").find("span").text("通知内容过长,最大长度20000.当前长度"+$.trim(contents).length+"!");
+        return false;
+    }else {
+        $("#content_div").find("i.fa-times-circle").show();
+        $("#content_div").find("i.fa-check-circle").hide();
+        $("#content_div").find("span").text("请填写通知内容!");
+        return false;
+    }
+}
+
+
+/**
+ * 是否选中发送类型
+ * @returns {boolean}
+ */
+function checkSendOptios() {
+    var flag = false;
+
+    var sendType = $('input:radio[name="sendtype"]:checked').val();
+    if (sendType != null && $.trim(sendType) != '') {
+        flag = true;
+        $('input:radio[name="sendtype"]').parent().parent().next().find("i.fa-times-circle").hide();
+        $('input:radio[name="sendtype"]').parent().parent().next().find("i.fa-check-circle").show();
+        $('input:radio[name="sendtype"]').parent().parent().next().find("span").text("");
+    } else {
+        $('input:radio[name="sendtype"]').parent().parent().next().find("i.fa-times-circle").show();
+        $('input:radio[name="sendtype"]').parent().parent().next().find("i.fa-check-circle").hide();
+        $('input:radio[name="sendtype"]').parent().parent().next().find("span").text("请选择发送类型");
+        flag = false;
+    }
+    return flag;
+}
+
+
+/**
+ * 标题为空验证
+ * @returns {boolean}
+ */
+function checkTitle() {
+    var flag = true;
+    var title = $("#title").val() == null ? '' : $("#title").val();
+    if ($.trim(title) == '') {
+        $("#title").parent().next("div").last().find("i.fa-times-circle").show();
+        $("#title").parent().next("div").last().find("i.fa-check-circle").hide();
+        $("#title").parent().next("div").last().find("span").text("请填写标题");
+        flag = false;
+    } else {
+        $("#title").parent().next("div").last().find("i.fa-times-circle").hide();
+        $("#title").parent().next("div").last().find("i.fa-check-circle").show();
+        $("#title").parent().next("div").last().find("span").text("");
+    }
+    return flag;
+}
+</script>
+#parse("/common/south.html")

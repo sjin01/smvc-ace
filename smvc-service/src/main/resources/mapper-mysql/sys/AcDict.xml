@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="net.hunanst.eduz100.api.sys.AcDict" >
+  <resultMap id="BaseResultMap" type="net.hunanst.eduz100.api.sys.AcDict" >
+    <id column="ID" property="id" jdbcType="INTEGER" />
+    <result column="TYPEID" property="typeid" jdbcType="INTEGER" />
+    <result column="TNAME" property="tname" jdbcType="VARCHAR" />
+    <result column="TVALUE" property="tvalue" jdbcType="VARCHAR" />
+    <result column="SORTID" property="sortid" jdbcType="INTEGER" />
+    <result column="MEMO" property="memo" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    ID, TYPEID, TNAME, TVALUE, SORTID, MEMO
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from ac_dict
+    where ID = #{value}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from ac_dict
+    where ID = #{value}
+  </delete>
+  <insert id="insert" parameterType="net.hunanst.eduz100.api.sys.AcDict" >
+    <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER" >
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into ac_dict (TYPEID, TNAME, TVALUE, 
+      SORTID, MEMO)
+    values (#{typeid,jdbcType=INTEGER}, #{tname,jdbcType=VARCHAR}, #{tvalue,jdbcType=VARCHAR}, 
+      #{sortid,jdbcType=INTEGER}, #{memo,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="net.hunanst.eduz100.api.sys.AcDict" >
+    <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER" >
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into ac_dict
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="typeid != null" >
+        TYPEID,
+      </if>
+      <if test="tname != null" >
+        TNAME,
+      </if>
+      <if test="tvalue != null" >
+        TVALUE,
+      </if>
+      <if test="sortid != null" >
+        SORTID,
+      </if>
+      <if test="memo != null" >
+        MEMO,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="typeid != null" >
+        #{typeid,jdbcType=INTEGER},
+      </if>
+      <if test="tname != null" >
+        #{tname,jdbcType=VARCHAR},
+      </if>
+      <if test="tvalue != null" >
+        #{tvalue,jdbcType=VARCHAR},
+      </if>
+      <if test="sortid != null" >
+        #{sortid,jdbcType=INTEGER},
+      </if>
+      <if test="memo != null" >
+        #{memo,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="net.hunanst.eduz100.api.sys.AcDict" >
+    update ac_dict
+    <set >
+      <if test="typeid != null" >
+        TYPEID = #{typeid,jdbcType=INTEGER},
+      </if>
+      <if test="tname != null" >
+        TNAME = #{tname,jdbcType=VARCHAR},
+      </if>
+      <if test="tvalue != null" >
+        TVALUE = #{tvalue,jdbcType=VARCHAR},
+      </if>
+      <if test="sortid != null" >
+        SORTID = #{sortid,jdbcType=INTEGER},
+      </if>
+      <if test="memo != null" >
+        MEMO = #{memo,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where ID = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="net.hunanst.eduz100.api.sys.AcDict" >
+    update ac_dict
+    set TYPEID = #{typeid,jdbcType=INTEGER},
+      TNAME = #{tname,jdbcType=VARCHAR},
+      TVALUE = #{tvalue,jdbcType=VARCHAR},
+      SORTID = #{sortid,jdbcType=INTEGER},
+      MEMO = #{memo,jdbcType=VARCHAR}
+    where ID = #{id,jdbcType=INTEGER}
+  </update>
+  <select id="select_page" resultMap="BaseResultMap" parameterType="net.hunanst.eduz100.api.sys.AcDict" >
+    select
+    <include refid="Base_Column_List" />
+     from ac_dict
+    <where >
+      <if test="id!=null" >
+        AND ID=#{id}
+      </if>
+      <if test="typeid!=null" >
+        AND TYPEID=#{typeid}
+      </if>
+      <if test="tname!=null" >
+        AND TNAME=#{tname}
+      </if>
+      <if test="tvalue!=null" >
+        AND TVALUE=#{tvalue}
+      </if>
+      <if test="sortid!=null" >
+        AND SORTID=#{sortid}
+      </if>
+      <if test="memo!=null" >
+        AND MEMO=#{memo}
+      </if>
+    </where>
+  </select>
+</mapper>

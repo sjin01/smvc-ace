@@ -1,0 +1,440 @@
+<script src="$contextPath/static/ace/js/fuelux/fuelux.tree.min.js"></script>
+<script src="$contextPath/static/js/org_fueluxtree.js"></script>
+
+<div class="well">
+
+    <dl style="padding-left: 50px; padding-right: 50px;">
+        <dt></dt>
+        <dd>
+            <h4 class="blue ">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;审批</h4>
+            <hr/>
+        </dd>
+    </dl>
+
+    <form id="officialdocument_approve_form">
+
+        <dl class="dl-horizontal">
+
+            <dt>您的批注</dt>
+            <dd>
+                    <textarea class="width-50 limited" id="postilContent_textarea" name="postilContent" maxlength="512"
+                              rows="5"></textarea>
+            </dd>
+
+            <dt class="padding-top-20"><span style="color: red">*</span>操作类型</dt>
+            <dd class="padding-top-20">
+                <div class="form-group">
+                    <select class="col-xs-3" id="form-field-select-1" name="flag" onchange="yjr_div();">
+                        <option value="">请选择</option>
+
+                        <option value="5">驳回</option>
+                        <option value="1">移交</option>
+                        <option value="2">通过</option>
+                    </select>
+                </div>
+            </dd>
+
+            #*<div id="yjr_div" style="display: none;">
+                <dt class="padding-top-20">移交给</dt>
+                <dd class="padding-top-20">
+                    <input type="text" id="" placeholder="" class="col-xs-3 input-sm">
+                    <div class="help-block col-xs-12 col-sm-reset inline"> &nbsp;&nbsp;&nbsp;选择一个部门或人员 </div>
+                </dd>
+            </div>*#
+
+            <div id="yjr_div" style="display: none;">
+                <dt class="padding-top-20">
+                    移交给
+                </dt>
+                <dd class="padding-top-20">
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <label class="grey" style="font-size: 12px"> 通过以下选择器，选择您要提交的部门或人： </label>
+                            <br />
+                            <div class="widget-box widget-color-grey">
+                                <div class="widget-body">
+                                    <div class="widget-main padding-8">
+                                        <div id="treeview" class="tree"></div>
+                                    </div>
+                                </div>
+                            </div>
+
+                        #*<span class="help-inline col-xs-12 col-sm-7">
+                            <span class="middle" style="color: #a3a3a3"></span>
+                        </span>*#
+                        </div>
+                    </div>
+
+                    <div style="padding-top: 20px; display: none;" id="error_alert">
+                        <div class="alert alert-danger col-sm-6" >
+                            <strong>
+                                <i class="ace-icon fa fa-times"></i>
+                                出错啦！
+                            </strong>
+                            您没有指定提交给谁！
+                            <br>
+                        </div>
+                    </div>
+                </dd>
+            </div>
+
+            <div id="choose_seal_div" class="hide">
+                <dt class="padding-top-20">加盖公章</dt>
+                <dd class="padding-top-20">
+                    #if($!officialdocumentFileList_size <=0 )
+                        <div style="padding-left: 10px;" class="inline" id="current_seal">
+                            这个公文没有附件，无需加盖公章!
+                        </div>
+                    #else
+                        <div style="padding-left: 10px;" class="inline" id="current_seal">
+                            不盖
+                        </div>
+
+                        <input type="hidden" id="seal_url" value=""/>
+
+                        <div style="padding-left: 30px;" class="inline">
+                            <button type="button" class="btn btn-xs btn-white btn-primary" style="" onclick="showChooseSealDialog();"> 选择公章</button>
+                            <button type="button" id="removeSealChoose_btn" class="btn btn-xs btn-white btn-danger " style="display: none;" onclick="removeSealChoose();">清除</button>
+                        </div>
+                    #end
+
+                </dd>
+            </div>
+
+            <dt class="padding-top-20">消息提醒</dt>
+            <dd class="padding-top-20">
+                <div class="row">
+                    <div class="radio inline">
+                        <label>
+                            <input name="remindflag" type="radio" class="ace" value="0" onclick="$('#remindtype_div').hide();" checked="checked">
+                            <span class="lbl"> 不发送</span>
+                        </label>
+                    </div>
+
+                    <div class="radio inline">
+                        <label>
+                            <input name="remindflag" type="radio" class="ace" value="1" onclick="$('#remindtype_div').show();">
+                            <span class="lbl"> 发送</span>
+                        </label>
+                    </div>
+                </div>
+                <div class="row" id="remindtype_div" style="display:none;">
+                    <div class="radio inline">
+                        <label>
+                            <input name="remindtype" type="radio" class="ace" value="2" onclick="" checked="checked">
+                            <span class="lbl"> 系统短消息</span>
+                        </label>
+                    </div>
+                    <div class="radio inline">
+                        <label>
+                            <input name="remindtype" type="radio" class="ace" value="1" onclick="">
+                            <span class="lbl"> 手机短信</span>
+                        </label>
+                    </div>
+                    <div class="radio inline">
+                        <label>
+                            <input name="remindtype" type="radio" class="ace" value="3" onclick="">
+                            <span class="lbl"> 两者都发</span>
+                        </label>
+                    </div>
+                    <div for="" class="help-block"> 请注意：如果您将公文提交到一个部门，为避免给部门内所有人发送消息，消息提醒功能是无效的！ </div>
+                </div>
+            </dd>
+
+            #if($!{login_orgList_size} > 1)
+                <dt class="padding-top-20"><span style="color: red">*</span>选择您的部门</dt>
+                <dd class="padding-top-20">
+                    <div class="form-group">
+                        <select name="orgid" id="orgid" class="width-25">
+                            <option value="">请选择</option>
+                            #foreach($orgitem in $login_orgList)
+                                <option value="$!{orgitem.id}">$!{orgitem.orgname}</option>
+                            #end
+                        </select>
+                        <br/>
+                        <div for="" class="help-block">尊敬的 $!{login_user.username} 用户：您隶属于多个部门，需要选择一个身份来审批该公文！</div>
+                    </div>
+                </dd>
+
+            #elseif($!{login_orgList_size} == 1)
+                <dt class="padding-top-20">您的部门</dt>
+                <dd class="padding-top-20">
+                    <span class="badge badge-info"> $!{login_orgList.get(0).orgname} </span>
+                    <input type="hidden" value="$!{login_orgList.get(0).id}" name="orgid" id="orgid"/>
+                </dd>
+            #end
+        </dl>
+
+
+
+        <div class="clearfix form-actions">
+            <div class="col-md-offset-3 col-md-9">
+                <button class="btn btn-info" type="button" onclick="saveApprove();">
+                    <i class="ace-icon fa fa-check bigger-110"></i>
+                    提 交
+                </button>
+            </div>
+        </div>
+
+        <input type="hidden" name="officialDocumentId" id="officialDocumentId" value="$!{officialDocumentId}"/>
+        <input type="hidden" name="deliverid" id="deliverid" value=""/>
+        <input type="hidden" name="delivertype" id="delivertype" value=""/>
+
+        <input type="hidden" name="userid" value="$!{login_user.id}"/>
+
+        #foreach($ofile in $officialdocumentFileList)
+            <input type="hidden" value="$!ofile.id" name="officialdocumentFileList[$!{velocityCount}].id" id="officialdocumentFile_id_$!{velocityCount}"/>
+            <input type="hidden" value="$!ofile.filepath" name="officialdocumentFileList[$!{velocityCount}].filepath" id="officialdocumentFile_filepath_$!{velocityCount}"/>
+            <input type="hidden" value="$!ofile.sealpath" name="officialdocumentFileList[$!{velocityCount}].sealpath" id="officialdocumentFile_sealpath_$!{velocityCount}"/>
+        #end
+        <input type="hidden" id="filesize" value="$!{officialdocumentFileList.size()}"/>
+    </form>
+</div>
+
+<!-- 跳转 审批页面 隐藏表单 -->
+<form action="$contextPath/oa/officialdocument/step/approvalPass" id="toBeissued" method="post">
+    <input type="hidden" value="$contextPath/oa/officialdocument" name="pathname"/>
+    <input type="hidden" value="$!{officialDocumentId}" name="odid" id="toBeissued_odid"/>
+</form>
+
+
+<script type="text/javascript">
+
+    /**
+     * init Validate form
+     */
+    var vali_form;
+    function initValidate () {
+        vali_form = $("#officialdocument_approve_form").validate({
+            rules : {
+                flag : { required : true },
+                orgid : {required : true}
+            },
+            messages : {
+                flag : { required :"请选择操作类型" },
+                orgid : { required : "您必须选择一个部门的身份来发这个公文" }
+            }
+        })
+    }
+
+    function saveApprove () {
+
+        if(!vali_form.form()){
+            return false;
+        }
+
+        if($("#form-field-select-1").val() == 1) if(!validate_deliver()) {
+            return false;
+        }
+
+        var confirm_Str = '您确定对该公文进行';
+        if( $("#form-field-select-1").val() == 1){
+            confirm_Str += '移交吗？';
+        }else if ( $("#form-field-select-1").val() ==2 ){
+            confirm_Str += '审批通过吗？';
+        }else if( $("#form-field-select-1").val() == 5){
+            confirm_Str += '驳回吗？';
+        }
+        myConfirm( confirm_Str ,function (){
+
+            if($("#form-field-select-1").val() == 2) if( $('#seal_url').val() ){
+                // 处理 文件 盖 章
+                var filesize = $("#filesize").val();
+                for(var i = 1; i <= filesize ; i++){
+                    var file_path = $('#officialdocumentFile_filepath_'+i).val();
+                    var pdf_path = file_path.substring(0,file_path.lastIndexOf('.')) + '.pdf';
+                    var nginx_seal_url = '$!{nginx_seal}' + '?file1_url=' + pdf_path + '&file2_url=' + $("#seal_url").val();
+//                    console.log(nginx_seal_url);
+                    $.ajax({
+                        async:false,
+                        url: nginx_seal_url ,
+                        type:'POST',
+                        //data: $("#officialdocument_approve_form").serialize() ,
+                        dataType:'json',
+                        success:function( result ){
+//                            console.log(result);
+                            if(result) if(result.file1_url_stamp){
+                                $('#officialdocumentFile_sealpath_'+i).val(result.file1_url_stamp);
+                            }
+                        }
+                    });
+                }
+            }
+
+            $.ajax({
+                url:"$contextPath/oa/officialdocument/saveapprove" ,
+                type:'POST',
+                data: $("#officialdocument_approve_form").serialize() ,
+                dataType:'json',
+                success:function( result ){
+                    if(result.code == 200){
+                        // 成功  跳转到成功页面
+                        location.href = '$contextPath/oa/officialdocument/approve?odid=$!{officialDocumentId}';
+                    }else{
+                        // 失败
+                    }
+                }
+            });
+        });
+    }
+
+    function validate_deliver(){
+        if( $("#deliverid").val() && $("#delivertype").val() ){
+            $("#error_alert").hide();
+            return true;
+        }else{
+            $("#error_alert").show();
+            return false;
+        }
+    }
+
+    var choose_seal_dialog;
+    function showChooseSealDialog(){
+
+        $.ajax({
+            url:"$contextPath/oa/officialdocument/step/chooseSealDialog" ,
+            type:'POST',
+            dataType:'HTML',
+            success:function( data ){
+                choose_seal_dialog = bootbox.dialog({
+                    message: data,
+                    buttons: {
+                        "button1": {
+                            "label": "取消",
+                            "className": "btn btn-xs",
+                            "callback": function () {
+                            }
+                        }
+                    }
+                })
+            }
+        });
+    }
+    function chooseSeal( v , url ){
+        $('#current_seal').html('<img alt="150x150" src="'+'$!{nginx_filepath}'+url+'" width="150" height="150">');
+        choose_seal_dialog.modal("hide");
+        $('#removeSealChoose_btn').show();
+        $('#seal_url').val(url);
+    }
+    function removeSealChoose(){
+        $('#current_seal').html('不盖');
+        $('#removeSealChoose_btn').hide();
+        $('#seal_url').val('');
+    }
+
+    function yjr_div () {
+
+        if($("#form-field-select-1").val() == 1){
+            $("#yjr_div").show();
+        }else{
+            $("#yjr_div").hide();
+        }
+
+        if($("#form-field-select-1").val() == 2){
+            $('#choose_seal_div').removeClass('hide');
+        }else{
+            $('#choose_seal_div').addClass('hide');
+        }
+
+        /*$('.chosen-select').chosen({
+            allow_single_deselect:true ,
+            no_results_text: "该部门下没有找到："
+        });
+        $(window)
+                .off('resize.chosen')
+                .on('resize.chosen', function() {
+                    $('.chosen-select').each(function() {
+                        var $ this = $(this);
+                            $ this.next().css({'width': $ this.parent().width()});
+                    })
+                }).trigger('resize.chosen');*/
+    }
+
+    var tree ;
+    $(function (){
+        initValidate();
+
+        $('textarea.limited').inputlimiter({
+            remText: '您还能输入 %n 个字符，',
+            limitText: '最多能输入 : %n 字符。'
+        });
+
+
+        tree = initOrgTree( 'treeview' ,'$contextPath/sys/organization/orgUserTreeData' ,false, function (){
+
+            /*// 第一次 加载树的时候 展开根目录，并不执行后面的代码
+            if(tree.selectedItems().length>0 && tree.selectedItems()[0].additionalParameters.isRoot) {
+                tree.selectedItems()[0].additionalParameters.isRoot = false;
+                return false;
+            }*/
+
+            /*设置 view 和hidden */
+            if(tree.selectedItems().length > 0){
+
+                var id = tree.selectedItems()[0].id;
+                var datatype = tree.selectedItems()[0].datatype;
+
+                $("#deliverid").val(id);
+
+                if(datatype=='org'){
+                    $("#delivertype").val(2);
+//                    $("#deliverView").html('<dt>部门：</dt><dd><span class="badge badge-info">'+tree.selectedItems()[0].name+'</span></dd>');
+                }else if(datatype== 'user'){
+                    $("#delivertype").val(1);
+##                    var str = '<dt>个人：</dt><dd><span class="badge badge-info">'+tree.selectedItems()[0].name+'</span></dd><dt>所属单位：</dt>';
+##                    str +='<dd>';
+##                    $.ajax({
+##                        url: '$contextPath/sys/organization/getOrgByUserid?userid='+id ,
+##                        type: 'POST',
+##                        dataType: 'json',
+##                        async:false,
+##                        success : function(response) {
+##                            //console.log(response);
+##                            if(response.code == 200){
+##                                for(var i=0 ; i< response.data.length; i++){
+##                                    console.log(response.data[i]);
+##                                    str += '<span class="badge badge-info">' + response.data[i].orgname + '</span>&nbsp;&nbsp;';
+##                                }
+##                            }
+##                        },
+##                        error: function(response) {
+##                            //console.log(response);
+##                        }
+##                    })
+##                    str +='</dd>';
+##                    $("#deliverView").html(str);
+                }
+            }else{
+                $("#deliverid").val('');
+                $("#delivertype").val('');
+//                $("#deliverView").html('<dt></dt><dd><span class="badge badge-danger">暂未选择！</span></dd>');
+            }
+
+//            $("#deliverOrgid").val(tree.selectedItems()[0].id);   // 设置 组织机构id
+        });
+
+    })
+
+    /**
+     * 根据 orgid 获取 user数据 ，填充到 select空间
+     */
+    function getUserByOrgId(orgid){
+        $.ajax({
+            url:"$contextPath/sys/operator/list" ,
+            type:'POST',
+            data: {'orgid':orgid , 'iDisplayStart':0 , 'iDisplayLength':1000} ,
+            dataType:'json',
+            success:function( result ){
+                if (result.aaData && result.aaData.length > 0) {
+                    $("#deliverUserid_selectEle").html('');
+                    var html_str = '<option value="0">提交到部门</option>';
+                    for (var i = 0; i < result.aaData.length; i++)
+                        html_str += '<option name="user_option" data-username="'+result.aaData[i].username+'" value="' + result.aaData[i].id + '" >' + result.aaData[i].username + '</option>';
+                    $("#deliverUserid_selectEle").html(html_str);
+                } else   $("#deliverUserid_selectEle").html('<option value="0">提交到部门，但该部门目前没有成员</option>');
+
+                $("#deliverUserid_selectEle").trigger("chosen:updated");
+            }
+        });
+    }
+</script>

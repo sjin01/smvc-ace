@@ -1,0 +1,275 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="net.hunanst.eduz100.api.sys.AcOrg">
+    <resultMap id="BaseResultMap" type="net.hunanst.eduz100.api.sys.AcOrg">
+        <id column="ID" property="id" jdbcType="INTEGER"/>
+        <result column="ORGNAME" property="orgname" jdbcType="VARCHAR"/>
+        <result column="ORGFULLNAME" property="orgfullname" jdbcType="VARCHAR"/>
+        <result column="PARENTID" property="parentid" jdbcType="INTEGER"/>
+        <result column="ORGSEQ" property="orgseq" jdbcType="VARCHAR"/>
+        <result column="SORTID" property="sortid" jdbcType="INTEGER"/>
+        <result column="BELONGORGID" property="belongorgid" jdbcType="INTEGER"/>
+        <result column="CHILDCOUNT" property="childcount" jdbcType="INTEGER"/>
+
+    </resultMap>
+    <sql id="Base_Column_List">
+    ID, ORGNAME, ORGFULLNAME, PARENTID, ORGSEQ, SORTID, BELONGORGID
+  </sql>
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+        select
+        <include refid="Base_Column_List"/>
+        from ac_org
+        where ID = #{value}
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from ac_org
+    where ID = #{value}
+  </delete>
+    <insert id="insert" parameterType="net.hunanst.eduz100.api.sys.AcOrg">
+        <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER">
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+        insert into ac_org (ORGNAME, ORGFULLNAME, PARENTID,
+        ORGSEQ, SORTID, BELONGORGID
+        )
+        values (#{orgname,jdbcType=VARCHAR}, #{orgfullname,jdbcType=VARCHAR}, #{parentid,jdbcType=INTEGER},
+        #{orgseq,jdbcType=VARCHAR}, #{sortid,jdbcType=INTEGER}, #{belongorgid,jdbcType=INTEGER}
+        )
+    </insert>
+    <insert id="insertSelective" parameterType="net.hunanst.eduz100.api.sys.AcOrg">
+        <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER">
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+        insert into ac_org
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="orgname != null">
+                ORGNAME,
+            </if>
+            <if test="orgfullname != null">
+                ORGFULLNAME,
+            </if>
+            <if test="parentid != null">
+                PARENTID,
+            </if>
+            <if test="orgseq != null">
+                ORGSEQ,
+            </if>
+            <if test="sortid != null">
+                SORTID,
+            </if>
+            <if test="belongorgid != null">
+                BELONGORGID,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="orgname != null">
+                #{orgname,jdbcType=VARCHAR},
+            </if>
+            <if test="orgfullname != null">
+                #{orgfullname,jdbcType=VARCHAR},
+            </if>
+            <if test="parentid != null">
+                #{parentid,jdbcType=INTEGER},
+            </if>
+            <if test="orgseq != null">
+                #{orgseq,jdbcType=VARCHAR},
+            </if>
+            <if test="sortid != null">
+                #{sortid,jdbcType=INTEGER},
+            </if>
+            <if test="belongorgid != null">
+                #{belongorgid,jdbcType=INTEGER},
+            </if>
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective" parameterType="net.hunanst.eduz100.api.sys.AcOrg">
+        update ac_org
+        <set>
+            <if test="orgname != null">
+                ORGNAME = #{orgname,jdbcType=VARCHAR},
+            </if>
+            <if test="orgfullname != null">
+                ORGFULLNAME = #{orgfullname,jdbcType=VARCHAR},
+            </if>
+            <if test="parentid != null">
+                PARENTID = #{parentid,jdbcType=INTEGER},
+            </if>
+            <if test="orgseq != null">
+                ORGSEQ = #{orgseq,jdbcType=VARCHAR},
+            </if>
+            <if test="sortid != null">
+                SORTID = #{sortid,jdbcType=INTEGER},
+            </if>
+            <if test="belongorgid != null">
+                BELONGORGID = #{belongorgid,jdbcType=INTEGER},
+            </if>
+        </set>
+        where ID = #{id,jdbcType=INTEGER}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="net.hunanst.eduz100.api.sys.AcOrg">
+    update ac_org
+    set ORGNAME = #{orgname,jdbcType=VARCHAR},
+      ORGFULLNAME = #{orgfullname,jdbcType=VARCHAR},
+      PARENTID = #{parentid,jdbcType=INTEGER},
+      ORGSEQ = #{orgseq,jdbcType=VARCHAR},
+      SORTID = #{sortid,jdbcType=INTEGER},
+      BELONGORGID = #{belongorgid,jdbcType=INTEGER}
+    where ID = #{id,jdbcType=INTEGER}
+  </update>
+    <select id="select_page" resultMap="BaseResultMap" parameterType="net.hunanst.eduz100.api.sys.AcOrg">
+        select
+        <include refid="Base_Column_List"/>
+        from ac_org
+        <where>
+            <if test="id!=null">
+                AND ID=#{id}
+            </if>
+            <if test="orgname!=null">
+                AND ORGNAME=#{orgname}
+            </if>
+            <if test="orgfullname!=null">
+                AND ORGFULLNAME=#{orgfullname}
+            </if>
+            <if test="parentid!=null">
+                AND PARENTID=#{parentid}
+            </if>
+            <if test="orgseq!=null">
+                AND ORGSEQ=#{orgseq}
+            </if>
+            <if test="sortid!=null">
+                AND SORTID=#{sortid}
+            </if>
+            <if test="belongorgid!=null">
+                AND BELONGORGID=#{belongorgid}
+            </if>
+        </where>
+    </select>
+
+    <select id="selectAll" resultMap="BaseResultMap" parameterType="net.hunanst.eduz100.api.sys.AcOrg">
+        select
+        <include refid="Base_Column_List"/>
+        from ac_org
+        <where>
+            <if test="belongorgid!=null">
+                BELONGORGID = #{belongorgid}
+            </if>
+        </where>
+        order by SORTID
+    </select>
+
+    <select id="selectByParentid" resultMap="BaseResultMap" parameterType="int">
+    	select t.*
+        ,(select count(*) from ac_org c2 where c2.parentid = t.id) as childcount
+    	from ac_org t
+        where parentid = #{value}
+  	</select>
+
+    <select id="selectOrgAndUserForFueluxTreeByParentid"
+            parameterType="java.lang.Integer" resultType="net.hunanst.eduz100.dto.FueluxTreeVo">
+      select
+        t.id
+        ,t.ORGNAME as name
+        ,(select count(*) from ac_org c2 where c2.parentid = t.id)+(select count(OPERID) as usercount from ac_oper_org_relation o2 where o2.ORGID = t.id) as childcount
+        ,'org' as datatype
+        ,t.sortid as sort
+      from ac_org t
+      where t.parentid = #{value}
+
+      union all
+
+      select
+        u.id
+        , u.username as name
+        , 0 as childcount
+        , 'user' as datatype
+        , 88888 as sort
+        from ac_oper_org_relation oo
+      left join ac_operator u on oo.operid = u.ID
+      where oo.orgid = #{value} and u.STATUS = 1
+
+      order by sort
+
+    </select>
+
+    <delete id="deleteAndChildren" parameterType="net.hunanst.eduz100.api.sys.AcOrg">
+        delete from ac_org
+        where orgseq like '${orgseq}-%'
+        <if test="id!=null">
+            or id = #{id}
+        </if>
+    </delete>
+
+    <update id="updateSeq" parameterType="net.hunanst.eduz100.api.sys.AcOrg">
+        update ac_org
+        set
+        <choose>
+            <when test="parentid==null or parentid==0">
+                orgseq = concat(#{id})
+            </when>
+            <otherwise>
+                orgseq = concat(orgseq, '-', #{id})
+            </otherwise>
+        </choose>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteRelationWithFunc" parameterType="net.hunanst.eduz100.api.sys.AcOrg">
+        delete from ac_org_func
+        where orgid in
+        (select id from ac_org
+        where orgseq like '${orgseq}-%'
+        <if test="id!=null">
+            or id = #{id}
+        </if>
+        )
+    </delete>
+
+    <!-- 根据userid（operid） 查询 组织机构 -->
+    <select id="selectByUserid" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select
+    o.*
+    from ac_oper_org_relation r
+    left join ac_org o on o.id = r.ORGID
+    where r.OPERID = #{userId} and o.id is not null
+  </select>
+
+    <update id="updateBelongOrg" parameterType="net.hunanst.eduz100.api.sys.AcOrg">
+  	update ac_org 
+	set BELONGORGID = #{id}
+	where id = #{id}
+  </update>
+
+    <select id="selectAllSchoolOrg" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from ac_org where BELONGORGID > 0 and BELONGORGID = ID
+    </select>
+
+    <select id="selectBatchByPrimaryKey" parameterType="list" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from ac_org
+        where ID in
+        (<foreach collection="list" item="item" separator=",">
+        #{item}
+    </foreach>)
+    </select>
+
+    <select id="checkOrgNameExisted" parameterType="net.hunanst.eduz100.api.sys.AcOrg" resultType="int">
+  	select count(1) 
+	from ac_org
+	where PARENTID = #{parentid} and ORGNAME = #{orgname}
+  </select>
+
+    <select id="getDataByOrgId" resultType="net.hunanst.eduz100.api.oa.Notification" parameterType="java.lang.Integer">
+    select nh.NOTIFICATIONID as id,rela.OPERID as userid
+    from t_oa_notification_history nh right join ac_oper_org_relation rela
+    on rela.ORGID=nh.RECIPIENT
+    where nh.NOTIFICATIONID is not null and rela.OPERID is not null and  nh.RECIPIENT =#{0}
+    group  by nh.NOTIFICATIONID,rela.OPERID
+    </select>
+
+    <delete id="deleteNotiByOrgId"  parameterType="java.lang.Integer">
+        delete from t_oa_notification_history where RECIPIENT=#{0}
+    </delete>
+</mapper>

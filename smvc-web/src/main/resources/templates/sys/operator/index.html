@@ -1,0 +1,307 @@
+#parse("/common/north.html")
+
+<script src="$contextPath/static/ace/js/jquery.gritter.min.js"></script>
+<script type="text/javascript">
+var ztree;
+var datatable;
+var beforeSelectedOrgId;
+var pwdValidForm;
+
+$(function(){
+	initValidateForm();
+	
+	datatable = $('#datatable').advancedDataTable({
+        "sAjaxSource": '$contextPath/sys/operator/list',
+        "aoColumns": [
+            { "mDataProp": function(source, type, val){
+                return '<label class="position-relative"><input type="checkbox" class="ace" /><span class="lbl"></span></label>';
+            	}, "sClass" : "center"
+            },
+            {"mDataProp": "usercode"},
+            {"mDataProp": "username"},
+            {"mDataProp": function(source, type, val){
+                var obj = $dict.getDictMapString($sysdicts, "operator_status");
+                return obj[source.status]!=null?obj[source.status]:source.status;
+            }},
+            {"mDataProp": function(source, type, val){
+                return '<div class="action-buttons">'
+                        +'<a class="purple"title="查看" data-rel="tooltip" data-placement="bottom" href="$contextPath/sys/operator/detail?operationtype=select&id='+source.id+'"><i class="ace-icon fa fa-search bigger-130"></i></a>&nbsp;&nbsp;'
+                        +'<a class="green"title="编辑" data-rel="tooltip" data-placement="bottom" href="$contextPath/sys/operator/detail?operationtype=update&id='+source.id+'"><i class="ace-icon fa fa-edit bigger-130"></i></a>&nbsp;&nbsp;'
+                        +'<a class="red"title="删除" data-rel="tooltip" data-placement="bottom" href="#" onclick="deletes(this)"><i class="ace-icon fa fa-trash-o bigger-130"></i></a>&nbsp;&nbsp;'
+                        +'<a class="pink"title="机构关联" data-rel="tooltip" data-placement="bottom" href="$contextPath/sys/operator/orgrelation?id='+source.id+'"><i class="ace-icon fa fa-cogs bigger-130"></i></a>&nbsp;&nbsp;'
+                        +'<a class="orange"title="角色关联" data-rel="tooltip" data-placement="bottom" href="$contextPath/sys/operator/rolerelation?id='+source.id+'"><i class="ace-icon fa fa-users bigger-130"></i></a>&nbsp;&nbsp;'
+                        +'<a class="orange"title="修改密码" data-rel="tooltip" data-placement="bottom" onclick="openPwdWin(this, '+source.id+',\''+source.usercode+'\')" href="#"><i class="ace-icon fa fa-key bigger-130"></i></a>&nbsp;&nbsp;'
+                        +'</div>';
+            }}
+        ],
+        "fnServerParams": function ( aoData ) {
+            if($("#condition").val()!='')
+                aoData.push({ "name": "condition", "value": $("#condition").val()});
+            if(ztree!=null && ztree.getSelectedNodes().length>0)
+            	 aoData.push({ "name": "orgid", "value": ztree.getSelectedNodes()[0].id});
+        },
+        "oLanguage": {
+            "sUrl": "$contextPath/static/ace/js/jquery.dataTables.lang.zh-CN.txt"
+        }
+    });
+	
+	ztree = $.fn.zTree.init($("#treeDemo"), {
+		async: {url: '$contextPath/sys/organization/list', enable: true},
+		view: {selectedMulti: false, showIcon: true},
+		data: {
+			simpleData: {enable: true, idKey: "id", pIdKey: "parentid"},
+			key: {name: "orgname"}
+		},
+		callback:{
+			onClick: function(event, treeId, treeNode, clickFlag) {
+				if(treeNode.id == beforeSelectedOrgId){
+					beforeSelectedOrgId = null;
+					ztree.cancelSelectedNode(treeNode);
+				}else{
+					beforeSelectedOrgId = treeNode.id;
+				}
+				getdata();
+			},
+			onAsyncSuccess: function (event, treeId, treeNode, msg){
+				ztree.expandNode(ztree.getNodeByTId(treeId+"_1"));
+			}
+		}
+	}, null);
+});
+
+function getdata(){
+    datatable.fnPageChange("first", true);
+}
+
+function selectAll(){
+	var treeNode = ztree.getSelectedNodes()[0];
+	if(treeNode) {
+		ztree.cancelSelectedNode(treeNode);
+	}
+	getdata();
+}
+
+function deletes(target){
+	var ids = [];
+    if(target){
+        ids.push(datatable.fnGetData($(target).closest('tr')).id);
+    }else{
+        $.each(datatable.getSelectedData(), function(i, n){
+            ids.push(n.id);
+        });
+    }
+    if(ids.length==0){
+        alert("请选择一条记录！");
+        return;
+    }
+	
+    if(confirm("确定删除该记录吗？")) {
+    	jQuery.ajax({
+            type:"post",
+            contentType: 'application/json',
+            url:"$contextPath/sys/operator/deletes",
+            data:JSON.stringify(ids),
+            dataType: "json",
+            success:function(data){
+                getdata();
+            }
+        });
+    }
+}
+
+function initValidateForm(){
+	pwdValidForm = $('#validation-form').validate({
+		errorElement: 'div',
+		errorClass: 'help-block',
+		focusInvalid: false,
+		rules: {
+			password: {
+				required: true,
+				minlength: 6,
+				maxlength: 20
+			},
+			confirm_password: {
+				required: true,
+				minlength: 6,
+				maxlength: 20,
+				equalTo: "#password"
+			}
+		},
+		messages: {
+			password: {
+				required: "请输入密码",
+				minlength: "密码长度不能少于6个字符",
+				maxlength: "密码长度不能多于20个字符"
+			},
+			confirm_password: {
+				required: "请输入确认密码",
+				minlength: "确认密码长度不能少于6个字符",
+				maxlength: "确认密码长度不能多于20个字符",
+				equalTo: "密码和确认密码不一致"
+			}
+		},
+		highlight: function (e) {
+			$(e).closest('.form-group').removeClass('has-info').addClass('has-error');
+		},
+		success: function (e) {
+			$(e).closest('.form-group').removeClass('has-error');//.addClass('has-info');
+			$(e).remove();
+		},
+		errorPlacement: function (error, element) {
+			element.closest("div.form-group").append(error);
+		}
+	});
+}
+
+function openPwdWin(target, id, username){
+	$('#validation-form')[0].reset();
+	pwdValidForm.resetForm();
+	$('#validation-form .form-group').removeClass('has-error').addClass('has-info');
+	$('#id').val(id);
+	$('#myModal .modal-title').html('修改“'+username+'”的密码');
+	$("#myModal").modal("show");
+}
+
+function savePwd(target){
+	if($('#validation-form').valid()){
+		jQuery.ajax({
+            type:"post",
+            url:"$contextPath/sys/operator/changePassword",
+            data:{
+            	id: $("#id").val(),
+            	password: $("#password").val()
+            },
+            dataType: "json",
+            success:function(data){
+            	if(data.data>0){
+            		myGritterSuccess("修改密码成功！");
+            	}else{
+            		myGritterError("修改密码失败！");
+            	}
+            	$("#myModal").modal("hide");
+            }
+        });
+	}
+}
+</script>
+
+<div class="page-header">
+    <h1 class="page-header-h1"> 操作员管理
+        <small>
+            <i class="ace-icon fa fa-angle-double-right"></i> 管理操作员信息
+        </small>
+    </h1>
+</div>
+
+<div class="row">
+	<div class="col-sm-4" style="border-right: 1px dotted rgb(226, 226, 226); min-height: 380px;">
+		<div class="widget-box transparent ui-sortable-handle">
+			<div class="widget-header">
+				<h4 class="widget-title">机构树</h4>
+				<div class="widget-toolbar">
+		            <a href="#" data-action="fullscreen"><i class="ace-icon fa fa-expand"></i>&nbsp;全屏</a>
+		            &nbsp;&nbsp;
+		            <a href="#" data-action="collapse"><i class="ace-icon fa fa-chevron-up"></i>&nbsp;折叠</a>
+		        </div>
+		        &nbsp;&nbsp;
+		        <div class="widget-toolbar no-border">
+		        	<button class="btn btn-xs btn-light bigger" onclick='selectAll()'>
+						<i class="ace-icon glyphicon glyphicon-ok"></i> 全选
+					</button>
+				</div>
+			</div>
+			<div class="widget-body">
+				<div class="widget-main padding-8">
+					<ul id="treeDemo" class="ztree"></ul>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div class="col-sm-8">
+		<div class="widget-box transparent ui-sortable-handle">
+		    <div class="widget-header">
+		        <h5 class="widget-title">操作员列表</h5>
+		        <div class="widget-toolbar">
+		            <div class="action-buttons inline">
+		                <a class="pink" href="$contextPath/sys/operator/detail?operationtype=insert&id=0"><i class="ace-icon fa fa-plus-square-o bigger-130"></i>&nbsp;添加</a>
+		                &nbsp;&nbsp;
+		                <a class="red" href="#" onclick="deletes()"><i class="ace-icon fa fa-trash-o bigger-130"></i>&nbsp;批量删除</a>
+		            </div>
+		            &nbsp;&nbsp;
+		            <a href="#" data-action="fullscreen"><i class="ace-icon fa fa-expand"></i>&nbsp;全屏</a>
+		            &nbsp;&nbsp;
+		            <a href="#" data-action="collapse"><i class="ace-icon fa fa-chevron-up"></i>&nbsp;折叠</a>
+		        </div>
+		        &nbsp;&nbsp;
+		        <div class="widget-toolbar no-border" >
+					<input type="text" id="condition" onchange="getdata()" class="form-control search-query inline" style="width: 150px;" placeholder="请输入关键字">
+			        <span class="input-group-btn inline" style="margin-left: -3px;">
+			            <button id="btnselect" onclick="getdata()" type="button" class="btn btn-purple btn-sm">
+			                <i class="ace-icon fa fa-search icon-on-right bigger-110"></i>
+			            </button>
+			        </span>
+				</div>
+		    </div>
+		
+		    <div class="widget-body">
+		        <div class="widget-main">
+			        <table class="table table-striped table-hover" id="datatable">
+			            <thead>
+			                <tr>
+			                    <th class="center">
+			                        <label class="position-relative">
+			                            <input type="checkbox" class="ace" />
+			                            <span class="lbl"></span>
+			                        </label>
+			                    </th>
+			                    <th>操作员账号</th>
+			                    <th>操作员姓名</th>
+			                    <th>操作员状态</th>
+			                    <th>操作</th>
+			                </tr>
+			            </thead>
+			        </table>
+		        </div>
+		    </div>
+		</div>
+	</div>
+	
+	<div class="modal fade" id="myModal" role="dialog" data-backdrop="static">
+	  <div class="modal-dialog">
+	    <div class="modal-content">
+	      <div class="modal-header">
+	        <button type="button" class="close" data-dismiss="modal">
+	        	<span>&times;</span>
+	        </button>
+	        <h4 class="modal-title">&nbsp;</h4>
+	      </div>
+	      <div class="modal-body">
+	        <form class="form-horizontal" id="validation-form" name="validation-form" method="post">
+		        <input name="id" id="id" type="hidden">
+		        
+		        <div class="form-group">
+		            <label class="col-sm-2 control-label no-padding-right"> 密码 </label>
+		            <div class="col-sm-6">
+		                <input type="password" id="password" name="password" class="form-control" />
+		            </div>
+		        </div>
+		
+		        <div class="form-group">
+		            <label class="col-sm-2 control-label no-padding-right"> 确认密码 </label>
+		            <div class="col-sm-6">
+		                <input type="password" id="confirm_password" name="confirm_password" class="form-control" />
+		            </div>
+		        </div>
+		     </form>
+	      </div>
+	      <div class="modal-footer">
+	        <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+	        <button type="button" class="btn btn-primary" onclick="savePwd(this)">确定</button>
+	      </div>
+	    </div>
+	  </div>
+	</div>
+</div>
+
+#parse("/common/south.html")

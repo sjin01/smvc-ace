@@ -1,0 +1,83 @@
+#if(!$!{abs} || $!{abs.size()}==0)
+暂无数据！
+#else
+
+<div class="clearfix">
+    #foreach($ab in $!abs)
+
+        <div class="itemdiv memberdiv">
+            <div class="user">
+                #if(!$ab.imgurl)
+                    <img src="$contextPath/static/ace/avatars/avatar2.png">
+                #else
+                    $!ab.imgurl.size()
+                    <img style="width:32px; height:32px;" src="$!{nginx_filepath}$!ab.imgurl">
+                #end
+            </div>
+
+            <div class="body">
+                <div class="name">
+                    <input type="hidden" name="userid" value="$!ab.operid">
+                    <input type="hidden" name="phone" value="$!ab.phone">
+                    <span>$!ab.name</span>
+                    <span>$!ab.phone</span>
+                </div>
+
+                <!--<div class="time">
+                    <i class="ace-icon fa fa-clock-o"></i>
+                    <span class="green">20 min</span>
+                </div>-->
+                #if(!$!ab.operid)
+                    <div style="margin-top: 15%;">
+                        <span class="label label-warning label-sm arrowed-in">&nbsp;发送</span>
+
+                    </div>
+                #else
+                    <div style="margin-top: 15%;">
+                        <span class="label label-success label-sm arrowed-in">&nbsp;发送</span>
+
+                        <div class="inline position-relative" style="margin-left: -4%;">
+                            <button class="btn btn-minier btn-yellow btn-no-border dropdown-toggle"
+                                    data-toggle="dropdown" data-position="auto">
+                                <i class="ace-icon fa fa-angle-down icon-only bigger-120"></i>
+                            </button>
+
+                            <ul class="dropdown-menu dropdown-only-icon dropdown-yellow dropdown-menu-right dropdown-caret dropdown-close">
+                                <li>
+                                    <a href="javscript:void(0);" onclick="send('$!ab.operid','$!ab.name',2,'$!ab.imgurl');"
+                                       data-placement="bottom" class="tooltip-success" data-rel="tooltip" title="短消息"
+                                       data-original-title="Approve">
+                                <span class="green">
+                                    <i class="ace-icon fa fa-comment"></i>
+                                    短消息
+                                </span>
+                                    </a>
+                                </li>
+
+                                <li>
+                                    <a href="javscript:void(0);" onclick="send('$!ab.operid','$!ab.name',1,'$!ab.imgurl');"
+                                       data-placement="bottom" class="tooltip-warning" data-rel="tooltip" title="邮箱"
+                                       data-original-title="Reject">
+                                <span class="orange">
+                                    <i class="ace-icon glyphicon glyphicon-envelope"></i>
+                                    邮箱
+                                </span>
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                #end
+            </div>
+        </div>
+    #end
+</div>
+<div>
+    <a href="$contextPath/oa/addressBook" style="float: right;padding-right: 30px;">更多&gt;&gt;</a>
+
+    <div class="space-18"></div>
+</div>
+
+#end
+
+

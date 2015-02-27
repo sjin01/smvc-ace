@@ -1,0 +1,118 @@
+<div id="dialog-message">
+	<div style="height: 251px; overflow: auto;" id="onLineMessage">
+		<!-- <div>
+						<p>
+							<img class="nav-user-photo" alt="Jason's Photo"
+								src="$ contextPath/static/ace/avatars/user.jpg"> 今天天气真好！
+						</p>
+					</div>
+					<div align="left">
+						<p align="right">
+							是啊<img class="nav-user-photo" alt="Jason's Photo"
+								src="$ contextPath/static/ace/avatars/user.jpg">
+						</p>
+					</div> -->
+	</div>
+	<div class="hr hr-12 hr-double"></div>
+	<div>
+		<input type="hidden" name="receiveId" id="receiveId" />
+		<textarea id="messageContent" style="height: 35%; width: 98%"
+			maxlength="256" onkeydown="onMessageSubmit();" class="limited"></textarea>
+	</div>
+
+
+</div>
+
+<script type="text/javascript">
+	$(function() {
+		getMessageByID('$!{receiveId}', '$!{img}');
+
+		$('textarea.limited').inputlimiter({
+			remText : '您还能输入 %n 个字符，',
+			limitText : '最多能输入 : %n 字符。'
+		});
+	})
+
+	function getMessageByID(id, img) {
+		// console.log(img);
+		$("#onLineMessage").html("");
+
+		/*if(img && img !='' && img !='null') {
+		    img = '${ nginx_filepath}' + img;
+		}else{
+		    img = '$ contextPath/static/ace/avatars/avatar2.png';
+		}*/
+
+		$
+				.ajax({
+					url : "$contextPath/oa/message/getMessageByID?id=" + id,
+					dataType : 'json',
+					success : function(data) {
+						if (data && data.length > 0) {
+							var ops = "";
+							for ( var tab in data) {
+								if (data[tab].state == 1) {
+									var myimg = ''; // 用户自己头像
+									if ('$!loginUser.imgurl'
+											&& '$!loginUser.imgurl' != '') {
+										myimg = '${nginx_filepath}$!{loginUser.imgurl}';
+									} else {
+										myimg = '$contextPath/static/ace/avatars/avatar2.png';
+									}
+									ops = '<div align="left"><p  align="right">'
+											+ data[tab].content
+											+ '<img class="nav-user-photo" alt="" style="width:40px; height:40px;" src="'+myimg+'">'
+											+ '</p></div>';
+								} else {
+									ops = '<div><p>'
+											+ '<img class="nav-user-photo" alt="" style="width:40px; height:40px;" src="'+img+'">'
+											+ data[tab].content + '</p></div>';
+								}
+								$("#onLineMessage").prepend(ops);
+							}
+							//$("#onLineMessage").append(ops);
+							var mai = document.getElementById('onLineMessage');
+							mai.scrollTop = mai.scrollHeight;
+							t = window.setInterval('getUnreadMessageByID()',
+									2000);
+						}
+					}
+				});
+	}
+
+	function onMessageSubmit() {
+		var evt = evt ? evt : (window.event ? window.event : null);//兼容IE和FF
+		if (evt.keyCode == 13) {
+			/*sendMessage('$!{receiveId}','$!{name}','$!{img}');*/
+			if (window.event) {
+				window.event.returnValue = false;
+			} else {
+				e.preventDefault();//for firefox
+			}
+			$("#teatui").click();
+		}
+	}
+
+	function getUnreadMessageByID(img) {
+		var id = $("#receiveId").val();
+		$
+				.ajax({
+					url : "$contextPath/oa/message/getUnreadMessageByID?id="
+							+ id,
+					dataType : 'json',
+					success : function(data) {
+						if (data && data.length > 0) {
+							var ops = "";
+							for ( var tab in data) {
+								ops = '<div><p>'
+										+ '<img class="nav-user-photo" alt="" style="width:40px; height:40px;" src="'+img+'">'
+										+ data[tab].content + '</p></div>';
+							}
+							$("#onLineMessage").append(ops);
+							var mai = document.getElementById('onLineMessage');
+							mai.scrollTop = mai.scrollHeight;
+						}
+					}
+				});
+	}
+</script>

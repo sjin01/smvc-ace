@@ -1,0 +1,124 @@
+#parse("/common/north.html")
+
+<script type="text/javascript">
+var ztree;
+
+$(function(){
+	ztree = $.fn.zTree.init($("#treeDemo"), {
+		async: {url: '$contextPath/sys/organization/list', enable: true},
+		view: {selectedMulti: false, showIcon: true},
+		data: {
+			simpleData: {enable: true, idKey: "id", pIdKey: "parentid"},
+			key: {name: "orgname"}
+		},
+		check: {enable: true, chkboxType: {"Y": "", "N": ""}},
+		callback:{
+			onCheck: function(event, treeId, treeNode){
+				if(treeNode.checked){
+					$("#orgul").append('<li orgid="'+treeNode.id+'" class="dd-item dd2-item"><div class="dd2-content">'+treeNode.orgname+'</div></li>');
+				}else{
+					$("#orgul li[orgid='"+treeNode.id+"']").remove();
+				}
+			},
+			onAsyncSuccess: function (event, treeId, treeNode, msg){
+				ztree.expandAll(true);
+				jQuery.ajax({
+					type:"post",
+					url:"$contextPath/sys/operator/getorgrelation",
+					data:{ operid: $!model.id },
+					dataType: "json",
+					success:function(data){
+						var arr = data.data;
+						for(var i=0; i<arr.length; i++){
+							$("#"+ztree.getNodeByParam("id", arr[i].orgid, null).tId+"_check").click();
+						}
+					}
+				});
+			}
+		}
+	}, null);
+});
+
+function save(target){
+	var selectednodes = ztree.getCheckedNodes(true);
+	if(selectednodes.length==0){
+		var bl = confirm("没有选择机构，之前关联的机构将被删除！");
+		if(!bl) return;
+	}
+	
+	$(target).attr("disabled", "disabled");
+	var relations = [{ operid: $!model.id }];
+	$.each(selectednodes, function(i, n){
+		relations.push({operid: $!model.id, orgid: n.id});
+    });
+	
+	jQuery.ajax({
+		type:"post",
+		url:"$contextPath/sys/operator/saveorgrelation",
+		contentType: 'application/json',
+		data:JSON.stringify(relations),
+		dataType: "json",
+		success:function(data){
+			location.href = "$contextPath/sys/operator";
+		}
+	});
+}
+</script>
+
+<div class="page-header">
+    <h1 class="page-header-h1">用户管理
+        <small>
+            <i class="ace-icon fa fa-angle-double-right"></i> 为 “$model.username” 设置机构
+        </small>
+    </h1>
+</div>
+
+<div class="row">
+	<div class="col-sm-5" style="border-right: 1px dotted rgb(226, 226, 226); min-height: 380px;">
+		<div class="widget-box transparent ui-sortable-handle">
+			<div class="widget-header">
+				<h4 class="widget-title">机构树</h4>
+				<div class="widget-toolbar">
+		            <a href="#" data-action="fullscreen"><i class="ace-icon fa fa-expand"></i>&nbsp;全屏</a>
+		            &nbsp;&nbsp;
+		            <a href="#" data-action="collapse"><i class="ace-icon fa fa-chevron-up"></i>&nbsp;折叠</a>
+		        </div>
+			</div>
+			<div class="widget-body">
+				<div class="widget-main padding-8">
+					<ul id="treeDemo" class="ztree"></ul>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div class="col-sm-7">
+		<div class="widget-box transparent ui-sortable-handle">
+		    <div class="widget-header">
+		        <h5 class="widget-title"> 已关联的机构 </h5>
+		        <div class="widget-toolbar">
+		            <a href="#" data-action="fullscreen"><i class="ace-icon fa fa-expand"></i>&nbsp;全屏</a>
+		            &nbsp;&nbsp;
+		            <a href="#" data-action="collapse"><i class="ace-icon fa fa-chevron-up"></i>&nbsp;折叠</a>
+		        </div>
+		        <div class="widget-toolbar no-border">
+		        	<button class="btn btn-xs btn-light bigger" onclick='location.href="$contextPath/sys/operator"'>
+						<i class="ace-icon fa fa-arrow-left"></i> 返回
+					</button>
+					&nbsp;&nbsp;
+					<button class="btn btn-xs btn-info bigger" onclick="save(this)">
+						<i class="ace-icon fa fa-check"></i> 保存
+					</button>
+				</div>
+		    </div>
+		
+		    <div class="widget-body">
+		        <div class="widget-main">
+					<ol class="dd-list" id="orgul"></ol>
+		        </div>
+		    </div>
+		</div>
+	</div>
+</div>
+
+#parse("/common/south.html")

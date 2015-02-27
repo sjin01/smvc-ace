@@ -1,0 +1,141 @@
+#parse("/common/north.html")
+
+<script type="text/javascript">
+var ztree;
+
+$(function(){
+	ztree = $.fn.zTree.init($("#treeDemo"), {
+		async: {url: '$contextPath/sys/role/listAuth', 
+			enable: true,
+			otherParam: {"belongorgid": "$!model.belongorgid"}
+		},
+		view: {selectedMulti: false, showIcon: true},
+		check: {enable: true, chkboxType: { "Y" : "ps", "N" : "s" }},
+		data: {
+			simpleData: {enable: true, idKey: "id", pIdKey: "parentid"},
+			key: {name: "funcname"}
+		},
+		callback:{
+			onClick: function(event, treeId, treeNode, clickFlag) {
+				
+			},
+			onAsyncSuccess: function (event, treeId, treeNode, msg){
+				var arr = ztree.transformToArray(ztree.getNodes());
+				for(i in arr){
+					if(arr[i].functype == '1') {
+						arr[i].iconSkin = 'icon07';
+					} else if(arr[i].functype == '2') {
+						arr[i].iconSkin = 'icon08';
+					} else {
+						arr[i].iconSkin = 'icon00';
+					}
+				}
+				
+				var rootNode = ztree.getNodeByTId(treeId+"_1");
+				ztree.updateNode(rootNode);
+				ztree.expandAll(true);
+				
+				initData();
+			}
+		}
+	}, null);
+});
+
+function initData(){
+	jQuery.ajax({
+		type:"get",
+		url:"$contextPath/sys/role/getfuncrelation",
+		data:{roleid: $!model.id},
+		dataType: "json",
+		success:function(data){
+			var arr = data.data;
+			for(var i in arr){
+				var node = ztree.getNodeByParam("id", arr[i].funcid, null);
+				node.checked = true;
+				ztree.updateNode(node, false);
+			}
+		}
+	});
+}
+
+function save(target){
+	var selectednodes = ztree.getCheckedNodes(true);
+	var relations = [{ roleid: $!model.id }];
+	$.each(selectednodes, function(i, n){
+		relations.push({roleid: $!model.id, funcid: n.id});
+    });
+	
+	if(relations.length<=1){
+		var bl = confirm("没有选择功能，之前关联的功能将被删除！");
+		if(!bl) return;
+	}
+	
+	$(target).attr("disabled", "disabled");
+	
+	jQuery.ajax({
+		type:"post",
+		url:"$contextPath/sys/role/savefuncrelation",
+		contentType: 'application/json',
+		data:JSON.stringify(relations),
+		dataType: "json",
+		success:function(data){
+			location.href = "$contextPath/sys/role";
+		}
+	});
+}
+</script>
+
+<div class="page-header">
+    <h1 class="page-header-h1"> 角色管理
+        <small>
+            <i class="ace-icon fa fa-angle-double-right"></i> 为<span>$!model.rolename</span>设置功能
+        </small>
+    </h1>
+</div>
+
+<div class="row">
+	<div class="col-sm-2" style="border-right: 1px dotted rgb(226, 226, 226); min-height: 380px;">
+		<div class="widget-box transparent ui-sortable-handle">
+			<div class="widget-header">
+				<h4 class="widget-title">说明</h4>
+			</div>
+			<div class="widget-body">
+				<div class="widget-main padding-8">
+					<p><img src="$contextPath/static/plugins/zTree/css/zTreeStyle/img/diy/0.png"/> 表示 普通节点</p>
+					<p><img src="$contextPath/static/plugins/zTree/css/zTreeStyle/img/diy/7.png"/> 表示 菜单</p>
+					<p><img src="$contextPath/static/plugins/zTree/css/zTreeStyle/img/diy/8.png"/> 表示 功能</p>
+				</div>
+			</div>
+		</div>
+	</div>
+	
+	<div class="col-sm-10" style="border-left: 1px dotted rgb(226, 226, 226); min-height: 380px;">
+		<div class="widget-box transparent ui-sortable-handle">
+			<div class="widget-header">
+				<h4 class="widget-title">功能菜单树</h4>
+				<div class="widget-toolbar">
+		            <a href="#" data-action="fullscreen"><i class="ace-icon fa fa-expand"></i>&nbsp;全屏</a>
+		            &nbsp;&nbsp;
+		            <a href="#" data-action="collapse"><i class="ace-icon fa fa-chevron-up"></i>&nbsp;折叠</a>
+		        </div>
+		        &nbsp;&nbsp;
+		        <div class="widget-toolbar no-border">
+		        	<button class="btn btn-xs btn-light bigger" onclick='location.href="$contextPath/sys/role"'>
+						<i class="ace-icon fa fa-arrow-left"></i> 返回
+					</button>
+					&nbsp;&nbsp;
+					<button class="btn btn-xs btn-info bigger" onclick="save(this)">
+						<i class="ace-icon fa fa-check"></i> 保存
+					</button>
+				</div>
+			</div>
+			<div class="widget-body">
+				<div class="widget-main padding-8">
+					<ul id="treeDemo" class="ztree"></ul>
+				</div>
+			</div>
+		</div>
+	</div>	
+</div>
+
+#parse("/common/south.html")

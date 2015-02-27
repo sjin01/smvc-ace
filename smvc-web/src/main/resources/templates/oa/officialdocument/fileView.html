@@ -1,0 +1,177 @@
+#parse("/common/north.html")
+
+#*<a href="javascript:zhuanma123123();"  />转码</a>*#
+<div class="page-header">
+    <h1>
+        文件预览
+    #*<small>
+        <i class="ace-icon fa fa-angle-double-right"></i>
+    </small>*#
+    </h1>
+</div>
+
+<div class="col-sm-12">
+
+    <dl style="padding-left: 50px; padding-right: 50px;">
+        <dt></dt>
+        <dd>
+            <h4>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;$!{file.filename}$!{filename}</h4>
+            <hr/>
+        </dd>
+    </dl>
+
+    <div class="row">
+        <div class="col-xs-9">
+            <div style="margin-left: 80px;margin-top: 3px;">
+                <div id="swf_play_div"></div>
+            </div>
+        </div>
+        <div class="col-xs-3">
+            <div class="widget-box" style="margin-right: 80px;">
+                <div class="widget-header widget-header-flat">
+                    <h4 class="widget-title"> 文件信息</h4>
+                </div>
+
+                <div class="widget-body">
+                    <div class="widget-main">
+                        <ul class="list-unstyled spaced">
+                            <li>
+                                <strong>格式：</strong> <span id="suffix_div">$!{file.suffix}</span>
+                            </li>
+                            <li>
+                                <strong>大小：</strong> <span id="size_div">$!{file.size}$!{filesize}</span>
+                            </li>
+                            <p></p>
+                            #if($!{filepath} && $!{filepath}!='')
+                                尚未保存！
+                            #else
+                                <li>
+                                    <strong>上传时间：</strong> $!{file.uploaddateStr}
+                                </li>
+                                <li>
+                                    <strong>上传人：</strong> $!{username}
+                                </li>
+                                <li>
+                                    <strong>上传人所属部门：</strong> $!{orgname} #*#if(!$!{orgname} || $!{orgname}=='') 尚未发布 #end*#
+
+                                </li>
+                            #end
+                        </ul>
+                        <p></p>
+                        #if(!$!{filepath} || $!{filepath}=='')
+                            #if($!{file.sealpath} && $!{file.sealpath}!='')
+                                <button class="btn btn-info btn-xs width-100"
+                                        onclick="location.href='$!{nginx_filepath}$!{file.sealpath}'">
+                                    <i class="ace-icon fa fa-download "></i> 下 载
+                                </button>
+                            #else
+                                <button class="btn btn-info btn-xs width-100"
+                                        onclick="location.href='$!{nginx_filepath}$!{file.filepath}'">
+                                    <i class="ace-icon fa fa-download "></i> 下 载
+                                </button>
+
+                            #end
+                        #end
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div><!-- /.col -->
+
+
+<br style="clear:both;">
+
+
+<script type="text/javascript" src="$!{contextPath}/static/plugins/flexpaper/js/swfobject.js"></script>
+<script type="text/javascript" src="$!{contextPath}/static/plugins/flexpaper/js/flexpaper.js"></script>
+<script type="text/javascript" src="$!{contextPath}/static/plugins/flexpaper/js/flexpaper_handlers.js"></script>
+
+<script type="text/javascript">
+
+    function zhuanma123123() {
+        $.ajax({
+            type: 'POST',
+            async: true,
+            url: '$!{nginx_uploadeduz100tools}?file_url=/eos/application/octet-stream/20150109/1e7273157f5af68b5ae881d19beafe99.doc&opr_id=2',
+            cache: false,
+            dataType: 'json',
+            success: function (data) {
+                alert("文档转格式成功");
+            },
+            error: function () {
+            }
+        })
+    }
+
+    var swfFile;
+    function initFlexPaper(filepath) {
+        if (!filepath) return false;
+        var params = {
+            SwfFile: '$!{nginx_filepath}' + filepath,//"$! {context_path}/js/plug/flexpaper/docs/Paper.pdf.swf",
+
+            Scale: 0.6,
+            ZoomTransition: 'easeOut',
+            ZoomTime: 0.5,
+            ZoomInterval: 0.2,
+            FitPageOnLoad: true,
+            FitWidthOnLoad: true,
+            FullScreenAsMaxWindow: false,
+            ProgressiveLoading: false,
+            MinZoomSize: 0.2,
+            MaxZoomSize: 5,
+            SearchMatchAll: false,
+            InitViewMode: 'Portrait',
+            RenderingOrder: 'flash',
+            StartAtPage: '',
+
+            ViewModeToolsVisible: true,
+            ZoomToolsVisible: true,
+            NavToolsVisible: true,
+            CursorToolsVisible: true,
+            SearchToolsVisible: true,
+            WMode: 'window',
+            localeChain: 'zh_CN'
+        }
+        swfobject.embedSWF("$!{contextPath}/static/plugins/flexpaper/FlexPaperViewer.swf",
+                "swf_play_div", "100%", "829", "9.0.0", "$!{contextPath}/plugins/static/flexpaper/js/expressInstall.swf", params)
+    }
+
+    var swf_path;
+    var file_path;
+    function init() {
+        if ('$!{file.sealpath}') {
+            file_path = '$!{file.sealpath}';
+        } else {
+            file_path = '$!{file.filepath}';
+        }
+
+        if ('$!{filepath}') {
+            file_path = '$!{filepath}';
+            $('#suffix_div').html(file_path.substring(file_path.lastIndexOf('.') + 1, file_path.length));
+        }
+
+        swf_path = file_path.substring(0, file_path.lastIndexOf('.')) + '.swf';
+//        console.log(swf_path);
+
+        var size_bt = parseInt( $('#size_div').html() );
+
+        var size_kb = parseFloat( size_bt/1024);
+
+        if(size_kb > 1024){
+            var size_m = parseFloat( size_kb/1024 );
+            $('#size_div').html( size_m.toFixed(2) + ' M' );
+        }else{
+            $('#size_div').html( size_kb.toFixed(2) + ' KB' );
+        }
+
+    }
+
+    $(function () {
+        init();
+        initFlexPaper(swf_path);
+    })
+</script>
+
+
+#parse("/common/south.html")

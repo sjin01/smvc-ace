@@ -1,0 +1,320 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="net.hunanst.eduz100.api.sys.AcOperator">
+    <resultMap id="BaseResultMap" type="net.hunanst.eduz100.api.sys.AcOperator">
+        <id column="ID" property="id" jdbcType="INTEGER"/>
+        <result column="USERCODE" property="usercode" jdbcType="VARCHAR"/>
+        <result column="USERNAME" property="username" jdbcType="VARCHAR"/>
+        <result column="PASSWORD" property="password" jdbcType="VARCHAR"/>
+        <result column="STATUS" property="status" jdbcType="VARCHAR"/>
+        <result column="AUTHMODE" property="authmode" jdbcType="VARCHAR"/>
+        <result column="BINDUSERCODE" property="bindusercode" jdbcType="VARCHAR"/>
+        <result column="TELNUMBER" property="telnumber" jdbcType="VARCHAR"/>
+        <result column="EMAIL" property="email" jdbcType="VARCHAR"/>
+        <result column="CREATER" property="creater" jdbcType="VARCHAR"/>
+        <result column="CREATETIME" property="createtime" jdbcType="TIMESTAMP"/>
+        <result column="BELONGORGID" property="belongorgid" jdbcType="INTEGER"/>
+        <result column="IMGURL" property="imgurl" jdbcType="VARCHAR"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+    ID, USERCODE, USERNAME, PASSWORD, STATUS, AUTHMODE, BINDUSERCODE, TELNUMBER, EMAIL, 
+    CREATER, CREATETIME, BELONGORGID,IMGURL
+  </sql>
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+        select
+        <include refid="Base_Column_List"/>
+        from ac_operator
+        where ID = #{value}
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from ac_operator
+    where ID = #{value}
+  </delete>
+    <insert id="insert" parameterType="net.hunanst.eduz100.api.sys.AcOperator">
+        <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER">
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+        insert into ac_operator (USERCODE, USERNAME, PASSWORD,
+        STATUS, AUTHMODE, BINDUSERCODE,
+        TELNUMBER, EMAIL, CREATER,
+        CREATETIME, BELONGORGID,IMGURL)
+        values (#{usercode,jdbcType=VARCHAR}, #{username,jdbcType=VARCHAR}, #{password,jdbcType=VARCHAR},
+        #{status,jdbcType=VARCHAR}, #{authmode,jdbcType=VARCHAR}, #{bindusercode,jdbcType=VARCHAR},
+        #{telnumber,jdbcType=VARCHAR}, #{email,jdbcType=VARCHAR}, #{creater,jdbcType=VARCHAR},
+        #{createtime,jdbcType=TIMESTAMP}, #{belongorgid,jdbcType=INTEGER}, #{imgurl,jdbcType=VARCHAR})
+    </insert>
+    <insert id="insertSelective" parameterType="net.hunanst.eduz100.api.sys.AcOperator">
+        <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER">
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+        insert into ac_operator
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="usercode != null">
+                USERCODE,
+            </if>
+            <if test="username != null">
+                USERNAME,
+            </if>
+            <if test="password != null">
+                PASSWORD,
+            </if>
+            <if test="status != null">
+                STATUS,
+            </if>
+            <if test="authmode != null">
+                AUTHMODE,
+            </if>
+            <if test="bindusercode != null">
+                BINDUSERCODE,
+            </if>
+            <if test="telnumber != null">
+                TELNUMBER,
+            </if>
+            <if test="email != null">
+                EMAIL,
+            </if>
+            <if test="creater != null">
+                CREATER,
+            </if>
+            <if test="createtime != null">
+                CREATETIME,
+            </if>
+            <if test="belongorgid != null">
+                BELONGORGID,
+            </if>
+            <if test="imgurl != null">
+                IMGURL,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="usercode != null">
+                #{usercode,jdbcType=VARCHAR},
+            </if>
+            <if test="username != null">
+                #{username,jdbcType=VARCHAR},
+            </if>
+            <if test="password != null">
+                #{password,jdbcType=VARCHAR},
+            </if>
+            <if test="status != null">
+                #{status,jdbcType=VARCHAR},
+            </if>
+            <if test="authmode != null">
+                #{authmode,jdbcType=VARCHAR},
+            </if>
+            <if test="bindusercode != null">
+                #{bindusercode,jdbcType=VARCHAR},
+            </if>
+            <if test="telnumber != null">
+                #{telnumber,jdbcType=VARCHAR},
+            </if>
+            <if test="email != null">
+                #{email,jdbcType=VARCHAR},
+            </if>
+            <if test="creater != null">
+                #{creater,jdbcType=VARCHAR},
+            </if>
+            <if test="createtime != null">
+                #{createtime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="belongorgid != null">
+                #{belongorgid,jdbcType=INTEGER},
+            </if>
+            <if test="imgurl != null">
+                #{imgurl,jdbcType=VARCHAR},
+            </if>
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective" parameterType="net.hunanst.eduz100.api.sys.AcOperator">
+        update ac_operator
+        <set>
+            <if test="usercode != null">
+                USERCODE = #{usercode,jdbcType=VARCHAR},
+            </if>
+            <if test="username != null">
+                USERNAME = #{username,jdbcType=VARCHAR},
+            </if>
+            <if test="password != null">
+                PASSWORD = #{password,jdbcType=VARCHAR},
+            </if>
+            <if test="status != null">
+                STATUS = #{status,jdbcType=VARCHAR},
+            </if>
+            <if test="authmode != null">
+                AUTHMODE = #{authmode,jdbcType=VARCHAR},
+            </if>
+            <if test="bindusercode != null">
+                BINDUSERCODE = #{bindusercode,jdbcType=VARCHAR},
+            </if>
+            <if test="telnumber != null">
+                TELNUMBER = #{telnumber,jdbcType=VARCHAR},
+            </if>
+            <if test="email != null">
+                EMAIL = #{email,jdbcType=VARCHAR},
+            </if>
+            <if test="creater != null">
+                CREATER = #{creater,jdbcType=VARCHAR},
+            </if>
+            <if test="createtime != null">
+                CREATETIME = #{createtime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="belongorgid != null">
+                BELONGORGID = #{belongorgid,jdbcType=INTEGER},
+            </if>
+            <if test="imgurl != null and imgurl !=''">
+                IMGURL = #{imgurl,jdbcType=VARCHAR},
+            </if>
+        </set>
+        where ID = #{id,jdbcType=INTEGER}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="net.hunanst.eduz100.api.sys.AcOperator">
+    update ac_operator
+    set USERCODE = #{usercode,jdbcType=VARCHAR},
+      USERNAME = #{username,jdbcType=VARCHAR},
+      PASSWORD = #{password,jdbcType=VARCHAR},
+      STATUS = #{status,jdbcType=VARCHAR},
+      AUTHMODE = #{authmode,jdbcType=VARCHAR},
+      BINDUSERCODE = #{bindusercode,jdbcType=VARCHAR},
+      TELNUMBER = #{telnumber,jdbcType=VARCHAR},
+      EMAIL = #{email,jdbcType=VARCHAR},
+      CREATER = #{creater,jdbcType=VARCHAR},
+      CREATETIME = #{createtime,jdbcType=TIMESTAMP},
+      BELONGORGID = #{belongorgid,jdbcType=INTEGER},
+      IMGURL = #{imgurl,jdbcType=VARCHAR}
+    where ID = #{id,jdbcType=INTEGER}
+  </update>
+    <select id="select_page" resultMap="BaseResultMap" parameterType="net.hunanst.eduz100.api.sys.AcOperator">
+        select
+        <include refid="Base_Column_List"/>
+        from ac_operator
+        <where>
+            <if test="id!=null">
+                AND ID=#{id}
+            </if>
+            <if test="usercode!=null">
+                AND USERCODE=#{usercode}
+            </if>
+            <if test="username!=null">
+                AND USERNAME=#{username}
+            </if>
+            <if test="password!=null">
+                AND PASSWORD=#{password}
+            </if>
+            <if test="status!=null">
+                AND STATUS=#{status}
+            </if>
+            <if test="authmode!=null">
+                AND AUTHMODE=#{authmode}
+            </if>
+            <if test="bindusercode!=null">
+                AND BINDUSERCODE=#{bindusercode}
+            </if>
+            <if test="telnumber!=null">
+                AND TELNUMBER=#{telnumber}
+            </if>
+            <if test="email!=null">
+                AND EMAIL=#{email}
+            </if>
+            <if test="creater!=null">
+                AND CREATER=#{creater}
+            </if>
+            <if test="createtime!=null">
+                AND CREATETIME=#{createtime}
+            </if>
+            <if test="belongorgid != null">
+                AND BELONGORGID = #{belongorgid,jdbcType=INTEGER}
+            </if>
+            <if test="imgurl != null">
+                AND IMGURL = #{imgurl,jdbcType=INTEGER}
+            </if>
+        </where>
+    </select>
+
+    <select id="selectByCondition" parameterType="net.hunanst.eduz100.api.sys.AcOperator"
+            resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from ac_operator
+        <where>
+            <if test="id!=null">
+                AND ID=#{id}
+            </if>
+            <if test="usercode!=null">
+                AND USERCODE=#{usercode}
+            </if>
+            <if test="username!=null">
+                AND USERNAME=#{username}
+            </if>
+            <if test="password!=null">
+                AND PASSWORD=#{password}
+            </if>
+            <if test="status!=null">
+                AND STATUS=#{status}
+            </if>
+            <if test="authmode!=null">
+                AND AUTHMODE=#{authmode}
+            </if>
+            <if test="bindusercode!=null">
+                AND BINDUSERCODE=#{bindusercode}
+            </if>
+            <if test="telnumber!=null">
+                AND TELNUMBER=#{telnumber}
+            </if>
+            <if test="email!=null">
+                AND EMAIL=#{email}
+            </if>
+            <if test="creater!=null">
+                AND CREATER=#{creater}
+            </if>
+            <if test="createtime!=null">
+                AND CREATETIME=#{createtime}
+            </if>
+            <if test="belongorgid != null">
+                AND BELONGORGID = #{belongorgid,jdbcType=INTEGER}
+            </if>
+            <if test="imgurl != null">
+                AND IMGURL = #{imgurl}
+            </if>
+        </where>
+    </select>
+
+    <select id="selectCondition_page" parameterType="net.hunanst.eduz100.api.sys.vo.AcOperatorVo"
+            resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from ac_operator
+        where usercode != 'admin'
+        <if test="orgid!=null">
+            and id in (select t2.operid from ac_oper_org_relation t2 where t2.orgid = #{orgid})
+        </if>
+        <if test="condition!=null">
+            and (usercode like '%${condition}%' or username like '%${condition}%')
+        </if>
+        <if test="belongorgid!=null">
+            and BELONGORGID = #{belongorgid}
+        </if>
+        <if test="imgurl != null">
+            AND IMGURL = #{imgurl}
+        </if>
+        order by id desc
+    </select>
+
+    <delete id="deletes" parameterType="list">
+        delete from ac_operator
+        where ID in
+        (<foreach collection="list" item="item" separator=",">
+        #{item}
+    </foreach>)
+    </delete>
+
+    <select id="getMessageMembers" resultMap="BaseResultMap" parameterType="int">
+  		SELECT ID,USERNAME,imgurl FROM ac_operator WHERE ID != #{value}
+  		ORDER BY CONVERT(USERNAME USING gbk) 
+  	</select>
+
+    <select id="selectByNotid" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+      select operid as id from ac_oper_org_relation where orgid in
+      (select  RECIPIENT from t_oa_notification_history where NOTIFICATIONID=#{0})
+      and operid is not null group by operid
+    </select>
+</mapper>

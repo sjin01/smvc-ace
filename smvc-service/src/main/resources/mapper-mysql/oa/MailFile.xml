@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="MailFile">
+    <resultMap id="BaseResultMap" type="net.hunanst.eduz100.api.oa.MailFile">
+        <id column="ID" property="id" jdbcType="INTEGER"/>
+        <result column="MAILID" property="mailid" jdbcType="INTEGER"/>
+        <result column="FILEPATH" property="filepath" jdbcType="VARCHAR"/>
+        <result column="SUFFIX" property="suffix" jdbcType="VARCHAR"/>
+        <result column="SIZE" property="size" jdbcType="DOUBLE"/>
+        <result column="FILENAME" property="filename" jdbcType="VARCHAR"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+    ID, MAILID, FILEPATH, SUFFIX, SIZE, FILENAME
+  </sql>
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+        select
+        <include refid="Base_Column_List"/>
+        from t_oa_mail_file
+        where ID = #{value}
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from t_oa_mail_file
+    where ID = #{value}
+  </delete>
+    <insert id="insert"  parameterType="net.hunanst.eduz100.api.oa.MailFile">
+        <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER" >
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+    insert into t_oa_mail_file ( MAILID, FILEPATH,
+      SUFFIX, SIZE, FILENAME
+      )
+    values ( #{mailid,jdbcType=INTEGER}, #{filepath,jdbcType=VARCHAR},
+      #{suffix,jdbcType=VARCHAR}, #{size,jdbcType=DOUBLE}, #{filename,jdbcType=VARCHAR}
+      )
+  </insert>
+    <insert id="insertSelective" parameterType="net.hunanst.eduz100.api.oa.MailFile">
+        insert into t_oa_mail_file
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                ID,
+            </if>
+            <if test="mailid != null">
+                MAILID,
+            </if>
+            <if test="filepath != null">
+                FILEPATH,
+            </if>
+            <if test="suffix != null">
+                SUFFIX,
+            </if>
+            <if test="size != null">
+                SIZE,
+            </if>
+            <if test="filename != null">
+                FILENAME,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{id,jdbcType=INTEGER},
+            </if>
+            <if test="mailid != null">
+                #{mailid,jdbcType=INTEGER},
+            </if>
+            <if test="filepath != null">
+                #{filepath,jdbcType=VARCHAR},
+            </if>
+            <if test="suffix != null">
+                #{suffix,jdbcType=VARCHAR},
+            </if>
+            <if test="size != null">
+                #{size,jdbcType=DOUBLE},
+            </if>
+            <if test="filename != null">
+                #{filename,jdbcType=VARCHAR},
+            </if>
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective" parameterType="net.hunanst.eduz100.api.oa.MailFile">
+        update t_oa_mail_file
+        <set>
+            <if test="mailid != null">
+                MAILID = #{mailid,jdbcType=INTEGER},
+            </if>
+            <if test="filepath != null">
+                FILEPATH = #{filepath,jdbcType=VARCHAR},
+            </if>
+            <if test="suffix != null">
+                SUFFIX = #{suffix,jdbcType=VARCHAR},
+            </if>
+            <if test="size != null">
+                SIZE = #{size,jdbcType=DOUBLE},
+            </if>
+            <if test="filename != null">
+                FILENAME = #{filename,jdbcType=VARCHAR},
+            </if>
+        </set>
+        where ID = #{id,jdbcType=INTEGER}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="net.hunanst.eduz100.api.oa.MailFile">
+    update t_oa_mail_file
+    set MAILID = #{mailid,jdbcType=INTEGER},
+      FILEPATH = #{filepath,jdbcType=VARCHAR},
+      SUFFIX = #{suffix,jdbcType=VARCHAR},
+      SIZE = #{size,jdbcType=DOUBLE},
+      FILENAME = #{filename,jdbcType=VARCHAR}
+    where ID = #{id,jdbcType=INTEGER}
+  </update>
+    <select id="select_page" resultMap="BaseResultMap" parameterType="net.hunanst.eduz100.api.oa.MailFile">
+        select
+        <include refid="Base_Column_List"/>
+        from t_oa_mail_file
+        <where>
+            <if test="id!=null">
+                AND ID=#{id}
+            </if>
+            <if test="mailid!=null">
+                AND MAILID=#{mailid}
+            </if>
+            <if test="filepath!=null">
+                AND FILEPATH=#{filepath}
+            </if>
+            <if test="suffix!=null">
+                AND SUFFIX=#{suffix}
+            </if>
+            <if test="size!=null">
+                AND SIZE=#{size}
+            </if>
+            <if test="filename!=null">
+                AND FILENAME=#{filename}
+            </if>
+        </where>
+    </select>
+</mapper>

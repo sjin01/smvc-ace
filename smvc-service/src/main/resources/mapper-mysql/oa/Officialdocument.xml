@@ -1,0 +1,353 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="Officialdocument">
+    <resultMap id="BaseResultMap" type="net.hunanst.eduz100.api.oa.Officialdocument">
+        <id column="ID" property="id" jdbcType="INTEGER"/>
+        <result column="DRAFTUSERID" property="draftuserid" jdbcType="INTEGER"/>
+        <result column="DRAFTORGID" property="draftorgid" jdbcType="INTEGER"/>
+        <result column="CREATEDATE" property="createdate" jdbcType="TIMESTAMP"/>
+        <result column="COMMITDATE" property="commitdate" jdbcType="TIMESTAMP"/>
+        <result column="TITLE" property="title" jdbcType="VARCHAR"/>
+        <result column="CONTENT" property="content" jdbcType="VARCHAR"/>
+        <result column="IMPORTANTLEVEL" property="importantlevel" jdbcType="INTEGER"/>
+        <result column="TIMELINESSFLAG" property="timelinessflag" jdbcType="INTEGER"/>
+        <result column="LASTDATE" property="lastdate" jdbcType="TIMESTAMP"/>
+        <result column="STATUS" property="status" jdbcType="INTEGER"/>
+
+        <result column="DELIVERID" property="deliverid" jdbcType="INTEGER"/>
+        <result column="DELIVERTYPE" property="delivertype" jdbcType="INTEGER"/>
+
+        <result column="USERNAME" property="username" jdbcType="INTEGER"/>
+        <result column="ORGNAME" property="orgname" jdbcType="INTEGER"/>
+
+        <result column="DELIVERUSERNAME" property="deliverusername" jdbcType="INTEGER"/>
+        <result column="DELIVERORGNAME" property="deliverorgname" jdbcType="INTEGER"/>
+
+        <result column="COMMITDATESTR" property="commitdateStr" jdbcType="VARCHAR"/>
+
+
+
+    </resultMap>
+    <sql id="Base_Column_List">
+    ID, DRAFTUSERID, DRAFTORGID, CREATEDATE, COMMITDATE, TITLE, CONTENT, IMPORTANTLEVEL, 
+    TIMELINESSFLAG, LASTDATE, STATUS
+  </sql>
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+        select
+        t.* , u.username  , o.orgname
+        ,(
+                select b.DELIVERID from t_oa_officialdocument_deliver b
+                where b.OFFICIALDOCUMENTID = t.id order by DELIVERDATE desc limit 0,1
+              ) as DELIVERID
+            ,(
+                select b.DELIVERTYPE from t_oa_officialdocument_deliver b
+                where b.OFFICIALDOCUMENTID = t.id order by DELIVERDATE desc limit 0,1
+              ) as DELIVERTYPE
+        from t_oa_officialdocument t
+        left join ac_operator u on u.ID = t.DRAFTUSERID
+        left join ac_org o on o.ID = t.DRAFTORGID
+        where t.ID = #{value}
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from t_oa_officialdocument
+    where ID = #{value}
+  </delete>
+
+    <delete id="deleteByIdList" parameterType="java.util.List">
+        delete from t_oa_officialdocument
+        where ID in (
+        <foreach collection="list" item="item" index="index"  separator="," >
+          #{item}
+        </foreach>
+        )
+    </delete>
+
+    <insert id="insert" parameterType="net.hunanst.eduz100.api.oa.Officialdocument">
+    insert into t_oa_officialdocument (ID, DRAFTUSERID, DRAFTORGID, 
+      CREATEDATE, COMMITDATE, TITLE, 
+      CONTENT, IMPORTANTLEVEL, TIMELINESSFLAG, 
+      LASTDATE, STATUS)
+    values (#{id,jdbcType=INTEGER}, #{draftuserid,jdbcType=INTEGER}, #{draftorgid,jdbcType=INTEGER}, 
+      #{createdate,jdbcType=TIMESTAMP}, #{commitdate,jdbcType=TIMESTAMP}, #{title,jdbcType=VARCHAR}, 
+      #{content,jdbcType=VARCHAR}, #{importantlevel,jdbcType=INTEGER}, #{timelinessflag,jdbcType=INTEGER}, 
+      #{lastdate,jdbcType=TIMESTAMP}, #{status,jdbcType=INTEGER})
+  </insert>
+    <insert id="insertSelective" parameterType="net.hunanst.eduz100.api.oa.Officialdocument" useGeneratedKeys="true" keyProperty="id">
+        insert into t_oa_officialdocument
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                ID,
+            </if>
+            <if test="draftuserid != null">
+                DRAFTUSERID,
+            </if>
+            <if test="draftorgid != null">
+                DRAFTORGID,
+            </if>
+            <if test="createdate != null">
+                CREATEDATE,
+            </if>
+            <if test="commitdate != null">
+                COMMITDATE,
+            </if>
+            <if test="title != null and title!='' ">
+                TITLE,
+            </if>
+            <if test="content != null and content!='' ">
+                CONTENT,
+            </if>
+            <if test="importantlevel != null">
+                IMPORTANTLEVEL,
+            </if>
+            <if test="timelinessflag != null">
+                TIMELINESSFLAG,
+            </if>
+            <if test="lastdate != null">
+                LASTDATE,
+            </if>
+            <if test="status != null">
+                STATUS,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{id,jdbcType=INTEGER},
+            </if>
+            <if test="draftuserid != null">
+                #{draftuserid,jdbcType=INTEGER},
+            </if>
+            <if test="draftorgid != null">
+                #{draftorgid,jdbcType=INTEGER},
+            </if>
+            <if test="createdate != null">
+                #{createdate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="commitdate != null">
+                #{commitdate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="title != null and title!='' ">
+                #{title,jdbcType=VARCHAR},
+            </if>
+            <if test="content != null and content!='' ">
+                #{content,jdbcType=VARCHAR},
+            </if>
+            <if test="importantlevel != null">
+                #{importantlevel,jdbcType=INTEGER},
+            </if>
+            <if test="timelinessflag != null">
+                #{timelinessflag,jdbcType=INTEGER},
+            </if>
+            <if test="lastdate != null">
+                #{lastdate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="status != null">
+                #{status,jdbcType=INTEGER},
+            </if>
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective" parameterType="net.hunanst.eduz100.api.oa.Officialdocument">
+        update t_oa_officialdocument
+        <set>
+            <if test="draftuserid != null">
+                DRAFTUSERID = #{draftuserid,jdbcType=INTEGER},
+            </if>
+            <if test="draftorgid != null">
+                DRAFTORGID = #{draftorgid,jdbcType=INTEGER},
+            </if>
+            <if test="createdate != null">
+                CREATEDATE = #{createdate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="commitdate != null">
+                COMMITDATE = #{commitdate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="title != null and title!='' ">
+                TITLE = #{title,jdbcType=VARCHAR},
+            </if>
+            <if test="content != null and content!='' ">
+                CONTENT = #{content,jdbcType=VARCHAR},
+            </if>
+            <if test="importantlevel != null">
+                IMPORTANTLEVEL = #{importantlevel,jdbcType=INTEGER},
+            </if>
+            <if test="timelinessflag != null">
+                TIMELINESSFLAG = #{timelinessflag,jdbcType=INTEGER},
+            </if>
+            <if test="lastdate != null">
+                LASTDATE = #{lastdate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="status != null">
+                STATUS = #{status,jdbcType=INTEGER},
+            </if>
+        </set>
+        where ID = #{id,jdbcType=INTEGER}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="net.hunanst.eduz100.api.oa.Officialdocument">
+    update t_oa_officialdocument
+    set DRAFTUSERID = #{draftuserid,jdbcType=INTEGER},
+      DRAFTORGID = #{draftorgid,jdbcType=INTEGER},
+      CREATEDATE = #{createdate,jdbcType=TIMESTAMP},
+      COMMITDATE = #{commitdate,jdbcType=TIMESTAMP},
+      TITLE = #{title,jdbcType=VARCHAR},
+      CONTENT = #{content,jdbcType=VARCHAR},
+      IMPORTANTLEVEL = #{importantlevel,jdbcType=INTEGER},
+      TIMELINESSFLAG = #{timelinessflag,jdbcType=INTEGER},
+      LASTDATE = #{lastdate,jdbcType=TIMESTAMP},
+      STATUS = #{status,jdbcType=INTEGER}
+    where ID = #{id,jdbcType=INTEGER}
+  </update>
+    <select id="select_page" resultMap="BaseResultMap" parameterType="net.hunanst.eduz100.api.oa.Officialdocument">
+        select
+        <include refid="Base_Column_List"/>
+        from t_oa_officialdocument
+        <where>
+            <if test="id!=null">
+                AND ID=#{id}
+            </if>
+            <if test="draftuserid!=null">
+                AND DRAFTUSERID=#{draftuserid}
+            </if>
+            <if test="draftorgid!=null">
+                AND DRAFTORGID=#{draftorgid}
+            </if>
+            <if test="createdate!=null">
+                AND CREATEDATE=#{createdate}
+            </if>
+            <if test="commitdate!=null">
+                AND COMMITDATE=#{commitdate}
+            </if>
+            <if test="title!=null and title!='' ">
+                AND TITLE=#{title}
+            </if>
+            <if test="content!=null and content!='' ">
+                AND CONTENT=#{content}
+            </if>
+            <if test="importantlevel!=null">
+                AND IMPORTANTLEVEL=#{importantlevel}
+            </if>
+            <if test="timelinessflag!=null">
+                AND TIMELINESSFLAG=#{timelinessflag}
+            </if>
+            <if test="lastdate!=null">
+                AND LASTDATE=#{lastdate}
+            </if>
+            <if test="status!=null">
+                AND STATUS=#{status}
+            </if>
+        </where>
+        order by CREATEDATE DESC
+    </select>
+
+    <!-- 可批阅 根据 个人  -->
+    <select id="selectApproveForUser_page" resultMap="BaseResultMap" parameterType="net.hunanst.eduz100.api.oa.Officialdocument">
+        select c.*
+        , u.USERNAME , o.ORGNAME
+        , (select temp1.username from ac_operator temp1 where temp1.id = c.deliverid and c.delivertype =1 ) as deliverusername
+        , (select temp2.orgname from ac_org temp2 where temp2.id = c.deliverid and c.delivertype =2 ) as deliverorgname
+        from
+        (
+            select a.*
+            ,(
+                select b.DELIVERID from t_oa_officialdocument_deliver b
+                where b.OFFICIALDOCUMENTID = a.id order by DELIVERDATE desc limit 0,1
+              ) as DELIVERID
+            ,(
+                select b.DELIVERTYPE from t_oa_officialdocument_deliver b
+                where b.OFFICIALDOCUMENTID = a.id order by DELIVERDATE desc limit 0,1
+              ) as DELIVERTYPE
+            ,(
+                select b.DELIVERDATE from t_oa_officialdocument_deliver b
+                where b.OFFICIALDOCUMENTID = a.id order by DELIVERDATE desc limit 0,1
+            ) as DELIVERDATE
+
+            from t_oa_officialdocument a
+            where a.status in (1,2,5)
+        ) c
+        left join ac_operator u on u.ID = c.draftuserid
+		left join ac_org o on o.id = c.draftorgid
+        where c.DELIVERID=#{userid} and c.DELIVERTYPE=1
+
+        union all
+
+        select od.*
+        ,t.DELIVERID ,t.DELIVERTYPE ,t.DELIVERDATE
+
+        , u.USERNAME , o.ORGNAME
+
+        , (select temp1.username from ac_operator temp1 where temp1.id = t.deliverid and t.delivertype =1 ) as deliverusername
+        , (select temp2.orgname from ac_org temp2 where temp2.id = t.deliverid and t.delivertype =2 ) as deliverorgname
+
+        from t_oa_officialdocument_deliver t
+        left join t_oa_officialdocument od on t.OFFICIALDOCUMENTID = od.id
+
+        left join ac_operator u on u.ID = od.draftuserid
+        left join ac_org o on o.id = od.draftorgid
+
+        where t.CHANGESTATUS = 3 and t.DELIVERID = #{userid}
+        and od.id not in (select t2.OFFICIALDOCUMENTID from t_oa_officialdocument_deliver t2 where t2.CHANGESTATUS = 4 and t2.USERID = #{userid} )
+        and od.STATUS != 4
+
+        order by DELIVERDATE desc
+    </select>
+
+    <!-- 可批阅 根据 部门 -->
+    <select id="selectApproveForOrg_page" resultMap="BaseResultMap" parameterType="net.hunanst.eduz100.api.oa.Officialdocument">
+        select c.*
+        , u.USERNAME , o.ORGNAME
+        , (select temp1.username from ac_operator temp1 where temp1.id = c.deliverid and c.delivertype =1 ) as deliverusername
+        , (select temp2.orgname from ac_org temp2 where temp2.id = c.deliverid and c.delivertype =2 ) as deliverorgname
+        from
+        (
+            select a.*
+            ,(
+                select b.DELIVERID from t_oa_officialdocument_deliver b
+                where b.OFFICIALDOCUMENTID = a.id order by DELIVERDATE desc limit 0,1
+              ) as DELIVERID
+            ,(
+                select b.DELIVERTYPE from t_oa_officialdocument_deliver b
+                where b.OFFICIALDOCUMENTID = a.id order by DELIVERDATE desc limit 0,1
+              ) as DELIVERTYPE
+            ,(
+                select b.DELIVERDATE from t_oa_officialdocument_deliver b
+                where b.OFFICIALDOCUMENTID = a.id order by DELIVERDATE desc limit 0,1
+            ) as DELIVERDATE
+            from t_oa_officialdocument a
+            where a.status in (1,2,3,5)
+        ) c
+        left join ac_operator u on u.ID = c.draftuserid
+		left join ac_org o on o.id = c.draftorgid
+        where DELIVERID=#{orgid} and DELIVERTYPE=2
+
+        order by DELIVERDATE desc
+    </select>
+
+
+    <!-- 最新， （提交到您或您所属部门 ） -->
+    <select id="selectNewest_page" resultMap="BaseResultMap" parameterType="net.hunanst.eduz100.api.oa.Officialdocument">
+        select A.*  ,date_format(A.DELEVERDATE,'%Y-%m-%d') as commitdateStr
+        , ( select o.ORGNAME from ac_org o where A.DELIVERTYPE = 2 and A.DELIVERID = o.ID) as orgname
+        from
+        (
+        SELECT
+        t.id , t.title, t.CONTENT ,t.status
+        ,(
+                select b.DELIVERID from t_oa_officialdocument_deliver b
+                where b.OFFICIALDOCUMENTID = t.id order by DELIVERDATE desc limit 0,1
+            ) as DELIVERID
+        ,(
+                select b.DELIVERTYPE from t_oa_officialdocument_deliver b
+                where b.OFFICIALDOCUMENTID = t.id order by DELIVERDATE desc limit 0,1
+            ) as DELIVERTYPE
+        ,(
+                select b.DELIVERDATE from t_oa_officialdocument_deliver b
+                where b.OFFICIALDOCUMENTID = t.id order by DELIVERDATE desc limit 0,1
+        ) as DELEVERDATE
+
+        FROM t_oa_officialdocument t where t.STATUS = 1
+        ) A
+        where A.DELIVERTYPE = 1 and A.DELIVERID = #{userid}
+         or (A.DELIVERTYPE = 2 and A.DELIVERID in ( select orgid from ac_oper_org_relation or2 where or2.operid = #{userid} ))
+
+        order by A.DELEVERDATE desc
+    </select>
+
+</mapper>

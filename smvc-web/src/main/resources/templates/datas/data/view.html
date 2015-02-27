@@ -1,0 +1,141 @@
+#parse("/common/north.html")
+
+<script src="$contextPath/static/js/org_fueluxtree.js"></script>
+<div class="page-header">
+    <h1 class="page-header-h1">数据
+        <small>
+            <i class="ace-icon fa fa-angle-double-right"></i>
+            <a href="$contextPath/data/person">任务列表</a>
+        </small>
+        <small>
+            <i class="ace-icon fa fa-angle-double-right"></i> 数据查看
+        </small>
+    </h1>
+</div>
+
+<div class="row">
+    <div class="col-xs-12">
+        <form class="form-horizontal" id="myform" name="myform" method="post"
+              action="">
+            <div class="row">
+                <div class="col-xs-12">
+                    <div class="row">
+                        <div style="text-align: center;">
+                            <h3>$!{temp.title}</h3>
+                            <span style="margin-left: 15%;">
+                                <span style="color: gray;font-size: xx-small;">说明：</span>
+                                <span style="color: red;font-size: xx-small;">$!{temp.remark}</span>
+                            </span>
+                        </div>
+                        <div class="col-xs-12">
+                            <div id="hidden_div" style="display: none;">
+                                <input type="hidden" name="tempinfoid" value="$!{temp.id}">
+                                <input type="hidden" name="orgid" value="$!{temp.orgid}">
+                                <input type="hidden" name="userid" value="$!{temp.userid}">
+                            </div>
+                            <!--class="table table-striped table-bordered table-hover"-->
+                            <table id="sample-table-1" class="table table-striped">
+                                <thead>
+                                <tr id="head_th">
+                                    #set($nums=0)
+                                    #foreach($!details in $!{temp.tempInfoDetails} )
+                                    <th style="text-align: center;">
+                                        <input type="hidden" name="dataCollectInfoDetailList[$nums].tempdetailid" value="$!details.id">
+                                        $!details.detail
+                                        #set($nums=$nums+1)
+                                    </th>
+                                    #end
+                                </tr>
+                                </thead>
+                                <tbody id="body_data">
+
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+        <div class="clearfix form-actions no-margin-bottom">
+            <div class="center">
+                <!--<a class="btn btn-info " onclick="save()">
+                    <i class="ace-icon fa fa-check bigger-110"></i>Excel
+                </a>
+                &nbsp; &nbsp; &nbsp;-->
+                <a class="btn" href="$contextPath/data/person">
+                    <i class="ace-icon fa fa-undo bigger-110"></i>
+                    返回
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+
+    $(function () {
+        getSubmitData();
+    });
+
+    function getSubmitData(){
+        jQuery.ajax({
+            url: "$contextPath/data/collect/getSubmitData",
+            data:{tempinfoid:$("input[name=tempinfoid]").val(),userid:$("input[name=userid]").val(),type:1},
+            dataType: "JSON",
+            success: function (data) {
+                if(data&&data.length>0){
+                    var trs="<tr>";
+                    $("#head_th").find("th").each(function(index){
+                        var detailid= $(this).find("input").eq(0).val();
+                        for(a in data){
+                            if(data[a].tempdetailid==detailid)
+                                trs+="<td style='text-align: center;'>"+data[a].detail+"</td>";
+                        }
+                    });
+                    trs+="</tr>"
+                    $("#body_data").append(trs);
+                    $("#hidden_div").append("<input type='hidden' name='id' value='"+data[0].infoid+"'>");
+                }else{
+                    var len=$!temp.tempInfoDetails.size();
+                    var trs="<tr>";
+                    for(var a=0;a<len;a++){
+                        trs+="<td style='text-align: center;'></td>";
+                    }
+                    trs+="</tr>"
+                    $("#body_data").append(trs);
+                }
+            }
+        });
+    }
+
+    function save() {
+
+        //document.myform.submit();
+
+    }
+
+    function checkLen(e) {
+        var title = e.value;
+        if (title.length >= 512) {
+            $(e).parent().next().find("i").not(".red").hide();
+            $(e).parent().next().find("i.red").show();
+            $(e).parent().next().find("span").text("通知内容最多只能输入512个汉字或字母");
+            return false;
+        } else if (title.length == 0) {
+
+            if ($.trim(e.id) == "title") {
+                $(e).parent().next().find("i").not(".red").hide();
+                $(e).parent().next().find("i.red").show();
+                $(e).parent().next().find("span").text("请输入通知内容");
+                return false;
+            }
+
+        } else {
+            $(e).parent().next().find("i.red").hide();
+            $(e).parent().next().find("i").not(".red").show();
+            $(e).parent().next().find("span").text("");
+        }
+    }
+
+</script>
+#parse("/common/south.html")

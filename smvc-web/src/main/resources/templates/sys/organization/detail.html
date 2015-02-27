@@ -1,0 +1,200 @@
+#parse("/common/north.html")
+
+<div class="page-header">
+    <h1 class="page-header-h1">机构管理
+        <small>
+            <i class="ace-icon fa fa-angle-double-right"></i>  $!{dual.operationname}
+        </small>
+    </h1>
+</div>
+
+<div class="row">
+    <div class="col-xs-12">
+        <form class="form-horizontal" id="validation-form" name="validation-form" method="post">
+            #if($dual.operationtype=='insert')
+            <input type="hidden" id="parentid" name="parentid" value="$!porg.id" />
+            <input type="hidden" id="orgseq" name="orgseq" value="$!porg.orgseq" />
+            #elseif($dual.operationtype=='update')
+            <input type="hidden" id="id" name="id" value="$!corg.id" />
+            #end
+            
+            <div class="form-group">
+                <label class="col-sm-2 control-label no-padding-right"> 父机构名 </label>
+                <div class="col-sm-6">
+                    <input type="text" disabled value="$!porg.orgname" class="form-control" />
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <label class="col-sm-2 control-label no-padding-right"> 机构名 </label>
+                <div class="col-sm-6">
+                    <input type="text" id="orgname" name="orgname" $!dual.disabled value="$!corg.orgname" class="form-control" />
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="col-sm-2 control-label no-padding-right"> 机构全名 </label>
+                <div class="col-sm-6">
+                    <input type="text" id="orgfullname" name="orgfullname" $!dual.disabled value="$!corg.orgfullname" class="form-control" />
+                </div>
+            </div>
+            
+            #if($dual.operationtype=='insert')
+            <div class="form-group">
+                <label class="col-sm-2 control-label no-padding-right"> 机构类型</label>
+                <div class="col-sm-6">
+                    #if(!$porg)
+                    <label>
+						<input name="belongorgid" type="radio" class="ace" value="0">
+						<span class="lbl"> 教育局机构 </span>
+					</label>
+					#elseif($porg.belongorgid==0)
+					<label>
+						<input name="belongorgid" type="radio" class="ace" value="0">
+						<span class="lbl"> 教育局机构 </span>
+					</label>
+					&nbsp;&nbsp;&nbsp;&nbsp;
+					<label>
+						<input name="belongorgid" type="radio" class="ace" value="">
+						<span class="lbl"> 学校机构</span>
+					</label>
+					#else
+					<label>
+						<input name="belongorgid" type="radio" class="ace" value="$!porg.belongorgid">
+						<span class="lbl"> 学校机构</span>
+					</label>
+					#end
+                </div>
+            </div>
+            #else
+            <div class="form-group">
+                <label class="col-sm-2 control-label no-padding-right"> 机构类型</label>
+                <div class="col-sm-6">
+					#if($corg.belongorgid==0)
+					<label>
+						<input name="belongorgid" type="radio" class="ace" value="0" checked disabled>
+						<span class="lbl"> 教育局机构 </span>
+					</label>
+					#else
+					<label>
+						<input name="belongorgid" type="radio" class="ace" value="" checked disabled>
+						<span class="lbl"> 学校机构</span>
+					</label>
+					#end
+                </div>
+            </div>
+            #end
+            
+            <div class="form-group">
+                <label class="col-sm-2 control-label no-padding-right"> 显示顺序 </label>
+                <div class="col-sm-6">
+                    <input type="text" id="sortid" name="sortid" $!dual.disabled value="$!corg.sortid" class="form-control" />
+                </div>
+            </div>
+            
+            #if($dual.operationtype=='insert')
+            <div class="form-group">
+                <label class="col-sm-2 control-label no-padding-right"> &nbsp; </label>
+                <div class="col-sm-6">
+                    <label class="">
+						<input type="checkbox" class="ace" name="extending" value="true">
+						<span class="lbl"> 继承父机构的权限</span>
+					</label>
+                </div>
+            </div>
+            #end
+            
+            <div class="clearfix form-actions no-margin-bottom">
+                <div class="center">
+                    <button class="btn btn-info" type="button" style="margin: 0 10px" onclick="save(this)">
+                        <i class="ace-icon fa fa-check bigger-110"></i>保存
+                    </button>
+                    <a class="btn" type="reset" style="margin: 0 10px" href="$contextPath/sys/organization">
+                        <i class="ace-icon fa fa-undo bigger-110"></i>$!dual.goback
+                    </a>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script type="text/javascript">
+    
+    $(function(){
+    	
+    	var jqbelongorgid = $('#validation-form input[name=belongorgid]:enabled');
+    	if(jqbelongorgid.length>0) jqbelongorgid[0].checked = true;
+    	
+    	$('#validation-form').validate({
+			errorElement: 'div',
+			errorClass: 'help-block',
+			focusInvalid: false,
+			rules: {
+				orgname: {
+					required: true,
+					maxlength: 20,
+				  	remote: { //验证在同级机构中，机构名是否存在
+	               		type:"POST",
+	               		url:"$contextPath/sys/organization/checkOrgName",
+	               		data:{
+	               			parentid: '$!porg.id',
+	               			orgname: function(){return $("#orgname").val();}
+	               		}
+	              	}
+				},
+				orgfullname: {
+					required: true,
+					maxlength: 50
+				},
+				sortid: {
+					required: true,
+					digits: true,
+					maxlength: 6
+				}
+			},
+			messages: {
+				orgname: {
+					required: "请填写机构名称",
+					maxlength: "机构名称不能多余20个字符",
+					remote: "机构名称已经存在"
+				},
+				orgfullname: {
+					required: "请填写完整的机构名称",
+					maxlength: "机构全称不能多余50个字符"
+				},
+				sortid: {
+					required: "请填写显示的顺序",
+					digits: "显示顺序只能输入整数",
+					maxlength: "显示顺序只能是6位或6位以下的整数"
+				}
+			},
+			highlight: function (e) {
+				$(e).closest('.form-group').removeClass('has-info').addClass('has-error');
+			},
+			success: function (e) {
+				$(e).closest('.form-group').removeClass('has-error');//.addClass('has-info');
+				$(e).remove();
+			},
+			errorPlacement: function (error, element) {
+				element.closest("div.form-group").append(error);
+			}
+		});
+    });
+    
+    function save(target){
+    	if($('#validation-form').valid()==false) return;
+    	
+    	$(target).attr("disabled", "disabled");
+    	
+   		jQuery.ajax({
+   			type:"post",
+   			url:"$contextPath/sys/organization/save",
+   			data:$('#validation-form').serialize(),
+   			dataType: "json",
+   			success:function(data){
+   				location.href = "$contextPath/sys/organization";
+   			}
+   		});
+    }
+</script>
+#parse("/common/south.html")

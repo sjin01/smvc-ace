@@ -1,0 +1,159 @@
+#parse("/common/north.html")
+<script src="$contextPath/static/ace/js/jquery.gritter.min.js"></script>
+<div class="page-header">
+	<div class="input-group col-sm-4">
+		<h1 class="no-margin col-sm-8 left page-header-h1">
+			通讯录 <small> <i class="ace-icon fa fa-angle-double-right"></i>
+				<a href="$contextPath/oa/addressBook">通讯薄</a> <i
+				class="ace-icon fa fa-angle-double-right"></i> #if($vo.id)编辑
+				#else新增#end
+			</small>
+		</h1>
+	</div>
+</div>
+<div class="row">
+	<div class="col-xs-12" id="find">
+		<!-- PAGE CONTENT BEGINS -->
+			<!-- #section:elements.form -->
+			<div class="form-group">
+				<label class="col-sm-3 control-label no-padding-right" for="">
+					<!-- <span style="color: red">*</span> 登录用户名 -->
+				</label>
+				<div class="col-sm-9">
+					<div class="input-group col-sm-6">
+						<input type="text" id="usercode" class="form-control search-query"
+							placeholder="用户名/姓名"> <span class="input-group-btn">
+							<button id="btnselect" type="button" onclick="findUser();"
+								class="btn btn-purple btn-sm">
+								查找<i class="ace-icon fa fa-search icon-on-right bigger-110"></i>
+							</button>
+						</span>
+					</div>
+				</div>
+
+			</div>
+	</div>
+	<div class="col-xs-12" style="padding-top: 15px;">
+		<div class="widget-box transparent" id="recent-box">
+			
+			<!-- /.widget-body -->
+		</div>
+	</div>
+</div>
+<script type="text/javascript">
+	jQuery(function($) {
+		$("div#main-container").css("width", "96%");
+		$('.date-picker').datepicker({
+			format : "yyyy-mm-dd",
+			autoclose : true,
+			todayHighlight : true
+		})
+		//show datepicker when clicking on the icon
+		.next().on(ace.click_event, function() {
+			$(this).prev().focus();
+		});
+
+		init_validate();
+		
+		$("#usercode").bind("change", findUser);
+		$(window).keydown(function(e){
+			 if(e.keyCode==13){
+				// findUser();
+			 }
+		});
+	})
+	
+	function findUser(){
+		$("#find").attr("style","");
+		var str = $("#usercode").val();
+		if(!str){
+			myGritterError("请输入要查询的用户名或姓名","提示",1000);
+		}else{
+			$("#recent-box").load("$contextPath/oa/addressBook/findUser", {name: str});
+		}
+	}
+	
+	function save() {
+		$("#usersubmit").attr("disabled", "disabled");
+		if (!addressBook_form_vali.form()) {
+			$("#usersubmit").removeAttr("disabled");
+			return false;
+		}
+
+		validateUser();
+		return;
+		/* 
+		myConfirm("是否确认提交？", function(){
+		    $.ajax({
+		        url:"$contextPath/oa/addressBook/saveOrUpdate",
+		        type:'POST',
+		        data: $("#addressBook_form").serialize(),
+		        dataType:'json',
+		        success:function( result ){
+		        	console.log(result);
+		            if(result > 0){
+		                // 成功  TODO 跳转到成功页面
+		                myFinishAndTurn('操作成功','已成功添加到通讯薄中！' ,'$contextPath/oa/addressBook');
+		            }else{
+		                // 失败
+		            }
+		        }
+		    });
+		}); */
+
+	}
+
+
+	/**
+	 * init Validate form
+	 */
+	var addressBook_form_vali;
+	function init_validate() {
+		addressBook_form_vali = $("#addressBook_form").validate({
+			rules : {
+				usercode : {
+					required : true
+				}
+			},
+			messages : {
+				usercode : {
+					required : "请输入对方的用户名！",
+				}
+			}
+		})
+	}
+
+	function validateUser() {
+		$.ajax({
+			url : "$contextPath/oa/addressBook/validateUser",
+			type : 'POST',
+			data : $("#addressBook_form").serialize(),
+			dataType : 'json',
+			success : function(data) {
+				if (data.code == 200) {
+					//$("#operid").val(data.data);
+					addUser(data.data);
+				} else if (data.code == 511) {
+					//用户不存在，是否新增用户并加入到通讯录中？
+					//addUser(data.data);
+					myConfirmTwo("用户&nbsp;" + $("#usercode").val()
+							+ "&nbsp;不存在，是否新增用户并加入到通讯录中？", function() {
+						//确认时执行
+						alert("此功能正在完善中，请耐心等待！");
+						$("#usersubmit").removeAttr("disabled");
+						return;
+					}, function() {
+						//取消时执行
+						$("#usersubmit").removeAttr("disabled");
+						return;
+					});
+				} else {
+					$("#usersubmit").removeAttr("disabled");
+					alert(data.data);
+				}
+			}
+		});
+	}
+</script>
+
+#parse("/common/south.html")

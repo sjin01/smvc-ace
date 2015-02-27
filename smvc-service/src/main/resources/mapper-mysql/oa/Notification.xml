@@ -1,0 +1,359 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="Notification">
+    <resultMap id="BaseResultMap" type="net.hunanst.eduz100.api.oa.vo.NotificationVo">
+        <id column="ID" property="id" jdbcType="INTEGER"/>
+        <result column="USERID" property="userid" jdbcType="INTEGER"/>
+        <result column="USERNAME" property="username" jdbcType="VARCHAR"/>
+        <result column="ORGID" property="orgid" jdbcType="INTEGER"/>
+        <result column="ORGNAME" property="orgname" jdbcType="VARCHAR"/>
+        <result column="CONTENT" property="content" jdbcType="VARCHAR"/>
+        <result column="VIEWFLAG" property="viewflag" jdbcType="INTEGER"/>
+        <result column="TIMES" property="times" jdbcType="TIMESTAMP"/>
+        <result column="TITLE" property="title" jdbcType="VARCHAR"/>
+
+
+        <collection property="notificationFile" column="ID"
+                    select="Notification.selectFileByPid"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+    ID, USERID, ORGID, CONTENT, VIEWFLAG,TIMES,TITLE
+  </sql>
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+        select
+        <include refid="Base_Column_List"/>
+        from t_oa_notification
+        where ID = #{value}
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from t_oa_notification
+    where ID = #{value}
+  </delete>
+    <insert id="insert" parameterType="net.hunanst.eduz100.api.oa.Notification">
+    insert into t_oa_notification (USERID, ORGID,CONTENT, VIEWFLAG,TIMES,TITLE)
+    values ( #{userid,jdbcType=INTEGER}, #{orgid,jdbcType=INTEGER},
+      #{content,jdbcType=VARCHAR}, #{viewflag,jdbcType=INTEGER},#{times,jdbcType=TIMESTAMP},
+      #{title,jdbcType=VARCHAR})
+  </insert>
+    <insert id="insertSelective" parameterType="net.hunanst.eduz100.api.oa.Notification"
+            useGeneratedKeys="true" keyProperty="id">
+            /*SELECT @@IDENTITY*/
+
+        insert into t_oa_notification
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                ID,
+            </if>
+            <if test="userid != null">
+                USERID,
+            </if>
+            <if test="orgid != null">
+                ORGID,
+            </if>
+            <if test="content != null">
+                CONTENT,
+            </if>
+            <if test="viewflag != null">
+                VIEWFLAG,
+            </if>
+            <if test="times != null">
+                TIMES,
+            </if>
+            <if test="title != null and title!=''">
+                title,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{id,jdbcType=INTEGER},
+            </if>
+            <if test="userid != null">
+                #{userid,jdbcType=INTEGER},
+            </if>
+            <if test="orgid != null">
+                #{orgid,jdbcType=INTEGER},
+            </if>
+            <if test="content != null">
+                #{content,jdbcType=VARCHAR},
+            </if>
+            <if test="viewflag != null">
+                #{viewflag,jdbcType=INTEGER},
+            </if>
+            <if test="times != null">
+                #{times,jdbcType=TIMESTAMP},
+            </if>
+            <if test="title != null and title!=''">
+                #{title,jdbcType=TIMESTAMP},
+            </if>
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective" parameterType="net.hunanst.eduz100.api.oa.vo.NotificationVo">
+        update t_oa_notification
+        <set>
+            <if test="userid != null">
+                USERID = #{userid,jdbcType=INTEGER},
+            </if>
+            <if test="orgid != null">
+                ORGID = #{orgid,jdbcType=INTEGER},
+            </if>
+            <if test="content != null">
+                CONTENT = #{content,jdbcType=VARCHAR},
+            </if>
+            <if test="viewflag != null">
+                VIEWFLAG = #{viewflag,jdbcType=INTEGER},
+            </if>
+        </set>
+        where ID = #{id,jdbcType=INTEGER}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="net.hunanst.eduz100.api.oa.Notification">
+    update t_oa_notification
+    set USERID = #{userid,jdbcType=INTEGER},
+      ORGID = #{orgid,jdbcType=INTEGER},
+      CONTENT = #{content,jdbcType=VARCHAR},
+      VIEWFLAG = #{viewflag,jdbcType=INTEGER}
+    where ID = #{id,jdbcType=INTEGER}
+  </update>
+    <select id="select_page" resultMap="BaseResultMap" parameterType="net.hunanst.eduz100.api.oa.vo.NotificationVo">
+        select noti.id,noti.USERID,noti.orgid,noti.title,noti.content,noti.viewflag,noti.times,opr.username,
+        org.orgname  from t_oa_notification noti LEFT JOIN ac_operator opr on noti.USERID=opr.ID
+        LEFT JOIN ac_org org on noti.ORGID=org.id
+        <where>
+            <if test="id!=null">
+                AND noti.ID=#{id}
+            </if>
+            <if test="userid!=null">
+                AND noti.USERID=#{userid}
+            </if>
+            <if test="orgid!=null">
+                AND noti.ORGID=#{orgid}
+            </if>
+
+            <if test="viewflag!=null">
+                AND noti.VIEWFLAG=#{viewflag}
+            </if>
+            <if test="condition!=null and condition!=''">
+                AND (
+                opr.username like CONCAT('%',#{condition},'%')
+                or noti.title like CONCAT('%',#{condition},'%')
+                or org.orgname like CONCAT('%',#{condition},'%')
+                )
+            </if>
+        </where>
+        order by noti.times desc
+    </select>
+
+
+    <delete id="deletes" parameterType="list">
+        delete from t_oa_notification
+        where ID in
+        (<foreach collection="list" item="item" separator=",">
+        #{item}
+        </foreach>)
+    </delete>
+    
+    <select id="notiViewById" resultMap="BaseResultMap" parameterType="net.hunanst.eduz100.api.oa.vo.NotificationVo">
+        select n.ID, n.USERID,ao.username, org.id ORGID,org.orgname,n.CONTENT, n.VIEWFLAG,n.TIMES,n.TITLE,nr.id isread
+        from t_oa_notification n
+        left join t_oa_notification_history nh on n.id=nh.NOTIFICATIONID
+        left join t_oa_notification_read nr on nr.notid=n.id
+        left join ac_operator ao on n.USERID=ao.ID
+        left join ac_org org on org.ID=nh.recipient
+        where  n.id=#{id}
+        GROUP BY n.id
+    </select>
+
+    <select id="selectForDisplay_page" resultMap="BaseResultMap" parameterType="net.hunanst.eduz100.api.oa.vo.NotificationVo">
+        select n.ID, n.USERID,ao.username, org.id ORGID,org.orgname,n.CONTENT, n.VIEWFLAG,n.TIMES,n.TITLE,nr.id isread
+        from t_oa_notification n
+        left join t_oa_notification_history nh on n.id=nh.NOTIFICATIONID
+        left join t_oa_notification_read nr on nr.notid=n.id
+        left join ac_operator ao on n.USERID=ao.ID
+        left join ac_org org on org.ID=nh.recipient
+        where  org.ID in (select orgid from ac_oper_org_relation where operid=#{recipient} )
+        <if test="id!=null">
+            and n.id=#{id}
+        </if>
+        <if test="condition!=null and condition!=''">
+            and (ao.username like CONCAT('%',#{condition},'%') or org.orgname like CONCAT('%',#{condition},'%')
+            or n.TITLE like CONCAT('%',#{condition},'%') or n.CONTENT like CONCAT('%',#{condition},'%')
+            )
+        </if>
+        GROUP BY n.id
+        order by n.times desc
+        <!--<if test="limit!=null">
+            limit #{limit}
+        </if>-->
+
+        <!--select n.ID, n.USERID,ao.username, n.ORGID,org.orgname,n.CONTENT, n.VIEWFLAG,n.TIMES,n.TITLE,nh.isread
+        from t_oa_notification n
+        left join t_oa_notification_history nh  on n.id=nh.NOTIFICATIONID
+        left join ac_operator ao on n.USERID=ao.ID
+        left join ac_org org on org.id=n.ORGID
+        where nh.RECIPIENT=#{recipient}
+        <if test="id!=null">
+            and n.id=#{id}
+        </if>
+        order by n.times desc
+        <if test="limit!=null">
+            limit #{limit}
+        </if>-->
+    </select>
+
+    <insert id="insertNoti_history" parameterType="net.hunanst.eduz100.api.oa.NotificationHistory">
+        insert into t_oa_notification_history
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                ID,
+            </if>
+
+            <if test="recipientorgid != null">
+                RECIPIENTORGID,
+            </if>
+            <if test="date != null">
+                date,
+            </if>
+            <if test="notificationid != null">
+                NOTIFICATIONID,
+            </if>
+
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{id,jdbcType=INTEGER},
+            </if>
+
+            <if test="recipientorgid != null">
+                #{recipientorgid,jdbcType=INTEGER},
+            </if>
+            <if test="date != null">
+                #{date,jdbcType=TIMESTAMP},
+            </if>
+            <if test="notificationid != null">
+                #{notificationid,jdbcType=INTEGER},
+            </if>
+
+        </trim>
+    </insert>
+
+    <!--<select id="selectPersonByOegId" parameterType="java.lang.Integer"
+            resultType="net.hunanst.eduz100.api.sys.vo.AcOperatorVo">
+        SELECT
+            t.ID,
+            t.USERCODE,
+            t.USERNAME,
+            org.id orgid
+        FROM
+            ac_operator t
+        RIGHT JOIN ac_oper_org_relation s ON t.id = s.OPERID
+        LEFT JOIN ac_org org ON org.id = s.orgid
+        WHERE  o.id is not null and
+            s.ORGID =#{value}
+        ORDER BY
+            org.id
+    </select>-->
+    <select id="selectPersonByOegId" parameterType="java.lang.Integer"
+            resultType="net.hunanst.eduz100.api.sys.vo.AcOperatorVo">
+        SELECT t.ID,t.USERCODE,t.USERNAME,org.id orgid
+        FROM ac_operator t
+        RIGHT JOIN ac_oper_org_relation s ON t.id = s.OPERID
+        LEFT JOIN ac_org org ON org.id = s.orgid
+        WHERE
+        org.id is not null and t.id is not null
+        and s.ORGID =#{value}
+        ORDER BY org.id
+    </select>
+
+    <insert id="insertFile" parameterType="net.hunanst.eduz100.api.oa.vo.NotificationFileVo">
+        insert into t_oa_notification_file (notid,fileurl,filename,filesize,filetype,uploadtime)
+        values
+        (#{notid},#{fileurl},#{filename},#{filesize},#{filetype},#{uploadtime})
+    </insert>
+
+    <select id="selectFileByPid" parameterType="java.lang.Integer"
+            resultType="net.hunanst.eduz100.api.oa.NotificationFile">
+        select * from t_oa_notification_file where notid=#{0}
+    </select>
+
+    <delete id="delFileByNotId" parameterType="java.util.List">
+        delete from t_oa_notification_file
+        where ID in
+        (<foreach collection="list" item="item" separator=",">
+        #{item}
+        </foreach>)
+    </delete>
+
+    <select id="selectFile" resultType="net.hunanst.eduz100.api.oa.vo.NotificationFileVo"
+            parameterType="java.lang.Integer">
+        select nf.id,nf.fileurl,nf.filetype,nf.filename,nf.filesize,nf.notid,nf.uploadtime,n.userid,n.orgid
+        from t_oa_notification_file nf left join t_oa_notification n on nf.notid=n.id
+        where nf.id=#{0}
+    </select>
+    
+    <select id="unReadNoti" parameterType="net.hunanst.eduz100.api.oa.vo.NotiHistoryVo" resultType="net.hunanst.eduz100.api.oa.vo.NotiHistoryVo">
+        select nh.id,nh.RECIPIENT,nh.date,nh.NOTIFICATIONID,n.title,n.TIMES notitimes
+        from t_oa_notification_history  nh left join t_oa_notification n on nh.NOTIFICATIONID=n.ID
+        where n.title is not null
+        <if test="isread!=null">
+            and nh.isread=#{isread}
+        </if>
+        <if test="recipient!=null">
+            and nh.RECIPIENT=#{recipient}
+        </if>
+
+        order by n.TIMES desc
+    </select>
+
+    <update id="updateRead" parameterType="net.hunanst.eduz100.api.oa.NotificationRead">
+        insert into t_oa_notification_read(readuserid,notid,readtime)
+        values
+        (#{readuserid},#{notid},now())
+
+    </update>
+
+    <insert id="insertNotHisByBath" parameterType="Map">
+        insert into t_oa_notification_history(recipient,date,notificationid,isread)
+        select ORGID,NOW(),#{notid},0 from ac_oper_org_relation rela
+        /*left join ac_operator ao on rela.OPERID=ao.id*/ where orgid in
+        (<foreach collection="list" item="item" separator=",">
+        #{item.id}
+        </foreach>)
+        group by ORGID
+    </insert>
+    
+    <insert id="insertRemindByBath" parameterType="net.hunanst.eduz100.api.oa.vo.NotificationVo">
+        insert into t_oa_remind(remindtype,operatoruserid,recipientuserid,content,status,type,senddate)
+        select #{sendtype},#{userid},ao.id ,CONCAT(#{head},ao.USERNAME,#{extracontent}),
+        1,#{remindtype},now()
+        from ac_oper_org_relation rela left join ac_operator ao on rela.OPERID=ao.ID
+        where  ao.USERNAME is not null and
+        rela.orgid in
+        (<foreach collection="receives" item="item" separator=",">
+        #{item.id}
+        </foreach>)
+         group by ao.id
+    </insert>
+    
+    <select id="getUserByorgId" parameterType="net.hunanst.eduz100.api.oa.vo.NotificationVo" resultType="net.hunanst.eduz100.api.sys.AcOperator">
+        select ao.id ,ao.USERNAME,ao.TELNUMBER
+        from ac_oper_org_relation rela left join ac_operator ao on rela.OPERID=ao.ID
+        where ao.TELNUMBER &lt;&gt;'' and ao.TELNUMBER is not null and  rela.orgid in
+        (<foreach collection="receives" item="item" separator=",">
+        #{item.id}
+        </foreach>)
+        group by ao.id
+    </select>
+    
+    <delete id="deleteByNotid" parameterType="list">
+        delete from t_oa_notification_history where NOTIFICATIONID in
+        (<foreach collection="list" item="item" separator=",">
+        #{item}
+        </foreach>)
+    </delete>
+
+    <delete id="deleteReadByNotid" parameterType="list">
+        delete from t_oa_notification_read where notid in
+        (<foreach collection="list" item="item" separator=",">
+        #{item}
+        </foreach>)
+    </delete>
+</mapper>

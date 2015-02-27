@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="OfficialdocumentMonitor" >
+  <resultMap id="BaseResultMap" type="net.hunanst.eduz100.api.oa.OfficialdocumentMonitor" >
+    <id column="ID" property="id" jdbcType="INTEGER" />
+    <result column="OFFICIALDOCUMENTID" property="officialdocumentid" jdbcType="INTEGER" />
+    <result column="USERID" property="userid" jdbcType="INTEGER" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    ID, OFFICIALDOCUMENTID, USERID
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from t_oa_officialdocument_monitor
+    where ID = #{value}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from t_oa_officialdocument_monitor
+    where ID = #{value}
+  </delete>
+
+  <delete id="deleteSelective" parameterType="net.hunanst.eduz100.api.oa.OfficialdocumentMonitor">
+    delete from t_oa_officialdocument_monitor
+    <where >
+      <if test="id!=null" >
+        AND ID=#{id}
+      </if>
+      <if test="officialdocumentid!=null" >
+        AND OFFICIALDOCUMENTID=#{officialdocumentid}
+      </if>
+      <if test="userid!=null" >
+        AND USERID=#{userid}
+      </if>
+    </where>
+  </delete>
+
+  <insert id="insert" parameterType="net.hunanst.eduz100.api.oa.OfficialdocumentMonitor" >
+    insert into t_oa_officialdocument_monitor (ID, OFFICIALDOCUMENTID, USERID
+      )
+    values (#{id,jdbcType=INTEGER}, #{officialdocumentid,jdbcType=INTEGER}, #{userid,jdbcType=INTEGER}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="net.hunanst.eduz100.api.oa.OfficialdocumentMonitor" >
+    insert into t_oa_officialdocument_monitor
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        ID,
+      </if>
+      <if test="officialdocumentid != null" >
+        OFFICIALDOCUMENTID,
+      </if>
+      <if test="userid != null" >
+        USERID,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="officialdocumentid != null" >
+        #{officialdocumentid,jdbcType=INTEGER},
+      </if>
+      <if test="userid != null" >
+        #{userid,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="net.hunanst.eduz100.api.oa.OfficialdocumentMonitor" >
+    update t_oa_officialdocument_monitor
+    <set >
+      <if test="officialdocumentid != null" >
+        OFFICIALDOCUMENTID = #{officialdocumentid,jdbcType=INTEGER},
+      </if>
+      <if test="userid != null" >
+        USERID = #{userid,jdbcType=INTEGER},
+      </if>
+    </set>
+    where ID = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="net.hunanst.eduz100.api.oa.OfficialdocumentMonitor" >
+    update t_oa_officialdocument_monitor
+    set OFFICIALDOCUMENTID = #{officialdocumentid,jdbcType=INTEGER},
+      USERID = #{userid,jdbcType=INTEGER}
+    where ID = #{id,jdbcType=INTEGER}
+  </update>
+  <select id="select_page" resultMap="BaseResultMap" parameterType="net.hunanst.eduz100.api.oa.OfficialdocumentMonitor" >
+    select
+    <include refid="Base_Column_List" />
+     from t_oa_officialdocument_monitor
+    <where >
+      <if test="id!=null" >
+        AND ID=#{id}
+      </if>
+      <if test="officialdocumentid!=null" >
+        AND OFFICIALDOCUMENTID=#{officialdocumentid}
+      </if>
+      <if test="userid!=null" >
+        AND USERID=#{userid}
+      </if>
+    </where>
+  </select>
+
+  <!-- 通过监视记录， 查询 公文数据  return Officialdocument  -->
+  <select id="selectOfficialdocumentByMonitor_page" resultType="net.hunanst.eduz100.api.oa.Officialdocument"
+          parameterType="net.hunanst.eduz100.api.oa.OfficialdocumentMonitor">
+    select A.*
+    , u.username , o.orgname
+    , (select temp1.username from ac_operator temp1 where temp1.id = A.deliverid and A.delivertype =1 ) as deliverusername
+    , (select temp2.orgname from ac_org temp2 where temp2.id = A.deliverid and A.delivertype =2 ) as deliverorgname
+    from
+    (
+    select distinct t.*
+      ,(
+          select b.DELIVERID from t_oa_officialdocument_deliver b
+          where b.OFFICIALDOCUMENTID = t.id order by DELIVERDATE desc limit 0,1
+        ) as DELIVERID
+      ,(
+          select b.DELIVERTYPE from t_oa_officialdocument_deliver b
+          where b.OFFICIALDOCUMENTID = t.id order by DELIVERDATE desc limit 0,1
+        ) as DELIVERTYPE
+        ,(
+          select b.DELIVERDATE from t_oa_officialdocument_deliver b
+          where b.OFFICIALDOCUMENTID = t.id order by DELIVERDATE desc limit 0,1
+        ) as DELIVERDATA
+    from t_oa_officialdocument_monitor m
+    left join t_oa_officialdocument t on m.OFFICIALDOCUMENTID = t.ID
+    where m.userid = #{userid}
+
+    ) A
+    left join ac_operator u on u.id = A.draftuserid
+    left join ac_org o on o.id = A.draftorgid
+    order by A.DELIVERDATA DESC
+  </select>
+</mapper>

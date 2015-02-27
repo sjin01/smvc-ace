@@ -1,0 +1,75 @@
+#parse("/common/north.html")
+
+<div class="col-sm-12">
+
+    <div class="tabbable">
+        <ul class="nav nav-tabs padding-12  " id="myTab">
+            <li class="dropdown #if($!flag==1) active #end">
+                <a data-toggle="tab" href="#" class="tab_ele"
+                   data-htmlUrl="$!contextPath/userprofile/tab_info">
+                    <i class="green ace-icon fa fa-user bigger-120"></i>
+                    个人信息
+                </a>
+            </li>
+
+            <!--<li class="">
+                <a data-toggle="tab" href="#" class="tab_ele" >
+                    <i class="blue ace-icon fa fa-users bigger-120"></i>
+                    通讯录
+                </a>
+            </li>-->
+
+
+            <li class="dropdown #if($!flag==2) active #end">
+                <a data-toggle="tab" href="#" class="tab_ele" data-htmlUrl="$!contextPath/userprofile/tab_sealmanager">
+                    <i class="purple ace-icon fa fa-pencil bigger-125"></i>
+                    公章管理
+                </a>
+            </li>
+
+            <li class="dropdown #if($!flag==3) active #end">
+                <a data-toggle="tab" href="#" class="tab_ele" data-htmlUrl="$!contextPath/userprofile/tab_settings">
+                    <i class="purple ace-icon fa fa-cog bigger-125"></i>
+                    设置
+                </a>
+            </li>
+
+        </ul>
+
+        <div class="tab-content no-border" >
+            <div id="tb_content" class="tab-pane fade active in">
+
+            </div>
+        </div>
+    </div>
+
+
+</div>
+<br style="clear:both;">
+
+
+<script type="text/javascript">
+
+/*    function loadTab (index) {
+//        console.log("index="+index);
+        if(index == 3) $('#tb_content').load('$! contextPath/userprofile/tab_sealmanager');
+        if(!index || index == 1) $('#tb_content').load('$! contextPath/userprofile/tab_info');
+
+    }*/
+
+    $(function (){
+        //loadTab( $!{ flag});
+        if('$!{flag}'==1)$('#tb_content').load('$!contextPath/userprofile/tab_info_active');
+        if('$!{flag}'==2)$('#tb_content').load('$!contextPath/userprofile/tab_sealmanager_active');
+        if('$!{flag}'==3)$('#tb_content').load('$!contextPath/userprofile/tab_settings_active');
+
+        $(".tab_ele").click( function (){
+//            $("#tb_content").load($(this).attr("data-htmlUrl") );
+            location.href = $(this).attr("data-htmlUrl");
+        })
+    })
+</script>
+
+
+
+#parse("/common/south.html")

@@ -1,0 +1,160 @@
+<div class="col-xs-12 widget-container-col">
+    <!-- #section:custom/widget-box.options.transparent -->
+    <div class="widget-box transparent">
+        <div class="widget-header">
+            <h4 class="widget-title lighter"> 跟踪列表 </h4>
+
+            <div class="widget-toolbar">
+                <a href="javascript:void(0);" data-action="fullscreen" class="orange2" title="全屏查看" data-rel="tooltip" data-placement="bottom">
+                    <i class="ace-icon fa fa-expand"></i>
+                </a>&nbsp;
+                <a href="javascript:void(0);" data-action="collapse" title="收起" class="" data-rel="tooltip" data-placement="bottom">
+                    <i class="ace-icon fa fa-chevron-up"></i>
+                </a>
+            </div>
+        </div>
+
+        <div class="widget-body">
+            <div class="widget-main padding-6 no-padding-left no-padding-right">
+                <table id="od_datatable" class="table table-striped table-hover">
+                    <thead>
+                    <tr>
+                        #*<th class="center">
+                            <label class="position-relative">
+                                <input type="checkbox" class="ace" />
+                                <span class="lbl"></span>
+                            </label>
+                        </th>*#
+                        <th>主题</th>
+                        <th>内容</th>
+                        <th class="hidden-480">重要级别</th>
+
+                        <th>
+                            <i class="ace-icon fa fa-clock-o bigger-110 hidden-480"></i>
+                            时效性
+                        </th>
+                        <th class="hidden-480">最近变更时间</th>
+
+                        <th>发起人</th>
+                        <th>当前位置</th>
+                        <th>当前状态</th>
+                        <th>操作</th>
+                    </tr>
+                    </thead>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- /section:custom/widget-box.options.transparent -->
+</div>
+
+<script type="text/javascript">
+
+    var gd_dialog ;
+    function toRecord (odid){
+        $.ajax({
+            url:"$contextPath/oa/officialdocument/step/toRecordDialog?officialDocumentId="+odid ,
+            type:'POST',
+            dataType:'HTML',
+            success:function( data ){
+                gd_dialog = bootbox.dialog({
+                    message: data
+                })
+            }
+        });
+    }
+
+    var od_monitor_DT ;
+    var od_draft_DT_ajaxSource = '$contextPath/oa/officialdocument/monitorlistdata';
+    function initDataTable () {
+        od_monitor_DT = $('#od_datatable').advancedDataTable({
+            "sAjaxSource": od_draft_DT_ajaxSource,
+            "aoColumns": [
+                /*{
+                    "mDataProp": function (source, type, val) {
+                        return '<label class="position-relative"><input type="checkbox" class="ace" name="" value="' + source.id + '" />' +
+                                '<span class="lbl"></span></label>';
+                    },
+                    "sClass": "center"
+                },*/
+                {"mDataProp": function (source ,type, val){
+                    // 标题+超链接
+                    if(source.title.length > 15) return '<a class="" href="#" onclick="toApprove('+source.id+');" title="'+source.title+'">'+ source.title.substring(0,10) +'...</a>';
+                    return '<a class="" href="javascript:void(0);" onclick="toApprove('+ source.id+');" >'+ source.title +'</a>';
+                }},
+
+                {"mDataProp": function (source,type,val){
+                    // 内容
+                    if( source.content.length > 35) return '<span title="'+source.content+'">'+source.content.substring(0,30) + '...</span>';
+                    return source.content;
+                } },
+                {"mDataProp": function (source , type ,val){
+                    // 重要等级
+                    return source.importantlevel + '星';
+                }},
+                {"mDataProp": function (source , type , val){
+                    // 时效性
+                    if(source.timelinessflag == 1){
+                        return source.lastdate;
+                    }else{
+                        return '不具';
+                    }
+                }},
+                {"mDataProp": "deliverdata"}, // 提交时间
+                {"mDataProp": function (source,type,val){
+                    // 发起人
+                    if(_loginUserid == source.draftuserid) return '您';
+                    return source.orgname + ': '+ source.username;
+                }},
+                {"mDataProp": function (source,type,val){
+                    // 当前流转位置
+                    if(_loginUserid == source.deliverid && source.delivertype==1) return '您';
+                    return source.deliverusername + source.deliverorgname;
+                }},
+                {"mDataProp": function(source ,type,val){
+                    switch(source.status)
+                    {
+                        case 1:
+                            return '<span class="label label-warning arrowed-right arrowed-in"> 待审批 </span>';
+                            break;
+                        case 2:
+                            return '<span class="label label-info arrowed-right arrowed-in"> 待签发 </span>';
+                            break;
+                        case 3:
+                            return '<span class="label label-purple arrowed-right arrowed-in"> 待签收 </span>';
+                            break;
+                        case 4:
+                            return '<span class="label label-success arrowed-in arrowed-in-right"> 已签收 </span>';
+                            break;
+                        case 5:
+                            return '<span class="label label-danger arrowed arrowed-in-right"> 被驳回 </span>';
+                            break;
+                    }
+                }},
+                {"mDataProp" : function(source , type ,val){
+
+                    var html_str = '<div class="action-buttons">' +
+                            '<a class="purple" href="javascript:void(0);" onclick="toApprove('+ source.id+');" title="查看" data-rel="tooltip" data-placement="bottom"><i class="ace-icon fa fa-search bigger-130"></i></a>&nbsp;&nbsp;';
+                    if(source.status == 4){
+                        html_str += '<a class="" href="javascript:void(0);" onclick="toRecord('+source.id+');" title="归档" data-rel="tooltip" data-placement="bottom"><i class="ace-icon fa fa-floppy-o bigger-130"></i></a>&nbsp;&nbsp;';
+                    }
+                    html_str += '</div>';
+                    return html_str;
+                }}
+            ],
+            "oLanguage": {
+                "sUrl": "$contextPath/static/ace/js/jquery.dataTables.lang.zh-CN.txt"
+            }
+        });
+
+        $('[data-rel=tooltip]').tooltip({container:'body'});
+    }
+
+    $(function (){
+        initDataTable();
+        $('[data-rel=tooltip]').tooltip({container:'body'});
+    })
+
+
+</script>

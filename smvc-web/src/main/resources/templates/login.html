@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
+    <meta charset="utf-8"/>
+    <title>临澧县教育平台OA系统</title>
+
+    <meta name="description" content="User login page"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0"/>
+
+    <!-- bootstrap & fontawesome -->
+    <link rel="stylesheet" href="$contextPath/static/ace/css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="$contextPath/static/ace/css/font-awesome.min.css"/>
+
+    <!-- text fonts -->
+    <link rel="stylesheet" href="$contextPath/static/ace/css/ace-fonts.css"/>
+
+    <!-- ace styles -->
+    <link rel="stylesheet" href="$contextPath/static/ace/css/ace.min.css"/>
+
+    <!--[if lte IE 9]>
+    <link rel="stylesheet" href="$contextPath/static/ace/css/ace-part2.min.css"/>
+    <![endif]-->
+    <link rel="stylesheet" href="$contextPath/static/ace/css/ace-rtl.min.css"/>
+
+    <!--[if lte IE 9]>
+    <link rel="stylesheet" href="$contextPath/static/ace/css/ace-ie.min.css"/>
+    <![endif]-->
+    <link rel="stylesheet" href="$contextPath/static/ace/css/ace.onpage-help.css"/>
+
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+
+    <!--[if lt IE 9]>
+    <script src="$contextPath/static/ace/js/html5shiv.js"></script>
+    <script src="$contextPath/static/ace/js/respond.min.js"></script>
+    <![endif]-->
+</head>
+
+
+<body class="login-layout light-login">
+
+<div class="navbar navbar-default navbar-fixed-top">
+    <div class="navbar-container" id="navbar-container">
+
+        <div class="navbar-header pull-left">
+            <a href="#" class="navbar-brand">
+                <small>
+                    <i class="fa fa-leaf "></i>
+                    临澧教育平台 OA系统
+                </small>
+            </a>
+        </div>
+    </div>
+    <!-- /.navbar-container -->
+</div>
+
+<div class="main-container">
+    <div class="main-content">
+        <div class="row">
+            <div class="col-sm-10 col-sm-offset-1">
+                <div class="space-18"></div>
+                <div class="">
+
+                    <div class="space-18"></div>
+                    <div class="space-18"></div>
+                    <div class="space-18"></div>
+                    <div class="space-18"></div>
+
+                    <div class="position-relative">
+                        <div id="login-box" class="login-box visible widget-box no-border">
+                            <div class="widget-body">
+                                <div class="widget-main">
+                                    <div class="row">
+                                        <div class="col-xs-8">
+                                            <h4 style="">温馨提示：</h4>
+                                            <ul class="list-unstyled spaced">
+                                                <li><i class="ace-icon fa fa-check bigger-110 green"></i>
+                                                    1. 系统推荐使用：
+                                                    <a href="javascript:void(0);" data-rel="popover" data-placement="bottom" class="popover-info" title="UC浏览器"
+                                                       data-content="UC浏览器（原名UCWEB，2009年5月正式更名为UC浏览器）是一款把“互联网装入口袋”的主流手机浏览器 ，由优视科技（原名优视动景）公司研制开发。兼备cmnet、cmwap等联网方式，速度快而稳定，具有视频播放、网站导航、搜索、下载、个人数据管理等功能。
+2014年4月10日UC浏览器PC版正式发布[1-2]   。 6月11日，UC优视将全面并入阿里巴巴集团。UC浏览器为UC 优视的核心产品[3] 。<a href='http://www.uc.cn/' target='_blank'>前往官网下载</a>">UC浏览器</a>，
+                                                    <a href="javascript:void(0);" data-rel="popover" data-placement="bottom" class="popover-info" title="谷歌浏览器"
+                                                       data-content="Google Chrome，又称Google浏览器，是一个由Google（谷歌）公司开发的网页浏览器。该浏览器是基于其他开源软件所撰写，包括WebKit，目标是提升稳定性、速度和安全性，并创造出简单且有效率的使用者界面。软件的名称是来自于称作Chrome的网络浏览器图形使用者界面（GUI）。
+                                                       软件的beta测试版本在2008年9月2日发布，提供50种语言版本，有Windows、Mac OS X、Linux、Android、以及iOS版本提供下载。2013年9月，Chrome已达全球份额的43%，成为全球使用最广的浏览器。
+                                                       <a href='http://www.google.cn/intl/zh-CN/chrome/' target='_blank'>前往官网下载</a><br/>
+                                                       <a href='$!{nginx_filepath}$!{chrome_v40_x86_installer}' target='_blank'>本地下载（windows32位）</a><br/>
+                                                       <a href='$!{nginx_filepath}$!{chrome_v40_x64_installer}' target='_blank'>本地下载（windows64位）</a>">谷歌浏览器</a>，IE10及以上浏览器。
+                                                </li>
+                                                <li>
+                                                    <i class="ace-icon fa fa-exclamation-triangle orange bigger-110"></i>
+                                                    2. 系统为提供更好的功能体验使用了一些新技术，该功能将无法在<span class="red">IE10以下版本</span>浏览器使用，包括以其为内核的360浏览器！
+                                                </li>
+                                                <li><i class="ace-icon fa fa-bell-o bigger-110 purple"></i>
+                                                    3. <span id="browser_type"></span>
+                                                </li>
+                                                <div class="space-18"></div>
+                                                <li style="display: none;" id="browser_low">
+                                                    <div class="alert alert-danger">
+                                                        <i class="ace-icon fa fa-exclamation-triangle red bigger-130"></i>
+                                                        <i class="ace-icon fa fa-exclamation-triangle red bigger-130"></i>
+                                                        <i class="ace-icon fa fa-exclamation-triangle red bigger-130"></i>
+                                                        &nbsp;您的浏览器版本过低，可能会造成部分内容不兼容以及功能缺失！
+                                                        <br>
+                                                    </div>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                        <div class="col-sm-4 widget-container-col ui-sortable" style="border-left: 1px dotted rgb(170, 170, 170); ">
+
+                                            <h4 class="header blue lighter bigger">
+                                                <i class="ace-icon fa fa-coffee green"></i>
+                                                请输入您的登录信息
+                                            </h4>
+
+                                            <div class="space-6"></div>
+
+                                            <form>
+                                                <fieldset>
+
+                                                    <div class="inline width-20">用户名：</div>
+                                                    <div class="inline width-75" style="padding-left: 10px;">
+                                                        <label class="block clearfix inline">
+															<span class="block input-icon input-icon-right">
+																<input name="usercode" id="usercode" type="text"
+                                                                       class="form-control" placeholder="用户名"/>
+																<i class="ace-icon fa fa-user"></i>
+															</span>
+                                                        </label>
+                                                    </div>
+
+                                                    <div class="inline width-20">密码：</div>
+                                                    <div class="inline width-75" style="padding-left: 10px;">
+                                                        <label class="block clearfix">
+															<span class="block input-icon input-icon-right">
+																<input name="password" id="password" type="password"
+                                                                       class="form-control" placeholder="密码"/>
+																<i class="ace-icon fa fa-lock"></i>
+															</span>
+                                                        </label>
+                                                    </div>
+
+                                                    <div class="space"></div>
+
+                                                    <div class="clearfix">
+                                                        <label class="inline">
+                                                        </label>
+
+                                                        <button id="btnLogin" onclick="login()" type="button"
+                                                                class="width-35 pull-right btn btn-sm btn-primary">
+                                                            <i class="ace-icon fa fa-key"></i>
+                                                            <span class="bigger-110">登录</span>
+                                                        </button>
+                                                    </div>
+
+                                                    <div class="space-4"></div>
+                                                </fieldset>
+                                            </form>
+
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+                            <!-- /.widget-body -->
+                        </div>
+                        <!-- /.login-box -->
+
+                        <div class="space-6"></div>
+                        <div class=" center">
+                            <span class="grey">&copy; 盛通信息技术有限公司</span>
+                        </div>
+                    </div>
+                    <!-- /.position-relative -->
+                </div>
+
+                <div class="space-18"></div>
+
+
+
+            #*<div class="alert alert-info">
+                <strong>温馨提示!</strong> <div id="browser_type"></div>
+            </div>*#
+
+
+            </div>
+            <!-- /.col -->
+        </div>
+        <!-- /.row -->
+    </div>
+    <!-- /.main-content -->
+</div>
+<!-- /.main-container -->
+
+
+<!-- basic scripts -->
+
+<!--[if !IE]> -->
+<script type="text/javascript">
+    window.jQuery || document.write("<script src='$contextPath/static/ace/js/jquery.min.js'>" + "<" + "/script>");
+</script>
+<!-- <![endif]-->
+
+<!--[if IE]>
+<script type="text/javascript">
+    window.jQuery || document.write("<script src='$contextPath/static/ace/js/jquery1x.min.js'>" + "<" + "/script>");
+</script>
+<![endif]-->
+<script type="text/javascript">
+    if ('ontouchstart' in document.documentElement) document.write("<script src='$contextPath/static/ace/js/jquery.mobile.custom.min.js'>" + "<" + "/script>");
+</script>
+
+
+<script type="text/javascript">
+    var userAgent = navigator.userAgent.toLowerCase(), s, o = {};
+    var browser = {
+        version: (userAgent.match(/(?:firefox|opera|safari|chrome|msie)[\/: ]([\d.]+)/))[1],
+        safari: /version.+safari/.test(userAgent),
+        chrome: /chrome/.test(userAgent),
+        firefox: /firefox/.test(userAgent),
+        ie: /msie/.test(userAgent),
+        opera: /opera/.test(userAgent),
+        uc:  (/ubrowser/.test(userAgent) || /ucbrowser/.test(userAgent)) ,
+        ucversion : (userAgent.match(/(?:ubrowser|ucbrowser)[\/: ]([\d.]+)/))[1]
+    }
+    /* 获得浏览器的名称及版本信息 */
+    /*console.log(navigator.userAgent);
+    console.log(userAgent);*/
+    if (browser.ie) {
+        if(browser.version < 10){
+            $("#browser_low").show();
+            $("#browser_type").html("您当前使用的是：<span class='green'>IE浏览器</span> 版本：<span class='red'>" + browser.version + "</span>");
+        }else{
+            $("#browser_type").html("您当前使用的是：<span class='green'>IE浏览器</span> 版本：<span class='green'>" + browser.version + "</span>");
+        }
+    } else if (browser.uc) {
+        $("#browser_type").html("您当前使用的是：<span class='green'>UC浏览器</span> 版本：<span class='green'>" + browser.ucversion + "</span>");
+    } else if (browser.opera) {
+        $("#browser_type").html("您当前使用的是：<span class='green'>欧朋浏览器</span> 版本：<span class='green'>" + browser.version + "</span>");
+    } else if (browser.safari) {
+        $("#browser_type").html("您当前使用的是：<span class='green'>Safari浏览器</span> 版本：<span class='green'>" + browser.version + "</span>");
+    } else if (browser.chrome) {
+        $("#browser_type").html("您当前使用的是：<span class='green'>谷歌浏览器</span> 版本：<span class='green'>" + browser.version + "</span>");
+    } else if (browser.firefox) {
+        $("#browser_type").html("您当前使用的是：<span class='green'>火狐浏览器</span> 版本：<span class='green'>" + browser.version + "</span>");
+    }
+
+</script>
+
+
+<!-- inline scripts related to this page -->
+<script type="text/javascript">
+    jQuery(function ($) {
+        $(document).on('click', '.toolbar a[data-target]', function (e) {
+            e.preventDefault();
+            var target = $(this).data('target');
+            $('.widget-box.visible').removeClass('visible');//hide others
+            $(target).addClass('visible');//show target
+        });
+    });
+
+
+    //you don't need this, just used for changing background
+    jQuery(function ($) {
+        $('#btn-login-dark').on('click', function (e) {
+            $('body').attr('class', 'login-layout');
+            $('#id-text2').attr('class', 'white');
+            $('#id-company-text').attr('class', 'blue');
+
+            e.preventDefault();
+        });
+        $('#btn-login-light').on('click', function (e) {
+            $('body').attr('class', 'login-layout light-login');
+            $('#id-text2').attr('class', 'grey');
+            $('#id-company-text').attr('class', 'blue');
+
+            e.preventDefault();
+        });
+        $('#btn-login-blur').on('click', function (e) {
+            $('body').attr('class', 'login-layout blur-login');
+            $('#id-text2').attr('class', 'white');
+            $('#id-company-text').attr('class', 'light-blue');
+
+            e.preventDefault();
+        });
+
+    });
+
+
+    function login() {
+        if ($("#usercode").val() == '' || $("#password").val() == '') {
+            alert("用户名和密码都不能为空！");
+            return;
+        }
+
+        $("#btnLogin").attr("disabled", "disabled");
+
+        $.ajax({
+            url: "$contextPath/login",
+            type: "POST",
+            dataType: "json",
+            data: {
+                usercode: $("#usercode").val(),
+                password: $("#password").val()
+            },
+            success: function (data) {
+                if (data.code == 200) {
+                    location.href = "$contextPath/index";
+                } else if (data.code == 510) {
+                    $("#btnLogin").removeAttr("disabled");
+                    alert("用户名或密码错误！");
+                } else if (data.code == 405) {
+                    $("#btnLogin").removeAttr("disabled");
+                    alert("没有访问权限！");
+                }
+            }
+        });
+    }
+
+    $(function () {
+        $('[data-rel=popover]').popover({html:true});
+
+        $("#usercode , #password").keydown(function (e) {
+            if (e.keyCode == 13) {
+                login();
+            }
+        });
+    });
+</script>
+
+<script src="$contextPath/static/ace/js/bootstrap.min.js"></script>
+
+<!-- page specific plugin scripts -->
+<!--[if lte IE 8]>
+<script src="$contextPath/static/ace/js/excanvas.min.js"></script>
+<![endif]-->
+
+<!-- ace scripts -->
+<script src="$contextPath/static/ace/js/ace.min.js"></script>
+<script src="$contextPath/static/ace/js/ace-elements.min.js"></script>
+
+<script src="$contextPath/static/ace/js/jquery-ui.min.js"></script>
+<script src="$contextPath/static/ace/js/jquery-ui.custom.min.js"></script>
+<script src="$contextPath/static/ace/js/jquery.ui.touch-punch.min.js"></script>
+<script src="$contextPath/static/ace/js/chosen.jquery.min.js"></script>
+<script src="$contextPath/static/ace/js/fuelux/fuelux.spinner.min.js"></script>
+<script src="$contextPath/static/ace/js/date-time/bootstrap-datepicker.min.js"></script>
+<script src="$contextPath/static/ace/js/date-time/bootstrap-timepicker.min.js"></script>
+<script src="$contextPath/static/ace/js/date-time/moment.min.js"></script>
+<script src="$contextPath/static/ace/js/date-time/daterangepicker.min.js"></script>
+<script src="$contextPath/static/ace/js/date-time/bootstrap-datetimepicker.min.js"></script>
+<script src="$contextPath/static/ace/js/bootstrap-colorpicker.min.js"></script>
+<script src="$contextPath/static/ace/js/jquery.knob.min.js"></script>
+<script src="$contextPath/static/ace/js/jquery.autosize.min.js"></script>
+<script src="$contextPath/static/ace/js/jquery.inputlimiter.1.3.1.min.js"></script>
+<script src="$contextPath/static/ace/js/jquery.maskedinput.min.js"></script>
+<script src="$contextPath/static/ace/js/bootstrap-tag.min.js"></script>
+<script src="$contextPath/static/ace/js/typeahead.jquery.min.js"></script>
+
+<script src="$contextPath/static/ace/js/jquery.dataTables.min.js"></script>
+<script src="$contextPath/static/ace/js/jquery.dataTables.bootstrap.js"></script>
+
+<script src="$contextPath/static/ace/js/fuelux/data/fuelux.tree-sample-demo-data.js"></script>
+<script src="$contextPath/static/ace/js/fuelux/fuelux.tree.min.js"></script>
+
+<script src="$contextPath/static/ace/js/bootbox.min.js"></script>
+</body>
+</html>

@@ -1,0 +1,159 @@
+#parse("/common/north.html")
+
+<div class="page-header">
+    <h1 class="no-margin col-sm-9 left page-header-h1"> 角色管理
+        <small>
+            <i class="ace-icon fa fa-angle-double-right"></i> 管理系统角色
+        </small>
+    </h1>
+    <div class="input-group col-sm-3">
+        <input type="text" id="condition" class="form-control search-query" placeholder="请输入关键字">
+        <span class="input-group-btn">
+            <button id="btnselect" type="button" class="btn btn-purple btn-sm"> 查询
+                <i class="ace-icon fa fa-search icon-on-right bigger-110"></i>
+            </button>
+        </span>
+    </div>
+</div>
+
+<div class="widget-box transparent ui-sortable-handle">
+    <div class="widget-header">
+        <h5 class="widget-title">角色列表</h5>
+        <div class="widget-toolbar">
+            <div class="action-buttons inline">
+                <a class="pink" href="$contextPath/sys/role/detail?operationtype=insert&id=0"><i class="ace-icon fa fa-plus-square-o bigger-130"></i>&nbsp;添加</a>
+                &nbsp;&nbsp;
+                <a class="red" href="javascript:void(0)" onclick="deletes()"><i class="ace-icon fa fa-trash-o bigger-130"></i>&nbsp;批量删除</a>
+                &nbsp;&nbsp;
+                <a class="pink" href="javascript:void(0)" onclick="setFuncBatch()"><i class="ace-icon fa fa-cog bigger-130"></i>&nbsp;批量设置权限</a>
+            </div>
+            &nbsp;&nbsp;
+            <a href="javascript:void(0)" data-action="fullscreen"><i class="ace-icon fa fa-expand"></i>&nbsp;全屏</a>
+            &nbsp;&nbsp;
+            <a href="javascript:void(0)" data-action="collapse"><i class="ace-icon fa fa-chevron-up"></i>&nbsp;折叠</a>
+        </div>
+    </div>
+
+    <div class="widget-body">
+        <div class="widget-main">
+	        <table class="table table-striped table-hover" id="datatable">
+	            <thead>
+	                <tr>
+	                    <th class="center">
+	                        <label class="position-relative">
+	                            <input type="checkbox" class="ace" />
+	                            <span class="lbl"></span>
+	                        </label>
+	                    </th>
+	                    <th>角色代码</th>
+	                    <th>角色名称</th>
+	                    <th>所属机构</th>
+	                    <th>操作</th>
+	                </tr>
+	            </thead>
+	        </table>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+    var datatable;
+
+    function initDataTable () {
+        datatable = $('#datatable').advancedDataTable({
+            "sAjaxSource": '$contextPath/sys/role/list',
+            "aoColumns": [
+                { "mDataProp": function(source, type, val){
+                    	return '<label class="position-relative"><input type="checkbox" class="ace" /><span class="lbl"></span></label>';
+                	}, "sClass" : "center"
+                },
+                {"mDataProp": "rolecode"},
+                {"mDataProp": "rolename"},
+                {"mDataProp": function(source, type, val){
+                	if(source.belongorgname) return source.belongorgname;
+                    return '临澧教育局';
+        		}},
+                {"mDataProp": function(source, type, val){
+                    return '<div class="action-buttons">'
+                            +'<a class="purple" href="$contextPath/sys/role/detail?operationtype=select&id='+source.id+'"><i class="ace-icon fa fa-search bigger-130"></i></a>&nbsp;&nbsp;'
+                            +'<a class="green" href="$contextPath/sys/role/detail?operationtype=update&id='+source.id+'"><i class="ace-icon fa fa-edit bigger-130"></i></a>&nbsp;&nbsp;'
+                            +'<a class="red" href="javascript:void(0)" onclick="deletes(this)"><i class="ace-icon fa fa-trash-o bigger-130"></i></a>&nbsp;&nbsp;'
+                            +'<a class="pink" href="$contextPath/sys/role/funcrelation?roleid='+source.id+'"><i class="ace-icon fa fa-cog bigger-130"></i></a>'
+                            +'</div>';
+                }}
+            ],
+            "fnServerParams": function ( aoData ) {
+                if($("#condition").val()!='')
+                    aoData.push({ "name": "condition", "value": $("#condition").val()});
+            },
+            "oLanguage": {
+                "sUrl": "$contextPath/static/ace/js/jquery.dataTables.lang.zh-CN.txt"
+            }
+        });
+    }
+
+    function getdata(){
+        datatable.fnPageChange("first", true);
+    }
+
+    function deletes(target){
+        var ids = [];
+        if(target){
+            ids.push(datatable.fnGetData($(target).closest('tr')).id);
+        }else{
+            $.each(datatable.getSelectedData(), function(i, n){
+                ids.push(n.id);
+            });
+        }
+        if(ids.length==0){
+            alert("至少选择一条记录！");
+            return;
+        }
+        
+    	if(confirm("确定删除该记录吗？")) {
+    		jQuery.ajax({
+                type:"post",
+                contentType: 'application/json',
+                url:"$contextPath/sys/role/deletes",
+                data:JSON.stringify(ids),
+                dataType: "json",
+                success:function(data){
+                    getdata();
+                }
+            });
+    	}
+    }
+    
+    function setFuncBatch(){
+    	var datas = datatable.getSelectedData();
+    	if(datas.length==0){
+            alert("至少选择一条记录！");
+            return;
+        }
+    	
+    	var sameBelongorgid = true;
+    	var ids = [];
+        $.each(datas, function(i, n){
+        	if(n.belongorgid != datas[0].belongorgid){
+        		sameBelongorgid = false;
+        		return false;
+        	}
+            ids.push(n.id);
+        });
+        
+        if(!sameBelongorgid){
+            alert("请选择相同所属机构的角色！");
+            return;
+        }
+        
+        location.href="$contextPath/sys/role/funcbatch?roleids="+ids.join(",");
+    }
+
+    $(function(){
+        initDataTable();
+        $("#condition").bind("change", getdata);
+        $("#btnselect").bind("click", getdata);
+    });
+</script>
+
+#parse("/common/south.html")

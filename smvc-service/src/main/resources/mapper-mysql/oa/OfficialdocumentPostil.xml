@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="OfficialdocumentPostil">
+    <resultMap id="BaseResultMap" type="net.hunanst.eduz100.api.oa.OfficialdocumentPostil">
+        <id column="ID" property="id" jdbcType="INTEGER"/>
+        <result column="OFFICIALDOCUMENTID" property="officialdocumentid" jdbcType="INTEGER"/>
+        <result column="USERID" property="userid" jdbcType="INTEGER"/>
+        <result column="ORGID" property="orgid" jdbcType="INTEGER"/>
+        <result column="DATE" property="date" jdbcType="TIMESTAMP"/>
+        <result column="CONTENT" property="content" jdbcType="VARCHAR"/>
+        <result column="DELIVERID" property="deliverid" jdbcType="INTEGER"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+    ID, OFFICIALDOCUMENTID, USERID, ORGID, DATE, CONTENT ,DELIVERID
+  </sql>
+
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+        select
+        <include refid="Base_Column_List"/>
+        from t_oa_officialdocument_postil
+        where ID = #{value}
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from t_oa_officialdocument_postil
+    where ID = #{value}
+  </delete>
+    <insert id="insert" parameterType="net.hunanst.eduz100.api.oa.OfficialdocumentPostil">
+    insert into t_oa_officialdocument_postil (ID, OFFICIALDOCUMENTID, USERID, 
+      ORGID, DATE, CONTENT ,DELIVERID
+      )
+    values (#{id,jdbcType=INTEGER}, #{officialdocumentid,jdbcType=INTEGER}, #{userid,jdbcType=INTEGER}, 
+      #{orgid,jdbcType=INTEGER}, #{date,jdbcType=TIMESTAMP}, #{content,jdbcType=VARCHAR} , #{deliverid,jdbcType=INTEGER}
+      )
+  </insert>
+    <insert id="insertSelective" parameterType="net.hunanst.eduz100.api.oa.OfficialdocumentPostil">
+        insert into t_oa_officialdocument_postil
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                ID,
+            </if>
+            <if test="officialdocumentid != null">
+                OFFICIALDOCUMENTID,
+            </if>
+            <if test="userid != null">
+                USERID,
+            </if>
+            <if test="orgid != null">
+                ORGID,
+            </if>
+            <if test="date != null">
+                DATE,
+            </if>
+            <if test="content != null and content!='' ">
+                CONTENT,
+            </if>
+            <if test="deliverid != null">
+                DELIVERID,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{id,jdbcType=INTEGER},
+            </if>
+            <if test="officialdocumentid != null">
+                #{officialdocumentid,jdbcType=INTEGER},
+            </if>
+            <if test="userid != null">
+                #{userid,jdbcType=INTEGER},
+            </if>
+            <if test="orgid != null">
+                #{orgid,jdbcType=INTEGER},
+            </if>
+            <if test="date != null">
+                #{date,jdbcType=TIMESTAMP},
+            </if>
+            <if test="content != null and content!='' ">
+                #{content,jdbcType=VARCHAR},
+            </if>
+            <if test="deliverid != null">
+                #{deliverid,jdbcType=INTEGER},
+            </if>
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective" parameterType="net.hunanst.eduz100.api.oa.OfficialdocumentPostil">
+        update t_oa_officialdocument_postil
+        <set>
+            <if test="officialdocumentid != null">
+                OFFICIALDOCUMENTID = #{officialdocumentid,jdbcType=INTEGER},
+            </if>
+            <if test="userid != null">
+                USERID = #{userid,jdbcType=INTEGER},
+            </if>
+            <if test="orgid != null">
+                ORGID = #{orgid,jdbcType=INTEGER},
+            </if>
+            <if test="date != null">
+                DATE = #{date,jdbcType=TIMESTAMP},
+            </if>
+            <if test="content != null and content!='' ">
+                CONTENT = #{content,jdbcType=VARCHAR},
+            </if>
+            <if test="deliverid != null">
+                DELIVERID = #{deliverid,jdbcType=INTEGER},
+            </if>
+        </set>
+        where ID = #{id,jdbcType=INTEGER}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="net.hunanst.eduz100.api.oa.OfficialdocumentPostil">
+    update t_oa_officialdocument_postil
+    set OFFICIALDOCUMENTID = #{officialdocumentid,jdbcType=INTEGER},
+      USERID = #{userid,jdbcType=INTEGER},
+      ORGID = #{orgid,jdbcType=INTEGER},
+      DATE = #{date,jdbcType=TIMESTAMP},
+      CONTENT = #{content,jdbcType=VARCHAR},
+      DELIVERID = #{deliverid,jdbcType=INTEGER}
+    where ID = #{id,jdbcType=INTEGER}
+  </update>
+    <select id="select_page" resultMap="BaseResultMap"
+            parameterType="net.hunanst.eduz100.api.oa.OfficialdocumentPostil">
+        select
+        <include refid="Base_Column_List"/>
+        from t_oa_officialdocument_postil
+        <where>
+            <if test="id!=null">
+                AND ID=#{id}
+            </if>
+            <if test="officialdocumentid!=null">
+                AND OFFICIALDOCUMENTID=#{officialdocumentid}
+            </if>
+            <if test="userid!=null">
+                AND USERID=#{userid}
+            </if>
+            <if test="orgid!=null">
+                AND ORGID=#{orgid}
+            </if>
+            <if test="date!=null">
+                AND DATE=#{date}
+            </if>
+            <if test="content!=null and content!='' ">
+                AND CONTENT=#{content}
+            </if>
+            <if test="deliverid != null">
+                AND DELIVERID=#{deliverid}
+            </if>
+        </where>
+    </select>
+</mapper>

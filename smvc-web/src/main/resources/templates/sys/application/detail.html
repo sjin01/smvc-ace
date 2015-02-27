@@ -1,0 +1,143 @@
+#parse("/common/north.html")
+
+<div class="page-header">
+    <h1 class="page-header-h1">应用管理
+        <small>
+            <i class="ace-icon fa fa-angle-double-right"></i>  $!{dual.operationname}
+        </small>
+    </h1>
+</div>
+
+<div class="row">
+    <div class="col-xs-12">
+        <form class="form-horizontal" id="validation-form" name="validation-form" method="post" action="$contextPath/sys/application/save">
+            <input type="hidden" id="id" name="id" value="$!{model.id}" />
+            
+            <div class="form-group">
+                <label class="col-sm-3 control-label no-padding-right"> 应用系统名称 </label>
+                <div class="col-sm-4">
+                    <input type="text" id="appname" name="appname" $!dual.disabled value="$!{model.appname}" class="form-control" />
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="col-sm-3 control-label no-padding-right"> 应用系统代码 </label>
+                <div class="col-sm-4">
+                    <input type="text" id="appcode" name="appcode" $!dual.disabled value="$!{model.appcode}" class="form-control" />
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="col-sm-3 control-label no-padding-right"> 应用系统状态 </label>
+                <div class="col-sm-4">
+                    <select class="form-control" $!dual.disabled id="status" name="status">
+                        #foreach($item in $sysdicts.app_status.dicts)
+                            <option value="$item.tvalue" #if($item.tvalue==$model.status) selected #end>$item.tname</option>
+                        #end
+                    </select>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="col-sm-3 control-label no-padding-right"> 应用服务器的URL </label>
+                <div class="col-sm-5">
+                    <input type="text" id="appurl" $!dual.disabled name="appurl" value="$!{model.appurl}" class="form-control" />
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="col-sm-3 control-label no-padding-right"> 说明 </label>
+                <div class="col-sm-6">
+                    <textarea id="memo" name="memo" $!dual.disabled class="form-control" style="height: 100px;">$!{model.memo}</textarea>
+                </div>
+            </div>
+            
+            <div class="clearfix form-actions no-margin-bottom">
+                <div class="center">
+                    <button class="btn btn-info $!dual.hide" type="button" onclick="save(this)" style="margin: 0 10px">
+                        <i class="ace-icon fa fa-check bigger-110"></i>保存
+                    </button>
+                    
+                    <a class="btn" href="$contextPath/sys/application" style="margin: 0 10px">
+                        <i class="ace-icon fa fa-undo bigger-110"></i>$!dual.goback
+                    </a>
+                </div>
+            </div>
+        </form>
+
+    </div>
+</div>
+
+<script type="text/javascript">
+    
+    $(function(){
+    	$('#validation-form').validate({
+			errorElement: 'div',
+			errorClass: 'help-block',
+			focusInvalid: false,
+			rules: {
+				appname: {
+					required: true,
+					maxlength: 40
+				},
+				appcode: {
+					required: true,
+					maxlength: 20
+				},
+				appurl: {
+					maxlength: 100
+				},
+				memo: {
+					maxlength: 300
+				}
+			},
+			messages: {
+				appname: {
+					required: "请填写应用名称",
+					maxlength: "应用名称不能多余40个字符"
+				},
+				appcode: {
+					required: "请填写应用代码",
+					maxlength: "应用代码不能多余20个字符"
+				},
+				appurl: {
+					maxlength: "应用地址不能多余100个字符"
+				},
+				memo: {
+					maxlength: "应用说明不能多余300个字符"
+				}
+			},
+			highlight: function (e) {
+				$(e).closest('.form-group').removeClass('has-info').addClass('has-error');
+			},
+			success: function (e) {
+				$(e).closest('.form-group').removeClass('has-error');//.addClass('has-info');
+				$(e).remove();
+			},
+			errorPlacement: function (error, element) {
+				element.closest("div.form-group").append(error);
+			}
+		});
+    });
+    
+    function save(target){
+    	if($('#validation-form').valid()){
+    		$(target).attr("disabled", "disabled");
+    		jQuery.ajax({
+    			type:"post",
+    			url:"$contextPath/sys/application/save",
+    			data:$('#validation-form').serialize(),
+    			dataType: "json",
+    			success:function(data){
+    				if(data.code==530){
+    					$(target).removeAttr("disabled");
+    					alert("应用系统代码已经存在！");
+    				}else{
+    					location.href = "$contextPath/sys/application";
+    				}
+    			}
+    		});
+    	}
+    }
+</script>
+#parse("/common/south.html")

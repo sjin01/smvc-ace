@@ -1,0 +1,228 @@
+#parse("/common/north.html")
+
+<script type="text/javascript">
+var ztree;
+
+$(function(){
+	ztree = $.fn.zTree.init($("#treeDemo"), {
+		async: {url: '$contextPath/sys/func/list', enable: true},
+		view: {selectedMulti: false, showIcon: true},
+		data: {
+			simpleData: {enable: true, idKey: "id", pIdKey: "parentid"},
+			key: {name: "funcname"}
+		},
+		callback:{
+			onClick: function(event, treeId, treeNode, clickFlag) {
+				$("#validation-form label[id]").each(function(){
+					$(this).html(treeNode[$(this).attr("id")]);
+				});
+				
+				var obj = {#foreach($item in $dictmap.func_type.dicts) $item.tvalue: '$item.tname' #if($velocityHasNext) , #end #end};
+				$("#functype").html(obj[treeNode.functype]);
+				
+				$("#funcicon").html('<i class="ace-icon fa '+treeNode.funcicon+' icon-on-right bigger-110"></i>');
+				
+				var parentnode = treeNode.getParentNode();
+				if(parentnode){
+					$("#validation-form label[id=parentfuncname]").html(parentnode.funcname);
+				}else{
+					$("#validation-form label[id=parentfuncname]").html('&nbsp;');
+				}
+			},
+			onAsyncSuccess: function (event, treeId, treeNode, msg){
+				var arr = ztree.transformToArray(ztree.getNodes());
+				for(i in arr){
+					if(arr[i].functype == '1') {
+						arr[i].iconSkin = 'icon07';
+					} else if(arr[i].functype == '2') {
+						arr[i].iconSkin = 'icon08';
+					} else {
+						arr[i].iconSkin = 'icon00';
+					}
+				}
+				
+				var rootNode = ztree.getNodeByTId(treeId+"_1");
+				ztree.updateNode(rootNode);
+				ztree.expandNode(rootNode);
+			}
+		}
+	}, null);
+});
+
+function deletes(){
+	var treeNode = ztree.getSelectedNodes()[0];
+	if(!treeNode) {
+		alert("请选择功能树的一个节点");
+		return;
+	}
+	
+	if(confirm("确定删除该节点及其下属子节点吗？")){
+		jQuery.ajax({
+            type:"post",
+            url:"$contextPath/sys/func/deletes",
+            data: treeNode,
+            dataType: "json",
+            success:function(data){
+                if(data.data>0){
+                	window.location.reload(); return;
+                	var parentnode = treeNode.getParentNode();
+                	if(parentnode!=null){
+                		$("#"+parentnode.tId+"_a").click();
+                	}else{
+                		$("#validation-form :input").each(function(){
+                			$(this).val('');
+                		});
+                	}
+                	ztree.removeNode(treeNode);
+                }
+            }
+        });
+	}
+}
+
+function detail(operation){
+	if($("#appid").val()==null){
+		alert("请选择一个应用系统");
+		return;
+	}
+	
+	if(operation=='insert'){
+		if(ztree.getNodes().length>0){
+			var treeNode = ztree.getSelectedNodes()[0];
+			if(treeNode==null){
+				alert("请选择功能树的一个节点");
+				return;
+			}
+			if(treeNode.functype==2){
+				alert("该节点是功能，不能添加子节点");
+				return;
+			}
+			location.href='$contextPath/sys/func/detail?operationtype='+operation+'&parentid='+treeNode.id+'&appid='+$("#appid").val();
+		}else{
+			location.href='$contextPath/sys/func/detail?operationtype='+operation+'&parentid=-1&appid='+$("#appid").val();
+		}
+		
+	}else if(operation=='update'){
+		var treeNode = ztree.getSelectedNodes()[0];
+		if(treeNode==null){
+			alert("请选择功能树的一个节点");
+			return;
+		}
+		var parentid = treeNode.parentid!=null ? treeNode.parentid : -1;
+		location.href='$contextPath/sys/func/detail?operationtype='+operation+'&id='+treeNode.id+'&parentid='+parentid+'&appid='+$("#appid").val();
+	}
+}
+</script>
+
+<div class="page-header">
+    <h1 class="no-margin col-sm-7 left page-header-h1"> 功能菜单管理
+        <small>
+            <i class="ace-icon fa fa-angle-double-right"></i> 管理功能和菜单的信息
+        </small>
+    </h1>
+    <div class="col-sm-1 page-header-h1" style="margin: 0; padding: 0; text-align: right;">
+    	 应用系统&nbsp;&nbsp;
+    </div>
+    <div class="input-group col-sm-4" style="padding-right: 10px;">
+        <select class="form-control" id="appid" name="appid">
+            #foreach($item in $apps)
+                <option value="$item.id">$item.appname</option>
+            #end
+        </select>
+    </div>
+</div>
+
+<div class="row">
+	<div class="col-sm-6" style="border-right: 1px dotted rgb(226, 226, 226); min-height: 380px;">
+		<div class="widget-box transparent ui-sortable-handle">
+			<div class="widget-header">
+				<h4 class="widget-title">功能菜单树</h4>
+				<div class="widget-toolbar">
+		            <div class="action-buttons inline">
+		                <a class="pink" href="#" onclick="detail('insert')"><i class="ace-icon fa fa-plus-square-o bigger-130"></i>&nbsp;添加</a>
+		                &nbsp;&nbsp;
+		                <a class="green" href="#" onclick="detail('update')"><i class="ace-icon fa fa-edit bigger-130"></i>&nbsp;修改</a>
+		                &nbsp;&nbsp;
+		                <a class="red" href="javascript:void(0)" onclick="deletes()"><i class="ace-icon fa fa-trash-o bigger-130"></i>&nbsp;删除</a>
+		            </div>
+		            &nbsp;&nbsp;
+		            <a href="#" data-action="fullscreen"><i class="ace-icon fa fa-expand"></i>&nbsp;全屏</a>
+		            &nbsp;&nbsp;
+		            <a href="#" data-action="collapse"><i class="ace-icon fa fa-chevron-up"></i>&nbsp;折叠</a>
+		        </div>
+			</div>
+			<div class="widget-body">
+				<div class="widget-main padding-8">
+					
+					<div class="alert alert-danger no-margin">
+						<button type="button" class="close" data-dismiss="alert">
+							<i class="ace-icon fa fa-times"></i>
+						</button>
+						<img src="$contextPath/static/plugins/zTree/css/zTreeStyle/img/diy/0.png"/> 普通节点
+						&nbsp;&nbsp;&nbsp;
+						<img src="$contextPath/static/plugins/zTree/css/zTreeStyle/img/diy/7.png"/> 菜单
+						&nbsp;&nbsp;&nbsp;
+						<img src="$contextPath/static/plugins/zTree/css/zTreeStyle/img/diy/8.png"/> 功能
+					</div>
+					<ul id="treeDemo" class="ztree"></ul>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div class="col-sm-6">
+		<div class="widget-box transparent ui-sortable-handle">
+			<div class="widget-header">
+				<h4 class="widget-title operation-title">功能菜单的详细信息</h4>
+				<div class="widget-toolbar">
+		            <a href="#" data-action="fullscreen"><i class="ace-icon fa fa-expand"></i>&nbsp;全屏</a>
+		            &nbsp;&nbsp;
+		            <a href="#" data-action="collapse"><i class="ace-icon fa fa-chevron-up"></i>&nbsp;折叠</a>
+		        </div>
+			</div>
+			<div class="widget-body">
+				<div class="widget-main padding-8" style="padding-top: 13px;">
+					<form class="form-horizontal" id="validation-form" name="validation-form" method="post">
+			            
+			            <div class="form-group">
+			                <label class="col-sm-3 control-label no-padding-right"> 父功能名： </label>
+			                <label class="col-sm-9 no-padding-right" id="parentfuncname" style="word-wrap:break-word; word-break:break-all;">&nbsp;</label>
+			            </div>
+			            
+			            <div class="form-group">
+			                <label class="col-sm-3 control-label no-padding-right"> 功能名： </label>
+			                <label class="col-sm-9 no-padding-right" id="funcname" style="word-wrap:break-word; word-break:break-all;">&nbsp;</label>
+			            </div>
+			
+			            <div class="form-group">
+			                <label class="col-sm-3 control-label no-padding-right"> 功能代码： </label>
+			                <label class="col-sm-9 no-padding-right" id="funccode" style="word-wrap:break-word; word-break:break-all;">&nbsp;</label>
+			            </div>
+			            
+			            <div class="form-group">
+			                <label class="col-sm-3 control-label no-padding-right"> 功能类型： </label>
+			                <label class="col-sm-9 no-padding-right" id="functype" style="word-wrap:break-word; word-break:break-all;">&nbsp;</label>
+			            </div>
+			            
+			            <div class="form-group">
+			                <label class="col-sm-3 control-label no-padding-right"> 菜单功能地址： </label>
+			                <label class="col-sm-9 no-padding-right" id="funcaction" style="word-wrap:break-word; word-break:break-all;">&nbsp;</label>
+			            </div>
+			            
+			            <div class="form-group">
+			                <label class="col-sm-3 control-label no-padding-right"> 显示顺序： </label>
+			                <label class="col-sm-9 no-padding-right" id="sortid" style="word-wrap:break-word; word-break:break-all;">&nbsp;</label>
+			            </div>
+			            
+			            <div class="form-group">
+			                <label class="col-sm-3 control-label no-padding-right"> 菜单功能图标： </label>
+			                <label class="col-sm-9 no-padding-right" id="funcicon" style="word-wrap:break-word; word-break:break-all;">&nbsp;</label>
+			            </div>
+			        </form>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+#parse("/common/south.html")
