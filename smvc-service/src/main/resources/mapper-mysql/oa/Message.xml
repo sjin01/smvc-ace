@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="Message">
-    <resultMap id="BaseResultMap" type="net.hunanst.eduz100.api.oa.Message">
+    <resultMap id="BaseResultMap" type="net.sjin.smvc.api.oa.Message">
         <id column="ID" property="id" jdbcType="INTEGER"/>
         <result column="ADDRESSER" property="addresser" jdbcType="INTEGER"/>
         <result column="ADDRESSERORGID" property="addresserorgid" jdbcType="INTEGER"/>
@@ -26,7 +26,7 @@
     delete from t_oa_message
     where ID = #{value}
   </delete>
-    <insert id="insert" parameterType="net.hunanst.eduz100.api.oa.Message">
+    <insert id="insert" parameterType="net.sjin.smvc.api.oa.Message">
     insert into t_oa_message (ID, ADDRESSER, ADDRESSERORGID, 
       RECIPIENT, RECIPIENTORGID, DATE, 
       CONTENT, READFLAG)
@@ -56,7 +56,7 @@
         </foreach>
     </insert>
 
-    <insert id="insertSelective" parameterType="net.hunanst.eduz100.api.oa.Message">
+    <insert id="insertSelective" parameterType="net.sjin.smvc.api.oa.Message">
         insert into t_oa_message
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="id != null">
@@ -111,7 +111,7 @@
             </if>
         </trim>
     </insert>
-    <update id="updateByPrimaryKeySelective" parameterType="net.hunanst.eduz100.api.oa.Message">
+    <update id="updateByPrimaryKeySelective" parameterType="net.sjin.smvc.api.oa.Message">
         update t_oa_message
         <set>
             <if test="addresser != null">
@@ -138,7 +138,7 @@
         </set>
         where ID = #{id,jdbcType=INTEGER}
     </update>
-    <update id="updateByPrimaryKey" parameterType="net.hunanst.eduz100.api.oa.Message">
+    <update id="updateByPrimaryKey" parameterType="net.sjin.smvc.api.oa.Message">
     update t_oa_message
     set ADDRESSER = #{addresser,jdbcType=INTEGER},
       ADDRESSERORGID = #{addresserorgid,jdbcType=INTEGER},
@@ -149,7 +149,7 @@
       READFLAG = #{readflag,jdbcType=INTEGER}
     where ID = #{id,jdbcType=INTEGER}
   </update>
-    <select id="select_page" resultMap="BaseResultMap" parameterType="net.hunanst.eduz100.api.oa.Message">
+    <select id="select_page" resultMap="BaseResultMap" parameterType="net.sjin.smvc.api.oa.Message">
         select
         <include refid="Base_Column_List"/>
         from t_oa_message
@@ -181,7 +181,7 @@
         </where>
     </select>
 
-    <select id="getUnreadMessageByID" parameterType="Map" resultType="net.hunanst.eduz100.dto.MessageVo">
+    <select id="getUnreadMessageByID" parameterType="Map" resultType="net.sjin.smvc.dto.MessageVo">
         SELECT m.ID,m.CONTENT,o.USERNAME addressername,t.USERNAME recipientname,
         DATE_FORMAT(m.DATE,'%Y-%m-%d %H:%i%s') dateformat,IF(m.ADDRESSER = ${addresser},1,0) state
         FROM t_oa_message m
@@ -203,7 +203,7 @@
 		AND READFLAG = 0
     </select>
 
-    <select id="getMessageByID" parameterType="Map" resultType="net.hunanst.eduz100.dto.MessageVo">
+    <select id="getMessageByID" parameterType="Map" resultType="net.sjin.smvc.dto.MessageVo">
         SELECT m.ID,m.CONTENT,o.USERNAME addressername,t.USERNAME recipientname,
         DATE_FORMAT(m.DATE,'%Y-%m-%d %H:%i%s') dateformat,IF(m.ADDRESSER = ${addresser},1,0) state
         FROM t_oa_message m
@@ -224,8 +224,8 @@
         </foreach>
     </update>
 
-    <select id="listByUserId_page" parameterType="net.hunanst.eduz100.api.oa.vo.Chat"
-            resultType="net.hunanst.eduz100.api.oa.vo.Chat">
+    <select id="listByUserId_page" parameterType="net.sjin.smvc.api.oa.vo.Chat"
+            resultType="net.sjin.smvc.api.oa.vo.Chat">
 
         SELECT b.id,b.addresser,b.recipient,ao.USERNAME recipientname,b.content,b.date FROM (
         SELECT MAX(ID) ID,
@@ -253,8 +253,8 @@
     </select>-->
 
 
-    <select id="chatonelist_page" parameterType="net.hunanst.eduz100.api.oa.vo.Chat"
-            resultType="net.hunanst.eduz100.api.oa.vo.Chat">
+    <select id="chatonelist_page" parameterType="net.sjin.smvc.api.oa.vo.Chat"
+            resultType="net.sjin.smvc.api.oa.vo.Chat">
 
         SELECT m.ID,m.CONTENT,m.addresser,o.USERNAME addressername,m.recipient,t.USERNAME recipientname,
         m.date

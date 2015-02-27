@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="Seal" >
-  <resultMap id="BaseResultMap" type="net.hunanst.eduz100.api.oa.Seal" >
+  <resultMap id="BaseResultMap" type="net.sjin.smvc.api.oa.Seal" >
     <id column="ID" property="id" jdbcType="INTEGER" />
     <result column="FILEPATH" property="filepath" jdbcType="VARCHAR" />
     <result column="FILENAME" property="filename" jdbcType="VARCHAR" />
@@ -24,14 +24,14 @@
     where ID = #{value}
   </delete>
 
-  <insert id="insert" parameterType="net.hunanst.eduz100.api.oa.Seal" >
+  <insert id="insert" parameterType="net.sjin.smvc.api.oa.Seal" >
     insert into t_oa_seal (ID, FILEPATH, FILENAME, 
       KEYTEXT, USERID)
     values (#{id,jdbcType=INTEGER}, #{filepath,jdbcType=VARCHAR}, #{filename,jdbcType=VARCHAR}, 
       #{keytext,jdbcType=VARCHAR}, #{userid,jdbcType=INTEGER})
   </insert>
 
-  <insert id="insertSelective" parameterType="net.hunanst.eduz100.api.oa.Seal" >
+  <insert id="insertSelective" parameterType="net.sjin.smvc.api.oa.Seal" >
     insert into t_oa_seal
     <trim prefix="(" suffix=")" suffixOverrides="," >
       <if test="id != null" >
@@ -69,7 +69,7 @@
     </trim>
   </insert>
 
-  <update id="updateByPrimaryKeySelective" parameterType="net.hunanst.eduz100.api.oa.Seal" >
+  <update id="updateByPrimaryKeySelective" parameterType="net.sjin.smvc.api.oa.Seal" >
     update t_oa_seal
     <set >
       <if test="filepath != null" >
@@ -88,7 +88,7 @@
     where ID = #{id,jdbcType=INTEGER}
   </update>
 
-  <update id="updateByPrimaryKey" parameterType="net.hunanst.eduz100.api.oa.Seal" >
+  <update id="updateByPrimaryKey" parameterType="net.sjin.smvc.api.oa.Seal" >
     update t_oa_seal
     set FILEPATH = #{filepath,jdbcType=VARCHAR},
       FILENAME = #{filename,jdbcType=VARCHAR},
@@ -97,7 +97,7 @@
     where ID = #{id,jdbcType=INTEGER}
   </update>
 
-  <select id="select_page" resultMap="BaseResultMap" parameterType="net.hunanst.eduz100.api.oa.Seal" >
+  <select id="select_page" resultMap="BaseResultMap" parameterType="net.sjin.smvc.api.oa.Seal" >
     select
     <include refid="Base_Column_List" />
      from t_oa_seal

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="net.hunanst.eduz100.api.sys.AcOperRole" >
-  <resultMap id="BaseResultMap" type="net.hunanst.eduz100.api.sys.AcOperRole" >
+<mapper namespace="net.sjin.smvc.api.sys.AcOperRole" >
+  <resultMap id="BaseResultMap" type="net.sjin.smvc.api.sys.AcOperRole" >
     <id column="ID" property="id" jdbcType="INTEGER" />
     <result column="OPERID" property="operid" jdbcType="INTEGER" />
     <result column="ROLEID" property="roleid" jdbcType="INTEGER" />
@@ -19,14 +19,14 @@
     delete from ac_oper_role
     where ID = #{value}
   </delete>
-  <insert id="insert" parameterType="net.hunanst.eduz100.api.sys.AcOperRole" >
+  <insert id="insert" parameterType="net.sjin.smvc.api.sys.AcOperRole" >
     <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER" >
       SELECT LAST_INSERT_ID()
     </selectKey>
     insert into ac_oper_role (OPERID, ROLEID)
     values (#{operid,jdbcType=INTEGER}, #{roleid,jdbcType=INTEGER})
   </insert>
-  <insert id="insertSelective" parameterType="net.hunanst.eduz100.api.sys.AcOperRole" >
+  <insert id="insertSelective" parameterType="net.sjin.smvc.api.sys.AcOperRole" >
     <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER" >
       SELECT LAST_INSERT_ID()
     </selectKey>
@@ -48,7 +48,7 @@
       </if>
     </trim>
   </insert>
-  <update id="updateByPrimaryKeySelective" parameterType="net.hunanst.eduz100.api.sys.AcOperRole" >
+  <update id="updateByPrimaryKeySelective" parameterType="net.sjin.smvc.api.sys.AcOperRole" >
     update ac_oper_role
     <set >
       <if test="operid != null" >
@@ -60,13 +60,13 @@
     </set>
     where ID = #{id,jdbcType=INTEGER}
   </update>
-  <update id="updateByPrimaryKey" parameterType="net.hunanst.eduz100.api.sys.AcOperRole" >
+  <update id="updateByPrimaryKey" parameterType="net.sjin.smvc.api.sys.AcOperRole" >
     update ac_oper_role
     set OPERID = #{operid,jdbcType=INTEGER},
       ROLEID = #{roleid,jdbcType=INTEGER}
     where ID = #{id,jdbcType=INTEGER}
   </update>
-  <select id="select_page" resultMap="BaseResultMap" parameterType="net.hunanst.eduz100.api.sys.AcOperRole" >
+  <select id="select_page" resultMap="BaseResultMap" parameterType="net.sjin.smvc.api.sys.AcOperRole" >
     select
     <include refid="Base_Column_List" />
      from ac_oper_role
@@ -83,7 +83,7 @@
     </where>
   </select>
   
-  <delete id="deleteByOperid" parameterType="net.hunanst.eduz100.api.sys.AcOperRole" >
+  <delete id="deleteByOperid" parameterType="net.sjin.smvc.api.sys.AcOperRole" >
     delete from ac_oper_role
     where OPERID = #{operid}
   </delete>

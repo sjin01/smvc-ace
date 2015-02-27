@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="net.hunanst.eduz100.api.sys.AcOperator">
-    <resultMap id="BaseResultMap" type="net.hunanst.eduz100.api.sys.AcOperator">
+<mapper namespace="net.sjin.smvc.api.sys.AcOperator">
+    <resultMap id="BaseResultMap" type="net.sjin.smvc.api.sys.AcOperator">
         <id column="ID" property="id" jdbcType="INTEGER"/>
         <result column="USERCODE" property="usercode" jdbcType="VARCHAR"/>
         <result column="USERNAME" property="username" jdbcType="VARCHAR"/>
@@ -30,7 +30,7 @@
     delete from ac_operator
     where ID = #{value}
   </delete>
-    <insert id="insert" parameterType="net.hunanst.eduz100.api.sys.AcOperator">
+    <insert id="insert" parameterType="net.sjin.smvc.api.sys.AcOperator">
         <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER">
             SELECT LAST_INSERT_ID()
         </selectKey>
@@ -43,7 +43,7 @@
         #{telnumber,jdbcType=VARCHAR}, #{email,jdbcType=VARCHAR}, #{creater,jdbcType=VARCHAR},
         #{createtime,jdbcType=TIMESTAMP}, #{belongorgid,jdbcType=INTEGER}, #{imgurl,jdbcType=VARCHAR})
     </insert>
-    <insert id="insertSelective" parameterType="net.hunanst.eduz100.api.sys.AcOperator">
+    <insert id="insertSelective" parameterType="net.sjin.smvc.api.sys.AcOperator">
         <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER">
             SELECT LAST_INSERT_ID()
         </selectKey>
@@ -125,7 +125,7 @@
             </if>
         </trim>
     </insert>
-    <update id="updateByPrimaryKeySelective" parameterType="net.hunanst.eduz100.api.sys.AcOperator">
+    <update id="updateByPrimaryKeySelective" parameterType="net.sjin.smvc.api.sys.AcOperator">
         update ac_operator
         <set>
             <if test="usercode != null">
@@ -167,7 +167,7 @@
         </set>
         where ID = #{id,jdbcType=INTEGER}
     </update>
-    <update id="updateByPrimaryKey" parameterType="net.hunanst.eduz100.api.sys.AcOperator">
+    <update id="updateByPrimaryKey" parameterType="net.sjin.smvc.api.sys.AcOperator">
     update ac_operator
     set USERCODE = #{usercode,jdbcType=VARCHAR},
       USERNAME = #{username,jdbcType=VARCHAR},
@@ -183,7 +183,7 @@
       IMGURL = #{imgurl,jdbcType=VARCHAR}
     where ID = #{id,jdbcType=INTEGER}
   </update>
-    <select id="select_page" resultMap="BaseResultMap" parameterType="net.hunanst.eduz100.api.sys.AcOperator">
+    <select id="select_page" resultMap="BaseResultMap" parameterType="net.sjin.smvc.api.sys.AcOperator">
         select
         <include refid="Base_Column_List"/>
         from ac_operator
@@ -230,7 +230,7 @@
         </where>
     </select>
 
-    <select id="selectByCondition" parameterType="net.hunanst.eduz100.api.sys.AcOperator"
+    <select id="selectByCondition" parameterType="net.sjin.smvc.api.sys.AcOperator"
             resultMap="BaseResultMap">
         select
         <include refid="Base_Column_List"/>
@@ -278,7 +278,7 @@
         </where>
     </select>
 
-    <select id="selectCondition_page" parameterType="net.hunanst.eduz100.api.sys.vo.AcOperatorVo"
+    <select id="selectCondition_page" parameterType="net.sjin.smvc.api.sys.vo.AcOperatorVo"
             resultMap="BaseResultMap">
         select
         <include refid="Base_Column_List"/>

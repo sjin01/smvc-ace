@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="net.hunanst.eduz100.api.sys.AcApp" >
-  <resultMap id="BaseResultMap" type="net.hunanst.eduz100.api.sys.AcApp" >
+<mapper namespace="net.sjin.smvc.api.sys.AcApp" >
+  <resultMap id="BaseResultMap" type="net.sjin.smvc.api.sys.AcApp" >
     <id column="ID" property="id" jdbcType="INTEGER" />
     <result column="APPNAME" property="appname" jdbcType="VARCHAR" />
     <result column="APPCODE" property="appcode" jdbcType="VARCHAR" />
@@ -22,7 +22,7 @@
     delete from ac_app
     where ID = #{value}
   </delete>
-  <insert id="insert" parameterType="net.hunanst.eduz100.api.sys.AcApp" >
+  <insert id="insert" parameterType="net.sjin.smvc.api.sys.AcApp" >
     <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER" >
       SELECT LAST_INSERT_ID()
     </selectKey>
@@ -31,7 +31,7 @@
     values (#{appname,jdbcType=VARCHAR}, #{appcode,jdbcType=VARCHAR}, #{status,jdbcType=VARCHAR}, 
       #{appurl,jdbcType=VARCHAR}, #{memo,jdbcType=VARCHAR})
   </insert>
-  <insert id="insertSelective" parameterType="net.hunanst.eduz100.api.sys.AcApp" >
+  <insert id="insertSelective" parameterType="net.sjin.smvc.api.sys.AcApp" >
     <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER" >
       SELECT LAST_INSERT_ID()
     </selectKey>
@@ -71,7 +71,7 @@
       </if>
     </trim>
   </insert>
-  <update id="updateByPrimaryKeySelective" parameterType="net.hunanst.eduz100.api.sys.AcApp" >
+  <update id="updateByPrimaryKeySelective" parameterType="net.sjin.smvc.api.sys.AcApp" >
     update ac_app
     <set >
       <if test="appname != null" >
@@ -92,7 +92,7 @@
     </set>
     where ID = #{id,jdbcType=INTEGER}
   </update>
-  <update id="updateByPrimaryKey" parameterType="net.hunanst.eduz100.api.sys.AcApp" >
+  <update id="updateByPrimaryKey" parameterType="net.sjin.smvc.api.sys.AcApp" >
     update ac_app
     set APPNAME = #{appname,jdbcType=VARCHAR},
       APPCODE = #{appcode,jdbcType=VARCHAR},
@@ -101,7 +101,7 @@
       MEMO = #{memo,jdbcType=VARCHAR}
     where ID = #{id,jdbcType=INTEGER}
   </update>
-  <select id="select_page" resultMap="BaseResultMap" parameterType="net.hunanst.eduz100.api.sys.AcApp" >
+  <select id="select_page" resultMap="BaseResultMap" parameterType="net.sjin.smvc.api.sys.AcApp" >
     select
     <include refid="Base_Column_List" />
      from ac_app
@@ -127,7 +127,7 @@
     </where>
   </select>
   
-  <select id="selectCondition_page" resultMap="BaseResultMap" parameterType="net.hunanst.eduz100.api.sys.AcApp" >
+  <select id="selectCondition_page" resultMap="BaseResultMap" parameterType="net.sjin.smvc.api.sys.AcApp" >
     select
     <include refid="Base_Column_List" />
     from ac_app

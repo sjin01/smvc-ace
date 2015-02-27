@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="net.hunanst.eduz100.api.sys.AcOperlog" >
-  <resultMap id="BaseResultMap" type="net.hunanst.eduz100.api.sys.AcOperlog" >
+<mapper namespace="net.sjin.smvc.api.sys.AcOperlog" >
+  <resultMap id="BaseResultMap" type="net.sjin.smvc.api.sys.AcOperlog" >
     <id column="ID" property="id" jdbcType="INTEGER" />
     <result column="OPERID" property="operid" jdbcType="INTEGER" />
     <result column="USERCODE" property="usercode" jdbcType="VARCHAR" />
@@ -9,7 +9,7 @@
     <result column="LOGTIME" property="logtime" jdbcType="TIMESTAMP" />
     <result column="LOGIP" property="logip" jdbcType="VARCHAR" />
   </resultMap>
-  <resultMap id="ResultMapWithBLOBs" type="net.hunanst.eduz100.api.sys.AcOperlog" extends="BaseResultMap" >
+  <resultMap id="ResultMapWithBLOBs" type="net.sjin.smvc.api.sys.AcOperlog" extends="BaseResultMap" >
     <result column="LOGCONTENT" property="logcontent" jdbcType="LONGVARCHAR" />
   </resultMap>
   <sql id="Base_Column_List" >
@@ -30,7 +30,7 @@
     delete from ac_operlog
     where ID = #{value}
   </delete>
-  <insert id="insert" parameterType="net.hunanst.eduz100.api.sys.AcOperlog" >
+  <insert id="insert" parameterType="net.sjin.smvc.api.sys.AcOperlog" >
     <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER" >
       SELECT LAST_INSERT_ID()
     </selectKey>
@@ -41,7 +41,7 @@
       #{logtime,jdbcType=TIMESTAMP}, #{logip,jdbcType=VARCHAR}, #{logcontent,jdbcType=LONGVARCHAR}
       )
   </insert>
-  <insert id="insertSelective" parameterType="net.hunanst.eduz100.api.sys.AcOperlog" >
+  <insert id="insertSelective" parameterType="net.sjin.smvc.api.sys.AcOperlog" >
     <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER" >
       SELECT LAST_INSERT_ID()
     </selectKey>
@@ -87,7 +87,7 @@
       </if>
     </trim>
   </insert>
-  <update id="updateByPrimaryKeySelective" parameterType="net.hunanst.eduz100.api.sys.AcOperlog" >
+  <update id="updateByPrimaryKeySelective" parameterType="net.sjin.smvc.api.sys.AcOperlog" >
     update ac_operlog
     <set >
       <if test="operid != null" >
@@ -111,7 +111,7 @@
     </set>
     where ID = #{id,jdbcType=INTEGER}
   </update>
-  <update id="updateByPrimaryKey" parameterType="net.hunanst.eduz100.api.sys.AcOperlog" >
+  <update id="updateByPrimaryKey" parameterType="net.sjin.smvc.api.sys.AcOperlog" >
     update ac_operlog
     set OPERID = #{operid,jdbcType=INTEGER},
       USERCODE = #{usercode,jdbcType=VARCHAR},
@@ -121,7 +121,7 @@
       LOGCONTENT = #{logcontent,jdbcType=LONGVARCHAR}
     where ID = #{id,jdbcType=INTEGER}
   </update>
-  <select id="select_page" resultMap="BaseResultMap" parameterType="net.hunanst.eduz100.api.sys.AcOperlog" >
+  <select id="select_page" resultMap="BaseResultMap" parameterType="net.sjin.smvc.api.sys.AcOperlog" >
     select
     <include refid="Base_Column_List" />
      from ac_operlog

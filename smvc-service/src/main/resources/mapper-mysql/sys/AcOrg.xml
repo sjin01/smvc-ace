@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="net.hunanst.eduz100.api.sys.AcOrg">
-    <resultMap id="BaseResultMap" type="net.hunanst.eduz100.api.sys.AcOrg">
+<mapper namespace="net.sjin.smvc.api.sys.AcOrg">
+    <resultMap id="BaseResultMap" type="net.sjin.smvc.api.sys.AcOrg">
         <id column="ID" property="id" jdbcType="INTEGER"/>
         <result column="ORGNAME" property="orgname" jdbcType="VARCHAR"/>
         <result column="ORGFULLNAME" property="orgfullname" jdbcType="VARCHAR"/>
@@ -25,7 +25,7 @@
     delete from ac_org
     where ID = #{value}
   </delete>
-    <insert id="insert" parameterType="net.hunanst.eduz100.api.sys.AcOrg">
+    <insert id="insert" parameterType="net.sjin.smvc.api.sys.AcOrg">
         <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER">
             SELECT LAST_INSERT_ID()
         </selectKey>
@@ -36,7 +36,7 @@
         #{orgseq,jdbcType=VARCHAR}, #{sortid,jdbcType=INTEGER}, #{belongorgid,jdbcType=INTEGER}
         )
     </insert>
-    <insert id="insertSelective" parameterType="net.hunanst.eduz100.api.sys.AcOrg">
+    <insert id="insertSelective" parameterType="net.sjin.smvc.api.sys.AcOrg">
         <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER">
             SELECT LAST_INSERT_ID()
         </selectKey>
@@ -82,7 +82,7 @@
             </if>
         </trim>
     </insert>
-    <update id="updateByPrimaryKeySelective" parameterType="net.hunanst.eduz100.api.sys.AcOrg">
+    <update id="updateByPrimaryKeySelective" parameterType="net.sjin.smvc.api.sys.AcOrg">
         update ac_org
         <set>
             <if test="orgname != null">
@@ -106,7 +106,7 @@
         </set>
         where ID = #{id,jdbcType=INTEGER}
     </update>
-    <update id="updateByPrimaryKey" parameterType="net.hunanst.eduz100.api.sys.AcOrg">
+    <update id="updateByPrimaryKey" parameterType="net.sjin.smvc.api.sys.AcOrg">
     update ac_org
     set ORGNAME = #{orgname,jdbcType=VARCHAR},
       ORGFULLNAME = #{orgfullname,jdbcType=VARCHAR},
@@ -116,7 +116,7 @@
       BELONGORGID = #{belongorgid,jdbcType=INTEGER}
     where ID = #{id,jdbcType=INTEGER}
   </update>
-    <select id="select_page" resultMap="BaseResultMap" parameterType="net.hunanst.eduz100.api.sys.AcOrg">
+    <select id="select_page" resultMap="BaseResultMap" parameterType="net.sjin.smvc.api.sys.AcOrg">
         select
         <include refid="Base_Column_List"/>
         from ac_org
@@ -145,7 +145,7 @@
         </where>
     </select>
 
-    <select id="selectAll" resultMap="BaseResultMap" parameterType="net.hunanst.eduz100.api.sys.AcOrg">
+    <select id="selectAll" resultMap="BaseResultMap" parameterType="net.sjin.smvc.api.sys.AcOrg">
         select
         <include refid="Base_Column_List"/>
         from ac_org
@@ -165,7 +165,7 @@
   	</select>
 
     <select id="selectOrgAndUserForFueluxTreeByParentid"
-            parameterType="java.lang.Integer" resultType="net.hunanst.eduz100.dto.FueluxTreeVo">
+            parameterType="java.lang.Integer" resultType="net.sjin.smvc.dto.FueluxTreeVo">
       select
         t.id
         ,t.ORGNAME as name
@@ -191,7 +191,7 @@
 
     </select>
 
-    <delete id="deleteAndChildren" parameterType="net.hunanst.eduz100.api.sys.AcOrg">
+    <delete id="deleteAndChildren" parameterType="net.sjin.smvc.api.sys.AcOrg">
         delete from ac_org
         where orgseq like '${orgseq}-%'
         <if test="id!=null">
@@ -199,7 +199,7 @@
         </if>
     </delete>
 
-    <update id="updateSeq" parameterType="net.hunanst.eduz100.api.sys.AcOrg">
+    <update id="updateSeq" parameterType="net.sjin.smvc.api.sys.AcOrg">
         update ac_org
         set
         <choose>
@@ -213,7 +213,7 @@
         where id = #{id}
     </update>
 
-    <delete id="deleteRelationWithFunc" parameterType="net.hunanst.eduz100.api.sys.AcOrg">
+    <delete id="deleteRelationWithFunc" parameterType="net.sjin.smvc.api.sys.AcOrg">
         delete from ac_org_func
         where orgid in
         (select id from ac_org
@@ -233,7 +233,7 @@
     where r.OPERID = #{userId} and o.id is not null
   </select>
 
-    <update id="updateBelongOrg" parameterType="net.hunanst.eduz100.api.sys.AcOrg">
+    <update id="updateBelongOrg" parameterType="net.sjin.smvc.api.sys.AcOrg">
   	update ac_org 
 	set BELONGORGID = #{id}
 	where id = #{id}
@@ -255,13 +255,13 @@
     </foreach>)
     </select>
 
-    <select id="checkOrgNameExisted" parameterType="net.hunanst.eduz100.api.sys.AcOrg" resultType="int">
+    <select id="checkOrgNameExisted" parameterType="net.sjin.smvc.api.sys.AcOrg" resultType="int">
   	select count(1) 
 	from ac_org
 	where PARENTID = #{parentid} and ORGNAME = #{orgname}
   </select>
 
-    <select id="getDataByOrgId" resultType="net.hunanst.eduz100.api.oa.Notification" parameterType="java.lang.Integer">
+    <select id="getDataByOrgId" resultType="net.sjin.smvc.api.oa.Notification" parameterType="java.lang.Integer">
     select nh.NOTIFICATIONID as id,rela.OPERID as userid
     from t_oa_notification_history nh right join ac_oper_org_relation rela
     on rela.ORGID=nh.RECIPIENT

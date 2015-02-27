@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="OfficialdocumentFile">
-    <resultMap id="BaseResultMap" type="net.hunanst.eduz100.api.oa.OfficialdocumentFile">
+    <resultMap id="BaseResultMap" type="net.sjin.smvc.api.oa.OfficialdocumentFile">
         <id column="ID" property="id" jdbcType="INTEGER"/>
         <result column="OFFICIALDOCUMENTID" property="officialdocumentid" jdbcType="INTEGER"/>
         <result column="FILEPATH" property="filepath" jdbcType="VARCHAR"/>
@@ -41,7 +41,7 @@
         )
     </delete>
 
-    <insert id="insert" parameterType="net.hunanst.eduz100.api.oa.OfficialdocumentFile">
+    <insert id="insert" parameterType="net.sjin.smvc.api.oa.OfficialdocumentFile">
     insert into t_oa_officialdocument_file (ID, OFFICIALDOCUMENTID, FILEPATH, 
       SUFFIX, SIZE, FILENAME, 
       SOURCEFILEFLAG, UPLOADDATE, USERID, 
@@ -51,7 +51,7 @@
       #{sourcefileflag,jdbcType=INTEGER}, #{uploaddate,jdbcType=TIMESTAMP}, #{userid,jdbcType=INTEGER}, 
       #{orgid,jdbcType=INTEGER} , #{deliverid,jdbcType=INTEGER} ,#{sealpath,jdbcType=VARCHAR} )
   </insert>
-    <insert id="insertSelective" parameterType="net.hunanst.eduz100.api.oa.OfficialdocumentFile">
+    <insert id="insertSelective" parameterType="net.sjin.smvc.api.oa.OfficialdocumentFile">
         insert into t_oa_officialdocument_file
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="id != null">
@@ -159,7 +159,7 @@
     </insert>
 
 
-    <update id="updateByPrimaryKeySelective" parameterType="net.hunanst.eduz100.api.oa.OfficialdocumentFile">
+    <update id="updateByPrimaryKeySelective" parameterType="net.sjin.smvc.api.oa.OfficialdocumentFile">
         update t_oa_officialdocument_file
         <set>
             <if test="officialdocumentid != null">
@@ -198,7 +198,7 @@
         </set>
         where ID = #{id,jdbcType=INTEGER}
     </update>
-    <update id="updateByPrimaryKey" parameterType="net.hunanst.eduz100.api.oa.OfficialdocumentFile">
+    <update id="updateByPrimaryKey" parameterType="net.sjin.smvc.api.oa.OfficialdocumentFile">
     update t_oa_officialdocument_file
     set OFFICIALDOCUMENTID = #{officialdocumentid,jdbcType=INTEGER},
       FILEPATH = #{filepath,jdbcType=VARCHAR},
@@ -213,7 +213,7 @@
       SEALPATH = #{sealpath,jdbcType=INTEGER}
     where ID = #{id,jdbcType=INTEGER}
   </update>
-    <select id="select_page" resultMap="BaseResultMap" parameterType="net.hunanst.eduz100.api.oa.OfficialdocumentFile">
+    <select id="select_page" resultMap="BaseResultMap" parameterType="net.sjin.smvc.api.oa.OfficialdocumentFile">
         select
         <include refid="Base_Column_List"/>
         from t_oa_officialdocument_file

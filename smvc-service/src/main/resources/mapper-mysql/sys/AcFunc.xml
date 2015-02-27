@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="net.hunanst.eduz100.api.sys.AcFunc" >
-  <resultMap id="BaseResultMap" type="net.hunanst.eduz100.api.sys.AcFunc" >
+<mapper namespace="net.sjin.smvc.api.sys.AcFunc" >
+  <resultMap id="BaseResultMap" type="net.sjin.smvc.api.sys.AcFunc" >
     <id column="ID" property="id" jdbcType="INTEGER" />
     <result column="FUNCNAME" property="funcname" jdbcType="VARCHAR" />
     <result column="FUNCCODE" property="funccode" jdbcType="VARCHAR" />
@@ -27,7 +27,7 @@
     delete from ac_func
     where ID = #{value}
   </delete>
-  <insert id="insert" parameterType="net.hunanst.eduz100.api.sys.AcFunc" >
+  <insert id="insert" parameterType="net.sjin.smvc.api.sys.AcFunc" >
     <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER" >
       SELECT LAST_INSERT_ID()
     </selectKey>
@@ -40,7 +40,7 @@
       #{sortid,jdbcType=INTEGER}, #{parentid,jdbcType=INTEGER}, #{appid,jdbcType=INTEGER}
       )
   </insert>
-  <insert id="insertSelective" parameterType="net.hunanst.eduz100.api.sys.AcFunc" >
+  <insert id="insertSelective" parameterType="net.sjin.smvc.api.sys.AcFunc" >
     <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER" >
       SELECT LAST_INSERT_ID()
     </selectKey>
@@ -104,7 +104,7 @@
       </if>
     </trim>
   </insert>
-  <update id="updateByPrimaryKeySelective" parameterType="net.hunanst.eduz100.api.sys.AcFunc" >
+  <update id="updateByPrimaryKeySelective" parameterType="net.sjin.smvc.api.sys.AcFunc" >
     update ac_func
     <set >
       <if test="funcname != null" >
@@ -137,7 +137,7 @@
     </set>
     where ID = #{id,jdbcType=INTEGER}
   </update>
-  <update id="updateByPrimaryKey" parameterType="net.hunanst.eduz100.api.sys.AcFunc" >
+  <update id="updateByPrimaryKey" parameterType="net.sjin.smvc.api.sys.AcFunc" >
     update ac_func
     set FUNCNAME = #{funcname,jdbcType=VARCHAR},
       FUNCCODE = #{funccode,jdbcType=VARCHAR},
@@ -150,7 +150,7 @@
       APPID = #{appid,jdbcType=INTEGER}
     where ID = #{id,jdbcType=INTEGER}
   </update>
-  <select id="select_page" resultMap="BaseResultMap" parameterType="net.hunanst.eduz100.api.sys.AcFunc" >
+  <select id="select_page" resultMap="BaseResultMap" parameterType="net.sjin.smvc.api.sys.AcFunc" >
     select
     <include refid="Base_Column_List" />
      from ac_func
@@ -194,7 +194,7 @@
      	order by SORTID
   	</select>
   	
-  	<update id="updateSeq" parameterType="net.hunanst.eduz100.api.sys.AcFunc">
+  	<update id="updateSeq" parameterType="net.sjin.smvc.api.sys.AcFunc">
   		update ac_func 
 		set
 		<choose>
@@ -208,11 +208,11 @@
 		where id = #{id}
   	</update>
   	
-  	<delete id="deleteAndChildren" parameterType="net.hunanst.eduz100.api.sys.AcFunc">
+  	<delete id="deleteAndChildren" parameterType="net.sjin.smvc.api.sys.AcFunc">
   		delete from ac_func where id = #{id} or funcseq like '${funcseq}-%'
   	</delete>
   	
-  	<select id="selectFuncByOperid" resultType="net.hunanst.eduz100.api.sys.AcFunc" parameterType="int">
+  	<select id="selectFuncByOperid" resultType="net.sjin.smvc.api.sys.AcFunc" parameterType="int">
   	 	<!-- select t1.ID, t1.FUNCNAME, t1.FUNCCODE, t1.FUNCACTION, t1.FUNCICON, t1.FUNCTYPE, 
   	 		t1.FUNCSEQ, t1.SORTID, t1.PARENTID, t1.APPID
   	 	from ac_func t1

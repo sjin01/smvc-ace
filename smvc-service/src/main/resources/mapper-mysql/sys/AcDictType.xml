@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="net.hunanst.eduz100.api.sys.AcDictType" >
-  <resultMap id="BaseResultMap" type="net.hunanst.eduz100.api.sys.AcDictType" >
+<mapper namespace="net.sjin.smvc.api.sys.AcDictType" >
+  <resultMap id="BaseResultMap" type="net.sjin.smvc.api.sys.AcDictType" >
     <id column="ID" property="id" jdbcType="INTEGER" />
     <result column="TNAME" property="tname" jdbcType="VARCHAR" />
     <result column="TCODE" property="tcode" jdbcType="VARCHAR" />
@@ -21,7 +21,7 @@
     delete from ac_dict_type
     where ID = #{value}
   </delete>
-  <insert id="insert" parameterType="net.hunanst.eduz100.api.sys.AcDictType" >
+  <insert id="insert" parameterType="net.sjin.smvc.api.sys.AcDictType" >
     <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER" >
       SELECT LAST_INSERT_ID()
     </selectKey>
@@ -30,7 +30,7 @@
     values (#{tname,jdbcType=VARCHAR}, #{tcode,jdbcType=VARCHAR}, #{sortid,jdbcType=INTEGER}, 
       #{memo,jdbcType=VARCHAR})
   </insert>
-  <insert id="insertSelective" parameterType="net.hunanst.eduz100.api.sys.AcDictType" >
+  <insert id="insertSelective" parameterType="net.sjin.smvc.api.sys.AcDictType" >
     <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER" >
       SELECT LAST_INSERT_ID()
     </selectKey>
@@ -64,7 +64,7 @@
       </if>
     </trim>
   </insert>
-  <update id="updateByPrimaryKeySelective" parameterType="net.hunanst.eduz100.api.sys.AcDictType" >
+  <update id="updateByPrimaryKeySelective" parameterType="net.sjin.smvc.api.sys.AcDictType" >
     update ac_dict_type
     <set >
       <if test="tname != null" >
@@ -82,7 +82,7 @@
     </set>
     where ID = #{id,jdbcType=INTEGER}
   </update>
-  <update id="updateByPrimaryKey" parameterType="net.hunanst.eduz100.api.sys.AcDictType" >
+  <update id="updateByPrimaryKey" parameterType="net.sjin.smvc.api.sys.AcDictType" >
     update ac_dict_type
     set TNAME = #{tname,jdbcType=VARCHAR},
       TCODE = #{tcode,jdbcType=VARCHAR},
@@ -90,7 +90,7 @@
       MEMO = #{memo,jdbcType=VARCHAR}
     where ID = #{id,jdbcType=INTEGER}
   </update>
-  <select id="select_page" resultMap="BaseResultMap" parameterType="net.hunanst.eduz100.api.sys.AcDictType" >
+  <select id="select_page" resultMap="BaseResultMap" parameterType="net.sjin.smvc.api.sys.AcDictType" >
     select
     <include refid="Base_Column_List" />
      from ac_dict_type
@@ -113,13 +113,13 @@
     </where>
   </select>
   
-	<resultMap id="AdvancedResultMap" type="net.hunanst.eduz100.api.sys.AcDictType" >
+	<resultMap id="AdvancedResultMap" type="net.sjin.smvc.api.sys.AcDictType" >
    		<id column="ID" property="id" jdbcType="INTEGER" />
    		<result column="TNAME" property="tname" jdbcType="VARCHAR" />
    		<result column="TCODE" property="tcode" jdbcType="VARCHAR" />
    		<result column="SORTID" property="sortid" jdbcType="INTEGER" />
    		<result column="MEMO" property="memo" jdbcType="VARCHAR" />
-   		<collection property="dicts" ofType="net.hunanst.eduz100.api.sys.AcDict">
+   		<collection property="dicts" ofType="net.sjin.smvc.api.sys.AcDict">
 	   		<id column="_ID" property="id" jdbcType="INTEGER" />
 	    	<result column="_TYPEID" property="typeid" jdbcType="INTEGER" />
 	    	<result column="_TNAME" property="tname" jdbcType="VARCHAR" />

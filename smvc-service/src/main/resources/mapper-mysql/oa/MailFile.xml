@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="MailFile">
-    <resultMap id="BaseResultMap" type="net.hunanst.eduz100.api.oa.MailFile">
+    <resultMap id="BaseResultMap" type="net.sjin.smvc.api.oa.MailFile">
         <id column="ID" property="id" jdbcType="INTEGER"/>
         <result column="MAILID" property="mailid" jdbcType="INTEGER"/>
         <result column="FILEPATH" property="filepath" jdbcType="VARCHAR"/>
@@ -22,7 +22,7 @@
     delete from t_oa_mail_file
     where ID = #{value}
   </delete>
-    <insert id="insert"  parameterType="net.hunanst.eduz100.api.oa.MailFile">
+    <insert id="insert"  parameterType="net.sjin.smvc.api.oa.MailFile">
         <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER" >
             SELECT LAST_INSERT_ID()
         </selectKey>
@@ -33,7 +33,7 @@
       #{suffix,jdbcType=VARCHAR}, #{size,jdbcType=DOUBLE}, #{filename,jdbcType=VARCHAR}
       )
   </insert>
-    <insert id="insertSelective" parameterType="net.hunanst.eduz100.api.oa.MailFile">
+    <insert id="insertSelective" parameterType="net.sjin.smvc.api.oa.MailFile">
         insert into t_oa_mail_file
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="id != null">
@@ -76,7 +76,7 @@
             </if>
         </trim>
     </insert>
-    <update id="updateByPrimaryKeySelective" parameterType="net.hunanst.eduz100.api.oa.MailFile">
+    <update id="updateByPrimaryKeySelective" parameterType="net.sjin.smvc.api.oa.MailFile">
         update t_oa_mail_file
         <set>
             <if test="mailid != null">
@@ -97,7 +97,7 @@
         </set>
         where ID = #{id,jdbcType=INTEGER}
     </update>
-    <update id="updateByPrimaryKey" parameterType="net.hunanst.eduz100.api.oa.MailFile">
+    <update id="updateByPrimaryKey" parameterType="net.sjin.smvc.api.oa.MailFile">
     update t_oa_mail_file
     set MAILID = #{mailid,jdbcType=INTEGER},
       FILEPATH = #{filepath,jdbcType=VARCHAR},
@@ -106,7 +106,7 @@
       FILENAME = #{filename,jdbcType=VARCHAR}
     where ID = #{id,jdbcType=INTEGER}
   </update>
-    <select id="select_page" resultMap="BaseResultMap" parameterType="net.hunanst.eduz100.api.oa.MailFile">
+    <select id="select_page" resultMap="BaseResultMap" parameterType="net.sjin.smvc.api.oa.MailFile">
         select
         <include refid="Base_Column_List"/>
         from t_oa_mail_file

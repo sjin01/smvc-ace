@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="OfficialdocumentDeliver">
-    <resultMap id="BaseResultMap" type="net.hunanst.eduz100.api.oa.OfficialdocumentDeliver">
+    <resultMap id="BaseResultMap" type="net.sjin.smvc.api.oa.OfficialdocumentDeliver">
         <id column="ID" property="id" jdbcType="INTEGER"/>
         <result column="OFFICIALDOCUMENTID" property="officialdocumentid" jdbcType="INTEGER"/>
         <result column="USERID" property="userid" jdbcType="INTEGER"/>
@@ -35,7 +35,7 @@
     delete from t_oa_officialdocument_deliver
     where ID = #{value}
   </delete>
-    <insert id="insert" parameterType="net.hunanst.eduz100.api.oa.OfficialdocumentDeliver">
+    <insert id="insert" parameterType="net.sjin.smvc.api.oa.OfficialdocumentDeliver">
     insert into t_oa_officialdocument_deliver (ID, OFFICIALDOCUMENTID, USERID, 
       ORGID, DELIVERID, DELIVERTYPE, 
       DELIVERDATE, CHANGEFLAG, CHANGESTATUS
@@ -45,7 +45,7 @@
       #{deliverdate,jdbcType=TIMESTAMP}, #{changeflag,jdbcType=INTEGER}, #{changestatus,jdbcType=INTEGER}
       )
   </insert>
-    <insert id="insertSelective" parameterType="net.hunanst.eduz100.api.oa.OfficialdocumentDeliver" useGeneratedKeys="true" keyProperty="id">
+    <insert id="insertSelective" parameterType="net.sjin.smvc.api.oa.OfficialdocumentDeliver" useGeneratedKeys="true" keyProperty="id">
         insert into t_oa_officialdocument_deliver
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="id != null">
@@ -131,7 +131,7 @@
         </foreach>
     </insert>
 
-    <update id="updateByPrimaryKeySelective" parameterType="net.hunanst.eduz100.api.oa.OfficialdocumentDeliver">
+    <update id="updateByPrimaryKeySelective" parameterType="net.sjin.smvc.api.oa.OfficialdocumentDeliver">
         update t_oa_officialdocument_deliver
         <set>
             <if test="officialdocumentid != null">
@@ -161,7 +161,7 @@
         </set>
         where ID = #{id,jdbcType=INTEGER}
     </update>
-    <update id="updateByPrimaryKey" parameterType="net.hunanst.eduz100.api.oa.OfficialdocumentDeliver">
+    <update id="updateByPrimaryKey" parameterType="net.sjin.smvc.api.oa.OfficialdocumentDeliver">
     update t_oa_officialdocument_deliver
     set OFFICIALDOCUMENTID = #{officialdocumentid,jdbcType=INTEGER},
       USERID = #{userid,jdbcType=INTEGER},
@@ -174,7 +174,7 @@
     where ID = #{id,jdbcType=INTEGER}
   </update>
     <select id="select_page" resultMap="BaseResultMap"
-            parameterType="net.hunanst.eduz100.api.oa.OfficialdocumentDeliver">
+            parameterType="net.sjin.smvc.api.oa.OfficialdocumentDeliver">
         select
         <include refid="Base_Column_List"/>
         from t_oa_officialdocument_deliver

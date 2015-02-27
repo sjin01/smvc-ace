@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="Notification">
-    <resultMap id="BaseResultMap" type="net.hunanst.eduz100.api.oa.vo.NotificationVo">
+    <resultMap id="BaseResultMap" type="net.sjin.smvc.api.oa.vo.NotificationVo">
         <id column="ID" property="id" jdbcType="INTEGER"/>
         <result column="USERID" property="userid" jdbcType="INTEGER"/>
         <result column="USERNAME" property="username" jdbcType="VARCHAR"/>
@@ -29,13 +29,13 @@
     delete from t_oa_notification
     where ID = #{value}
   </delete>
-    <insert id="insert" parameterType="net.hunanst.eduz100.api.oa.Notification">
+    <insert id="insert" parameterType="net.sjin.smvc.api.oa.Notification">
     insert into t_oa_notification (USERID, ORGID,CONTENT, VIEWFLAG,TIMES,TITLE)
     values ( #{userid,jdbcType=INTEGER}, #{orgid,jdbcType=INTEGER},
       #{content,jdbcType=VARCHAR}, #{viewflag,jdbcType=INTEGER},#{times,jdbcType=TIMESTAMP},
       #{title,jdbcType=VARCHAR})
   </insert>
-    <insert id="insertSelective" parameterType="net.hunanst.eduz100.api.oa.Notification"
+    <insert id="insertSelective" parameterType="net.sjin.smvc.api.oa.Notification"
             useGeneratedKeys="true" keyProperty="id">
             /*SELECT @@IDENTITY*/
 
@@ -87,7 +87,7 @@
             </if>
         </trim>
     </insert>
-    <update id="updateByPrimaryKeySelective" parameterType="net.hunanst.eduz100.api.oa.vo.NotificationVo">
+    <update id="updateByPrimaryKeySelective" parameterType="net.sjin.smvc.api.oa.vo.NotificationVo">
         update t_oa_notification
         <set>
             <if test="userid != null">
@@ -105,7 +105,7 @@
         </set>
         where ID = #{id,jdbcType=INTEGER}
     </update>
-    <update id="updateByPrimaryKey" parameterType="net.hunanst.eduz100.api.oa.Notification">
+    <update id="updateByPrimaryKey" parameterType="net.sjin.smvc.api.oa.Notification">
     update t_oa_notification
     set USERID = #{userid,jdbcType=INTEGER},
       ORGID = #{orgid,jdbcType=INTEGER},
@@ -113,7 +113,7 @@
       VIEWFLAG = #{viewflag,jdbcType=INTEGER}
     where ID = #{id,jdbcType=INTEGER}
   </update>
-    <select id="select_page" resultMap="BaseResultMap" parameterType="net.hunanst.eduz100.api.oa.vo.NotificationVo">
+    <select id="select_page" resultMap="BaseResultMap" parameterType="net.sjin.smvc.api.oa.vo.NotificationVo">
         select noti.id,noti.USERID,noti.orgid,noti.title,noti.content,noti.viewflag,noti.times,opr.username,
         org.orgname  from t_oa_notification noti LEFT JOIN ac_operator opr on noti.USERID=opr.ID
         LEFT JOIN ac_org org on noti.ORGID=org.id
@@ -151,7 +151,7 @@
         </foreach>)
     </delete>
     
-    <select id="notiViewById" resultMap="BaseResultMap" parameterType="net.hunanst.eduz100.api.oa.vo.NotificationVo">
+    <select id="notiViewById" resultMap="BaseResultMap" parameterType="net.sjin.smvc.api.oa.vo.NotificationVo">
         select n.ID, n.USERID,ao.username, org.id ORGID,org.orgname,n.CONTENT, n.VIEWFLAG,n.TIMES,n.TITLE,nr.id isread
         from t_oa_notification n
         left join t_oa_notification_history nh on n.id=nh.NOTIFICATIONID
@@ -162,7 +162,7 @@
         GROUP BY n.id
     </select>
 
-    <select id="selectForDisplay_page" resultMap="BaseResultMap" parameterType="net.hunanst.eduz100.api.oa.vo.NotificationVo">
+    <select id="selectForDisplay_page" resultMap="BaseResultMap" parameterType="net.sjin.smvc.api.oa.vo.NotificationVo">
         select n.ID, n.USERID,ao.username, org.id ORGID,org.orgname,n.CONTENT, n.VIEWFLAG,n.TIMES,n.TITLE,nr.id isread
         from t_oa_notification n
         left join t_oa_notification_history nh on n.id=nh.NOTIFICATIONID
@@ -199,7 +199,7 @@
         </if>-->
     </select>
 
-    <insert id="insertNoti_history" parameterType="net.hunanst.eduz100.api.oa.NotificationHistory">
+    <insert id="insertNoti_history" parameterType="net.sjin.smvc.api.oa.NotificationHistory">
         insert into t_oa_notification_history
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="id != null">
@@ -236,7 +236,7 @@
     </insert>
 
     <!--<select id="selectPersonByOegId" parameterType="java.lang.Integer"
-            resultType="net.hunanst.eduz100.api.sys.vo.AcOperatorVo">
+            resultType="AcOperatorVo">
         SELECT
             t.ID,
             t.USERCODE,
@@ -252,7 +252,7 @@
             org.id
     </select>-->
     <select id="selectPersonByOegId" parameterType="java.lang.Integer"
-            resultType="net.hunanst.eduz100.api.sys.vo.AcOperatorVo">
+            resultType="net.sjin.smvc.api.sys.vo.AcOperatorVo">
         SELECT t.ID,t.USERCODE,t.USERNAME,org.id orgid
         FROM ac_operator t
         RIGHT JOIN ac_oper_org_relation s ON t.id = s.OPERID
@@ -263,14 +263,14 @@
         ORDER BY org.id
     </select>
 
-    <insert id="insertFile" parameterType="net.hunanst.eduz100.api.oa.vo.NotificationFileVo">
+    <insert id="insertFile" parameterType="net.sjin.smvc.api.oa.vo.NotificationFileVo">
         insert into t_oa_notification_file (notid,fileurl,filename,filesize,filetype,uploadtime)
         values
         (#{notid},#{fileurl},#{filename},#{filesize},#{filetype},#{uploadtime})
     </insert>
 
     <select id="selectFileByPid" parameterType="java.lang.Integer"
-            resultType="net.hunanst.eduz100.api.oa.NotificationFile">
+            resultType="net.sjin.smvc.api.oa.NotificationFile">
         select * from t_oa_notification_file where notid=#{0}
     </select>
 
@@ -282,14 +282,14 @@
         </foreach>)
     </delete>
 
-    <select id="selectFile" resultType="net.hunanst.eduz100.api.oa.vo.NotificationFileVo"
+    <select id="selectFile" resultType="net.sjin.smvc.api.oa.vo.NotificationFileVo"
             parameterType="java.lang.Integer">
         select nf.id,nf.fileurl,nf.filetype,nf.filename,nf.filesize,nf.notid,nf.uploadtime,n.userid,n.orgid
         from t_oa_notification_file nf left join t_oa_notification n on nf.notid=n.id
         where nf.id=#{0}
     </select>
     
-    <select id="unReadNoti" parameterType="net.hunanst.eduz100.api.oa.vo.NotiHistoryVo" resultType="net.hunanst.eduz100.api.oa.vo.NotiHistoryVo">
+    <select id="unReadNoti" parameterType="net.sjin.smvc.api.oa.vo.NotiHistoryVo" resultType="net.sjin.smvc.api.oa.vo.NotiHistoryVo">
         select nh.id,nh.RECIPIENT,nh.date,nh.NOTIFICATIONID,n.title,n.TIMES notitimes
         from t_oa_notification_history  nh left join t_oa_notification n on nh.NOTIFICATIONID=n.ID
         where n.title is not null
@@ -303,7 +303,7 @@
         order by n.TIMES desc
     </select>
 
-    <update id="updateRead" parameterType="net.hunanst.eduz100.api.oa.NotificationRead">
+    <update id="updateRead" parameterType="net.sjin.smvc.api.oa.NotificationRead">
         insert into t_oa_notification_read(readuserid,notid,readtime)
         values
         (#{readuserid},#{notid},now())
@@ -320,7 +320,7 @@
         group by ORGID
     </insert>
     
-    <insert id="insertRemindByBath" parameterType="net.hunanst.eduz100.api.oa.vo.NotificationVo">
+    <insert id="insertRemindByBath" parameterType="net.sjin.smvc.api.oa.vo.NotificationVo">
         insert into t_oa_remind(remindtype,operatoruserid,recipientuserid,content,status,type,senddate)
         select #{sendtype},#{userid},ao.id ,CONCAT(#{head},ao.USERNAME,#{extracontent}),
         1,#{remindtype},now()
@@ -333,7 +333,7 @@
          group by ao.id
     </insert>
     
-    <select id="getUserByorgId" parameterType="net.hunanst.eduz100.api.oa.vo.NotificationVo" resultType="net.hunanst.eduz100.api.sys.AcOperator">
+    <select id="getUserByorgId" parameterType="net.sjin.smvc.api.oa.vo.NotificationVo" resultType="net.sjin.smvc.api.sys.AcOperator">
         select ao.id ,ao.USERNAME,ao.TELNUMBER
         from ac_oper_org_relation rela left join ac_operator ao on rela.OPERID=ao.ID
         where ao.TELNUMBER &lt;&gt;'' and ao.TELNUMBER is not null and  rela.orgid in

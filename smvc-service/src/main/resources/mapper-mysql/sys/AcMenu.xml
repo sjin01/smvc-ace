@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="net.hunanst.eduz100.api.sys.AcMenu" >
-  <resultMap id="BaseResultMap" type="net.hunanst.eduz100.api.sys.AcMenu" >
+<mapper namespace="net.sjin.smvc.api.sys.AcMenu" >
+  <resultMap id="BaseResultMap" type="net.sjin.smvc.api.sys.AcMenu" >
     <id column="ID" property="id" jdbcType="INTEGER" />
     <result column="APPID" property="appid" jdbcType="INTEGER" />
     <result column="MENUNAME" property="menuname" jdbcType="VARCHAR" />
@@ -24,7 +24,7 @@
     delete from ac_menu
     where ID = #{value}
   </delete>
-  <insert id="insert" parameterType="net.hunanst.eduz100.api.sys.AcMenu" >
+  <insert id="insert" parameterType="net.sjin.smvc.api.sys.AcMenu" >
     <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER" >
       SELECT LAST_INSERT_ID()
     </selectKey>
@@ -35,7 +35,7 @@
       #{menuseq,jdbcType=VARCHAR}, #{sortid,jdbcType=INTEGER}, #{funcid,jdbcType=INTEGER}, 
       #{menuicon,jdbcType=VARCHAR})
   </insert>
-  <insert id="insertSelective" parameterType="net.hunanst.eduz100.api.sys.AcMenu" >
+  <insert id="insertSelective" parameterType="net.sjin.smvc.api.sys.AcMenu" >
     <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER" >
       SELECT LAST_INSERT_ID()
     </selectKey>
@@ -87,7 +87,7 @@
       </if>
     </trim>
   </insert>
-  <update id="updateByPrimaryKeySelective" parameterType="net.hunanst.eduz100.api.sys.AcMenu" >
+  <update id="updateByPrimaryKeySelective" parameterType="net.sjin.smvc.api.sys.AcMenu" >
     update ac_menu
     <set >
       <if test="appid != null" >
@@ -114,7 +114,7 @@
     </set>
     where ID = #{id,jdbcType=INTEGER}
   </update>
-  <update id="updateByPrimaryKey" parameterType="net.hunanst.eduz100.api.sys.AcMenu" >
+  <update id="updateByPrimaryKey" parameterType="net.sjin.smvc.api.sys.AcMenu" >
     update ac_menu
     set APPID = #{appid,jdbcType=INTEGER},
       MENUNAME = #{menuname,jdbcType=VARCHAR},
@@ -125,7 +125,7 @@
       MENUICON = #{menuicon,jdbcType=VARCHAR}
     where ID = #{id,jdbcType=INTEGER}
   </update>
-  <select id="select_page" resultMap="BaseResultMap" parameterType="net.hunanst.eduz100.api.sys.AcMenu" >
+  <select id="select_page" resultMap="BaseResultMap" parameterType="net.sjin.smvc.api.sys.AcMenu" >
     select
     <include refid="Base_Column_List" />
      from ac_menu

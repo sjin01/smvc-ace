@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="Mail" >
-  <resultMap id="BaseResultMap" type="net.hunanst.eduz100.api.oa.Mail" >
+  <resultMap id="BaseResultMap" type="net.sjin.smvc.api.oa.Mail" >
     <id column="ID" property="id" jdbcType="INTEGER" />
     <result column="TITLE" property="title" jdbcType="VARCHAR" />
     <result column="CREATEDATE" property="createdate" jdbcType="TIMESTAMP" />
@@ -12,7 +12,7 @@
     <result column="content" property="content" jdbcType="VARCHAR" />
   </resultMap>
 
-    <parameterMap id="mail" type="net.hunanst.eduz100.api.oa.Mail">
+    <parameterMap id="mail" type="net.sjin.smvc.api.oa.Mail">
         <parameter property="title" jdbcType="VARCHAR" />
         <parameter  property="createdate" jdbcType="TIMESTAMP" />
         <parameter property="senddate" jdbcType="TIMESTAMP" />
@@ -38,7 +38,7 @@
     where ID = #{value}
   </delete>
 
-  <!--<insert id="insert" useGeneratedKeys="true" keyProperty="id" parameterType="net.hunanst.eduz100.api.oa.Mail" >-->
+  <!--<insert id="insert" useGeneratedKeys="true" keyProperty="id" parameterType="Mail" >-->
     <!--insert into t_oa_mail ( TITLE, CREATEDATE, -->
       <!--SENDDATE, SENDSTATUS, USERID, -->
       <!--ORGID, CONTENT)-->
@@ -54,7 +54,7 @@
         values (?,?,?,?,?,?,?)
     </insert>
 
-  <insert id="insertSelective" parameterType="net.hunanst.eduz100.api.oa.Mail" >
+  <insert id="insertSelective" parameterType="net.sjin.smvc.api.oa.Mail" >
     insert into t_oa_mail
     <trim prefix="(" suffix=")" suffixOverrides="," >
       <if test="id != null" >
@@ -110,7 +110,7 @@
     </trim>
   </insert>
 
-  <update id="updateByPrimaryKeySelective" parameterType="net.hunanst.eduz100.api.oa.Mail" >
+  <update id="updateByPrimaryKeySelective" parameterType="net.sjin.smvc.api.oa.Mail" >
     update t_oa_mail
     <set >
       <if test="title != null" >
@@ -138,7 +138,7 @@
     where ID = #{id,jdbcType=INTEGER}
   </update>
 
-  <update id="updateByPrimaryKey" parameterType="net.hunanst.eduz100.api.oa.Mail" >
+  <update id="updateByPrimaryKey" parameterType="net.sjin.smvc.api.oa.Mail" >
     update t_oa_mail
     set TITLE = #{title,jdbcType=VARCHAR},
       CREATEDATE = #{createdate,jdbcType=TIMESTAMP},
@@ -150,7 +150,7 @@
     where ID = #{id,jdbcType=INTEGER}
   </update>
 
-  <select id="select_page" resultMap="BaseResultMap" parameterType="net.hunanst.eduz100.api.oa.Mail" >
+  <select id="select_page" resultMap="BaseResultMap" parameterType="net.sjin.smvc.api.oa.Mail" >
     select
     <include refid="Base_Column_List" />
      from t_oa_mail
@@ -182,7 +182,7 @@
     </where>
   </select>
 
-  <select id="selectForIndex" parameterType="net.hunanst.eduz100.api.oa.vo.MailForIndex" resultType="net.hunanst.eduz100.api.oa.vo.MailForIndex">
+  <select id="selectForIndex" parameterType="net.sjin.smvc.api.oa.vo.MailForIndex" resultType="net.sjin.smvc.api.oa.vo.MailForIndex">
       select m.id,m.TITLE,m.USERID sender,ao.USERNAME sendername,m.SENDDATE,m.CREATEDATE,ao.IMGURL,m.CONTENT from t_oa_mail_user mu
       left join t_oa_mail m on mu.MAILID=m.id
       left join ac_operator ao on ao.id=m.USERID

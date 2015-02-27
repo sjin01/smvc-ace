@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="MailBox">
-    <resultMap id="BaseResultMap" type="net.hunanst.eduz100.api.oa.MailBox">
+    <resultMap id="BaseResultMap" type="net.sjin.smvc.api.oa.MailBox">
         <id column="ID" property="id" jdbcType="INTEGER"/>
         <result column="MAILID" property="mailid" jdbcType="INTEGER"/>
         <result column="USERID" property="userid" jdbcType="INTEGER"/>
         <result column="BOXTYPE" property="boxtype" jdbcType="INTEGER"/>
     </resultMap>
 
-    <resultMap id="mailFile" type="net.hunanst.eduz100.api.oa.MailFile">
+    <resultMap id="mailFile" type="net.sjin.smvc.api.oa.MailFile">
         <id column="ID" property="id" jdbcType="INTEGER"/>
         <result column="MAILID" property="mailid" jdbcType="INTEGER"/>
         <result column="FILEPATH" property="filepath" jdbcType="VARCHAR"/>
@@ -17,13 +17,13 @@
         <result column="FILENAME" property="filename" jdbcType="VARCHAR"/>
     </resultMap>
     
-    <resultMap id="AcOperatorIdAndName" type="net.hunanst.eduz100.api.oa.AcOperatorIdAndName">
+    <resultMap id="AcOperatorIdAndName" type="net.sjin.smvc.api.oa.AcOperatorIdAndName">
         <id column="id" property="id" jdbcType="VARCHAR"/>
         <result column="label" property="label" jdbcType="VARCHAR"/>
         <result column="value" property="value" jdbcType="VARCHAR" />
     </resultMap>
     
-    <resultMap id="mailDetail" type="net.hunanst.eduz100.api.oa.MailDetail">
+    <resultMap id="mailDetail" type="net.sjin.smvc.api.oa.MailDetail">
         <result column="mailid" property="mailid" jdbcType="INTEGER"/>
         <result column="userid" property="userid" jdbcType="INTEGER"/>
         <result column="boxtype" property="boxtype" jdbcType="INTEGER"/>
@@ -38,7 +38,7 @@
 	        <result property="mailcontent" column="mailcontent" jdbcType="BLOB" javaType = "java.lang.String" />
 	  </resultMap>
 
-    <resultMap id="addressBook" type="net.hunanst.eduz100.api.oa.AddressBook" >
+    <resultMap id="addressBook" type="net.sjin.smvc.api.oa.AddressBook" >
         <id column="ID" property="id" jdbcType="INTEGER" />
         <result column="OWNER" property="owner" jdbcType="INTEGER" />
         <result column="OPERID" property="operid" jdbcType="INTEGER" />
@@ -69,13 +69,13 @@
     delete from t_oa_mail_box
     where ID = #{value}
   </delete>
-    <insert id="insert" useGeneratedKeys="true" keyProperty="id" parameterType="net.hunanst.eduz100.api.oa.MailBox">
+    <insert id="insert" useGeneratedKeys="true" keyProperty="id" parameterType="net.sjin.smvc.api.oa.MailBox">
     insert into t_oa_mail_box ( MAILID, USERID, 
       BOXTYPE)
     values ( #{mailid,jdbcType=INTEGER}, #{userid,jdbcType=INTEGER}, 
       #{boxtype,jdbcType=INTEGER})
   </insert>
-    <insert id="insertSelective" parameterType="net.hunanst.eduz100.api.oa.MailBox">
+    <insert id="insertSelective" parameterType="net.sjin.smvc.api.oa.MailBox">
         insert into t_oa_mail_box
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="id != null">
@@ -106,7 +106,7 @@
             </if>
         </trim>
     </insert>
-    <update id="updateByPrimaryKeySelective" parameterType="net.hunanst.eduz100.api.oa.MailBox">
+    <update id="updateByPrimaryKeySelective" parameterType="net.sjin.smvc.api.oa.MailBox">
         update t_oa_mail_box
         <set>
             <if test="mailid != null">
@@ -121,14 +121,14 @@
         </set>
         where ID = #{id,jdbcType=INTEGER}
     </update>
-    <update id="updateByPrimaryKey" parameterType="net.hunanst.eduz100.api.oa.MailBox">
+    <update id="updateByPrimaryKey" parameterType="net.sjin.smvc.api.oa.MailBox">
     update t_oa_mail_box
     set MAILID = #{mailid,jdbcType=INTEGER},
       USERID = #{userid,jdbcType=INTEGER},
       BOXTYPE = #{boxtype,jdbcType=INTEGER}
     where ID = #{id,jdbcType=INTEGER}
   </update>
-    <select id="select_page" resultMap="BaseResultMap" parameterType="net.hunanst.eduz100.api.oa.MailBox">
+    <select id="select_page" resultMap="BaseResultMap" parameterType="net.sjin.smvc.api.oa.MailBox">
         select
         <include refid="Base_Column_List"/>
         from t_oa_mail_box
@@ -148,7 +148,7 @@
         </where>
     </select>
 
-   <select id="selectInboxByCondition" resultMap="mailDetail" parameterType="net.hunanst.eduz100.api.oa.MailBox">
+   <select id="selectInboxByCondition" resultMap="mailDetail" parameterType="net.sjin.smvc.api.oa.MailBox">
         select m.id as mailid, m.userid, a.username, m.title as mailtitle ,
         m.createdate,m.content as mailcontent,mb.readstate
           from t_oa_mail_box mb left join t_oa_mail m on (mb.mailid = m.id)
@@ -172,7 +172,7 @@
         </if>
     </select>
     
-    <select id="selectInboxCountByCondition" resultType="Integer" parameterType="net.hunanst.eduz100.api.oa.MailBox">
+    <select id="selectInboxCountByCondition" resultType="Integer" parameterType="net.sjin.smvc.api.oa.MailBox">
         select count(1)
           from t_oa_mail_box mb left join t_oa_mail m on (mb.mailid = m.id)
           left join ac_operator a on (m.userid = a.id)
@@ -189,7 +189,7 @@
     </select>
     
     
-    <select id="selectSentBoxByCondition" resultMap="mailDetail" parameterType="net.hunanst.eduz100.api.oa.MailBox">
+    <select id="selectSentBoxByCondition" resultMap="mailDetail" parameterType="net.sjin.smvc.api.oa.MailBox">
         select m.id as mailid, mu.userid, a.username, m.title as mailtitle ,
         m.createdate,m.content as mailcontent, 1 as readstate
           from t_oa_mail_user mu 
@@ -216,7 +216,7 @@
     </select>
     
     
-    <select id="selectSentBoxCountByCondition" resultType="Integer" parameterType="net.hunanst.eduz100.api.oa.MailBox">
+    <select id="selectSentBoxCountByCondition" resultType="Integer" parameterType="net.sjin.smvc.api.oa.MailBox">
         select count(1)
           from t_oa_mail_user mu 
           left join t_oa_mail m on (mu.mailid = m.id)
@@ -235,7 +235,7 @@
     </select>
     
     
-    <select id="selectDraftBoxByCondition" resultMap="mailDetail" parameterType="net.hunanst.eduz100.api.oa.MailBox">
+    <select id="selectDraftBoxByCondition" resultMap="mailDetail" parameterType="net.sjin.smvc.api.oa.MailBox">
         select m.id as mailid, '', '没有接收人' as username, m.title as mailtitle ,
         m.createdate,m.content as mailcontent, 1 as readstate
           from t_oa_mail_box mb
@@ -260,7 +260,7 @@
     </select>
     
     
-   <select id="selectDraftBoxCountByCondition" resultType="Integer"  parameterType="net.hunanst.eduz100.api.oa.MailBox">
+   <select id="selectDraftBoxCountByCondition" resultType="Integer"  parameterType="net.sjin.smvc.api.oa.MailBox">
         select count(1)
           from t_oa_mail_box mb
           left join t_oa_mail m on (mb.mailid = m.id)
@@ -276,7 +276,7 @@
         </where>
     </select>
     
-    <select id="selectUnReadMailCountByCondition" resultType="Integer" parameterType="net.hunanst.eduz100.api.oa.MailBox">
+    <select id="selectUnReadMailCountByCondition" resultType="Integer" parameterType="net.sjin.smvc.api.oa.MailBox">
         select count(1)
           from t_oa_mail_box mb left join t_oa_mail m on (mb.mailid = m.id)
           left join ac_operator a on (m.userid = a.id)
@@ -291,7 +291,7 @@
     </select>
     
     
-    <select id="selectEmailReceiveOperaterByCondition" resultMap="AcOperatorIdAndName" parameterType="net.hunanst.eduz100.api.sys.AcOperator">
+    <select id="selectEmailReceiveOperaterByCondition" resultMap="AcOperatorIdAndName" parameterType="net.sjin.smvc.api.sys.AcOperator">
         select a.id as id, a.username as label , a.id as value from ac_operator a
         <where>
         	1=1 
@@ -314,7 +314,7 @@
     </select>
     
     
-   <update id="updateMailState" parameterType="net.hunanst.eduz100.api.oa.MailBox">
+   <update id="updateMailState" parameterType="net.sjin.smvc.api.oa.MailBox">
     update t_oa_mail_box
     set 
       readstate = 1
@@ -324,7 +324,7 @@
   </update>
     
     
-  <update id="delEmail" parameterType="net.hunanst.eduz100.api.oa.MailBox">
+  <update id="delEmail" parameterType="net.sjin.smvc.api.oa.MailBox">
     	delete from t_oa_mail_box
         <where>
         	1=1 
@@ -341,7 +341,7 @@
   </update>
 
 
-    <select id="selectMailFile"  resultMap="mailFile" parameterType="net.hunanst.eduz100.api.oa.MailBox">
+    <select id="selectMailFile"  resultMap="mailFile" parameterType="net.sjin.smvc.api.oa.MailBox">
         select  m.mailid,m.filepath,m.suffix,m.size,m.filename   from t_oa_mail_file m
         <where>
             1=1
@@ -359,7 +359,7 @@
         </where>
     </select>
 
-    <insert id="addAddressBookByAcOperId" parameterType="net.hunanst.eduz100.api.oa.AddressBook">
+    <insert id="addAddressBookByAcOperId" parameterType="net.sjin.smvc.api.oa.AddressBook">
         INSERT INTO t_oa_address_book(OWNER,NAME,OPERID,PHONE,EMAIL)
         SELECT #{owner} , USERNAME,ID,TELNUMBER,EMAIL FROM ac_operator
         WHERE ID =  #{operid}

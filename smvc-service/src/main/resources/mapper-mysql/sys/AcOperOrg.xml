@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="net.hunanst.eduz100.api.sys.AcOperOrg" >
-  <resultMap id="BaseResultMap" type="net.hunanst.eduz100.api.sys.AcOperOrg" >
+<mapper namespace="net.sjin.smvc.api.sys.AcOperOrg" >
+  <resultMap id="BaseResultMap" type="net.sjin.smvc.api.sys.AcOperOrg" >
     <id column="ID" property="id" jdbcType="INTEGER" />
     <result column="ORGID" property="orgid" jdbcType="INTEGER" />
     <result column="OPERID" property="operid" jdbcType="INTEGER" />
@@ -19,14 +19,14 @@
     delete from ac_oper_org
     where ID = #{value}
   </delete>
-  <insert id="insert" parameterType="net.hunanst.eduz100.api.sys.AcOperOrg" >
+  <insert id="insert" parameterType="net.sjin.smvc.api.sys.AcOperOrg" >
     <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER" >
       SELECT LAST_INSERT_ID()
     </selectKey>
     insert into ac_oper_org (ORGID, OPERID)
     values (#{orgid,jdbcType=INTEGER}, #{operid,jdbcType=INTEGER})
   </insert>
-  <insert id="insertSelective" parameterType="net.hunanst.eduz100.api.sys.AcOperOrg" >
+  <insert id="insertSelective" parameterType="net.sjin.smvc.api.sys.AcOperOrg" >
     <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER" >
       SELECT LAST_INSERT_ID()
     </selectKey>
@@ -48,7 +48,7 @@
       </if>
     </trim>
   </insert>
-  <update id="updateByPrimaryKeySelective" parameterType="net.hunanst.eduz100.api.sys.AcOperOrg" >
+  <update id="updateByPrimaryKeySelective" parameterType="net.sjin.smvc.api.sys.AcOperOrg" >
     update ac_oper_org
     <set >
       <if test="orgid != null" >
@@ -60,13 +60,13 @@
     </set>
     where ID = #{id,jdbcType=INTEGER}
   </update>
-  <update id="updateByPrimaryKey" parameterType="net.hunanst.eduz100.api.sys.AcOperOrg" >
+  <update id="updateByPrimaryKey" parameterType="net.sjin.smvc.api.sys.AcOperOrg" >
     update ac_oper_org
     set ORGID = #{orgid,jdbcType=INTEGER},
       OPERID = #{operid,jdbcType=INTEGER}
     where ID = #{id,jdbcType=INTEGER}
   </update>
-  <select id="select_page" resultMap="BaseResultMap" parameterType="net.hunanst.eduz100.api.sys.AcOperOrg" >
+  <select id="select_page" resultMap="BaseResultMap" parameterType="net.sjin.smvc.api.sys.AcOperOrg" >
     select
     <include refid="Base_Column_List" />
      from ac_oper_org

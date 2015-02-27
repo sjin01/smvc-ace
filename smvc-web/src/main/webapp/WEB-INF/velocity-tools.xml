@@ -18,7 +18,7 @@
     <toolbox scope="application">
         <!-- <tool key="map" class="java.util.HashMap"/> -->
         <!--<tool key="dateUtil" class="配置一个自定义的日期工具地址"/>-->
-        <tool key="dict" class="net.hunanst.eduz100.controller.util.velocity.SysDictUtil"/>
+        <tool key="dict" class="net.sjin.smvc.controller.util.velocity.SysDictUtil"/>
     </toolbox>
 
     <tool>

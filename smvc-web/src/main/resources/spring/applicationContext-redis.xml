@@ -33,7 +33,7 @@
 		<constructor-arg index="2" value="6379" />
 	</bean>
 	<!-- 包装类 -->
-	<bean id="redisUtil" class="net.hunanst.eduz100.service.push.RedisUtil">
+	<bean id="redisUtil" class="net.sjin.smvc.service.push.RedisUtil">
 		<property name="jedisPool" ref="jedisPool" />
 	</bean>
 	

@@ -6,11 +6,11 @@
 	<display-name>eduz100-web</display-name>
 
 	<listener>
-		<listener-class>net.hunanst.eduz100.listener.CustomerServletContextListener</listener-class>
+		<listener-class>net.sjin.smvc.listener.CustomerServletContextListener</listener-class>
 	</listener>
 	
 	<listener>
-		<listener-class>net.hunanst.eduz100.listener.CustomerHttpSessionListener</listener-class>
+		<listener-class>net.sjin.smvc.listener.CustomerHttpSessionListener</listener-class>
 	</listener>
 
 	<!-- 乱码 -->

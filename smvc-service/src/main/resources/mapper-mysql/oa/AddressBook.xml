@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="addressBook" >
-  <resultMap id="BaseResultMap" type="net.hunanst.eduz100.api.oa.AddressBook" >
+  <resultMap id="BaseResultMap" type="net.sjin.smvc.api.oa.AddressBook" >
     <id column="ID" property="id" jdbcType="INTEGER" />
     <result column="OWNER" property="owner" jdbcType="INTEGER" />
     <result column="OPERID" property="operid" jdbcType="INTEGER" />
@@ -39,7 +39,7 @@
     delete from t_oa_address_book
     where ID = #{value}
   </delete>
-  <insert id="insert" parameterType="net.hunanst.eduz100.api.oa.AddressBook" >
+  <insert id="insert" parameterType="net.sjin.smvc.api.oa.AddressBook" >
     <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER" >
       SELECT LAST_INSERT_ID()
     </selectKey>
@@ -52,7 +52,7 @@
       #{birthday,jdbcType=DATE}, #{orgid,jdbcType=INTEGER}, #{company,jdbcType=VARCHAR}, 
       #{department,jdbcType=VARCHAR}, #{position,jdbcType=VARCHAR}, #{remark,jdbcType=VARCHAR})
   </insert>
-  <insert id="insertSelective" parameterType="net.hunanst.eduz100.api.oa.AddressBook" >
+  <insert id="insertSelective" parameterType="net.sjin.smvc.api.oa.AddressBook" >
     <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER" >
       SELECT LAST_INSERT_ID()
     </selectKey>
@@ -140,7 +140,7 @@
       </if>
     </trim>
   </insert>
-  <update id="updateByPrimaryKeySelective" parameterType="net.hunanst.eduz100.api.oa.AddressBook" >
+  <update id="updateByPrimaryKeySelective" parameterType="net.sjin.smvc.api.oa.AddressBook" >
     update t_oa_address_book
     <set >
       <if test="owner != null" >
@@ -185,7 +185,7 @@
     </set>
     where ID = #{id,jdbcType=INTEGER}
   </update>
-  <update id="updateByPrimaryKey" parameterType="net.hunanst.eduz100.api.oa.AddressBook" >
+  <update id="updateByPrimaryKey" parameterType="net.sjin.smvc.api.oa.AddressBook" >
     update t_oa_address_book
     set OWNER = #{owner,jdbcType=INTEGER},
       OPERID = #{operid,jdbcType=INTEGER},
@@ -203,7 +203,7 @@
     where ID = #{id,jdbcType=INTEGER}
   </update>
   
-  <select id="selectPojoList_page" resultMap="BaseResultMap" parameterType="net.hunanst.eduz100.api.oa.AddressBook">
+  <select id="selectPojoList_page" resultMap="BaseResultMap" parameterType="net.sjin.smvc.api.oa.AddressBook">
   	SELECT b.ID,IFNULL(b.NAME,o.USERNAME) NAME,o.TELNUMBER PHONE,o.EMAIL,o.IMGURL,b.OPERID
 	FROM t_oa_address_book b
 	LEFT JOIN ac_operator o ON b.OPERID = o.ID
@@ -251,7 +251,7 @@
     order by id desc
   </select>
   
-  <select id="select_page" resultMap="BaseResultMap" parameterType="net.hunanst.eduz100.api.oa.AddressBook" >
+  <select id="select_page" resultMap="BaseResultMap" parameterType="net.sjin.smvc.api.oa.AddressBook" >
     select
     <include refid="Base_Column_List" />
      from t_oa_address_book
@@ -311,7 +311,7 @@
    	WHERE ID =  #{operId}
   </insert>
 
-  <select id="selectByowner" parameterType="net.hunanst.eduz100.api.oa.vo.AddressBookVo" resultType="net.hunanst.eduz100.api.oa.vo.AddressBookVo">
+  <select id="selectByowner" parameterType="net.sjin.smvc.api.oa.vo.AddressBookVo" resultType="net.sjin.smvc.api.oa.vo.AddressBookVo">
       select ao.IMGURL,org.orgname,ab.id,ab.OWNER,ab.OPERID,ab.name,ab.email,replace(ab.phone,' ','') phone,ab.ORGID
       from t_oa_address_book ab left join ac_org org on ab.ORGID=org.id
       left join ac_operator ao on ao.id=ab.OPERID
@@ -321,7 +321,7 @@
     </if>
   </select>
   
-  <select id="findUser" parameterType="Map" resultType="net.hunanst.eduz100.api.oa.vo.AddressBookVo">
+  <select id="findUser" parameterType="Map" resultType="net.sjin.smvc.api.oa.vo.AddressBookVo">
   	SELECT o.ID,o.USERCODE,o.USERNAME,o.TELNUMBER,IF(a.OPERID IS NULL,1,0) FLAG ,o.IMGURL
   	FROM ac_operator o
 	LEFT JOIN t_oa_address_book a ON o.ID = a.OPERID AND a.OWNER = #{operId}

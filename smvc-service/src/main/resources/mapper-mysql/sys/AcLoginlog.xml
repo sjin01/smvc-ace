@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="net.hunanst.eduz100.api.sys.AcLoginlog" >
-  <resultMap id="BaseResultMap" type="net.hunanst.eduz100.api.sys.AcLoginlog" >
+<mapper namespace="net.sjin.smvc.api.sys.AcLoginlog" >
+  <resultMap id="BaseResultMap" type="net.sjin.smvc.api.sys.AcLoginlog" >
     <id column="ID" property="id" jdbcType="INTEGER" />
     <result column="USERNAME" property="username" jdbcType="VARCHAR" />
     <result column="USERCODE" property="usercode" jdbcType="VARCHAR" />
@@ -23,7 +23,7 @@
     delete from ac_loginlog
     where ID = #{value}
   </delete>
-  <insert id="insert" parameterType="net.hunanst.eduz100.api.sys.AcLoginlog" >
+  <insert id="insert" parameterType="net.sjin.smvc.api.sys.AcLoginlog" >
     <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER" >
       SELECT LAST_INSERT_ID()
     </selectKey>
@@ -34,7 +34,7 @@
       #{logintime,jdbcType=TIMESTAMP}, #{logouttime,jdbcType=TIMESTAMP}, #{logip,jdbcType=VARCHAR}
       )
   </insert>
-  <insert id="insertSelective" parameterType="net.hunanst.eduz100.api.sys.AcLoginlog" >
+  <insert id="insertSelective" parameterType="net.sjin.smvc.api.sys.AcLoginlog" >
     <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER" >
       SELECT LAST_INSERT_ID()
     </selectKey>
@@ -80,7 +80,7 @@
       </if>
     </trim>
   </insert>
-  <update id="updateByPrimaryKeySelective" parameterType="net.hunanst.eduz100.api.sys.AcLoginlog" >
+  <update id="updateByPrimaryKeySelective" parameterType="net.sjin.smvc.api.sys.AcLoginlog" >
     update ac_loginlog
     <set >
       <if test="username != null" >
@@ -104,7 +104,7 @@
     </set>
     where ID = #{id,jdbcType=INTEGER}
   </update>
-  <update id="updateByPrimaryKey" parameterType="net.hunanst.eduz100.api.sys.AcLoginlog" >
+  <update id="updateByPrimaryKey" parameterType="net.sjin.smvc.api.sys.AcLoginlog" >
     update ac_loginlog
     set USERNAME = #{username,jdbcType=VARCHAR},
       USERCODE = #{usercode,jdbcType=VARCHAR},
@@ -114,7 +114,7 @@
       LOGIP = #{logip,jdbcType=VARCHAR}
     where ID = #{id,jdbcType=INTEGER}
   </update>
-  <select id="select_page" resultMap="BaseResultMap" parameterType="net.hunanst.eduz100.api.sys.AcLoginlog" >
+  <select id="select_page" resultMap="BaseResultMap" parameterType="net.sjin.smvc.api.sys.AcLoginlog" >
     select
     <include refid="Base_Column_List" />
      from ac_loginlog

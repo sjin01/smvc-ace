@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="Officialdocument">
-    <resultMap id="BaseResultMap" type="net.hunanst.eduz100.api.oa.Officialdocument">
+    <resultMap id="BaseResultMap" type="net.sjin.smvc.api.oa.Officialdocument">
         <id column="ID" property="id" jdbcType="INTEGER"/>
         <result column="DRAFTUSERID" property="draftuserid" jdbcType="INTEGER"/>
         <result column="DRAFTORGID" property="draftorgid" jdbcType="INTEGER"/>
@@ -62,7 +62,7 @@
         )
     </delete>
 
-    <insert id="insert" parameterType="net.hunanst.eduz100.api.oa.Officialdocument">
+    <insert id="insert" parameterType="net.sjin.smvc.api.oa.Officialdocument">
     insert into t_oa_officialdocument (ID, DRAFTUSERID, DRAFTORGID, 
       CREATEDATE, COMMITDATE, TITLE, 
       CONTENT, IMPORTANTLEVEL, TIMELINESSFLAG, 
@@ -72,7 +72,7 @@
       #{content,jdbcType=VARCHAR}, #{importantlevel,jdbcType=INTEGER}, #{timelinessflag,jdbcType=INTEGER}, 
       #{lastdate,jdbcType=TIMESTAMP}, #{status,jdbcType=INTEGER})
   </insert>
-    <insert id="insertSelective" parameterType="net.hunanst.eduz100.api.oa.Officialdocument" useGeneratedKeys="true" keyProperty="id">
+    <insert id="insertSelective" parameterType="net.sjin.smvc.api.oa.Officialdocument" useGeneratedKeys="true" keyProperty="id">
         insert into t_oa_officialdocument
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="id != null">
@@ -145,7 +145,7 @@
             </if>
         </trim>
     </insert>
-    <update id="updateByPrimaryKeySelective" parameterType="net.hunanst.eduz100.api.oa.Officialdocument">
+    <update id="updateByPrimaryKeySelective" parameterType="net.sjin.smvc.api.oa.Officialdocument">
         update t_oa_officialdocument
         <set>
             <if test="draftuserid != null">
@@ -181,7 +181,7 @@
         </set>
         where ID = #{id,jdbcType=INTEGER}
     </update>
-    <update id="updateByPrimaryKey" parameterType="net.hunanst.eduz100.api.oa.Officialdocument">
+    <update id="updateByPrimaryKey" parameterType="net.sjin.smvc.api.oa.Officialdocument">
     update t_oa_officialdocument
     set DRAFTUSERID = #{draftuserid,jdbcType=INTEGER},
       DRAFTORGID = #{draftorgid,jdbcType=INTEGER},
@@ -195,7 +195,7 @@
       STATUS = #{status,jdbcType=INTEGER}
     where ID = #{id,jdbcType=INTEGER}
   </update>
-    <select id="select_page" resultMap="BaseResultMap" parameterType="net.hunanst.eduz100.api.oa.Officialdocument">
+    <select id="select_page" resultMap="BaseResultMap" parameterType="net.sjin.smvc.api.oa.Officialdocument">
         select
         <include refid="Base_Column_List"/>
         from t_oa_officialdocument
@@ -238,7 +238,7 @@
     </select>
 
     <!-- 可批阅 根据 个人  -->
-    <select id="selectApproveForUser_page" resultMap="BaseResultMap" parameterType="net.hunanst.eduz100.api.oa.Officialdocument">
+    <select id="selectApproveForUser_page" resultMap="BaseResultMap" parameterType="net.sjin.smvc.api.oa.Officialdocument">
         select c.*
         , u.USERNAME , o.ORGNAME
         , (select temp1.username from ac_operator temp1 where temp1.id = c.deliverid and c.delivertype =1 ) as deliverusername
@@ -290,7 +290,7 @@
     </select>
 
     <!-- 可批阅 根据 部门 -->
-    <select id="selectApproveForOrg_page" resultMap="BaseResultMap" parameterType="net.hunanst.eduz100.api.oa.Officialdocument">
+    <select id="selectApproveForOrg_page" resultMap="BaseResultMap" parameterType="net.sjin.smvc.api.oa.Officialdocument">
         select c.*
         , u.USERNAME , o.ORGNAME
         , (select temp1.username from ac_operator temp1 where temp1.id = c.deliverid and c.delivertype =1 ) as deliverusername
@@ -322,7 +322,7 @@
 
 
     <!-- 最新， （提交到您或您所属部门 ） -->
-    <select id="selectNewest_page" resultMap="BaseResultMap" parameterType="net.hunanst.eduz100.api.oa.Officialdocument">
+    <select id="selectNewest_page" resultMap="BaseResultMap" parameterType="net.sjin.smvc.api.oa.Officialdocument">
         select A.*  ,date_format(A.DELEVERDATE,'%Y-%m-%d') as commitdateStr
         , ( select o.ORGNAME from ac_org o where A.DELIVERTYPE = 2 and A.DELIVERID = o.ID) as orgname
         from

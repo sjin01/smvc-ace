@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="net.hunanst.eduz100.api.sys.AcOrgFunc" >
-  <resultMap id="BaseResultMap" type="net.hunanst.eduz100.api.sys.AcOrgFunc" >
+<mapper namespace="net.sjin.smvc.api.sys.AcOrgFunc" >
+  <resultMap id="BaseResultMap" type="net.sjin.smvc.api.sys.AcOrgFunc" >
     <id column="ID" property="id" jdbcType="INTEGER" />
     <result column="ORGID" property="orgid" jdbcType="INTEGER" />
     <result column="FUNCID" property="funcid" jdbcType="INTEGER" />
@@ -19,14 +19,14 @@
     delete from ac_org_func
     where ID = #{value}
   </delete>
-  <insert id="insert" parameterType="net.hunanst.eduz100.api.sys.AcOrgFunc" >
+  <insert id="insert" parameterType="net.sjin.smvc.api.sys.AcOrgFunc" >
     <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER" >
       SELECT LAST_INSERT_ID()
     </selectKey>
     insert into ac_org_func (ORGID, FUNCID)
     values (#{orgid,jdbcType=INTEGER}, #{funcid,jdbcType=INTEGER})
   </insert>
-  <insert id="insertSelective" parameterType="net.hunanst.eduz100.api.sys.AcOrgFunc" >
+  <insert id="insertSelective" parameterType="net.sjin.smvc.api.sys.AcOrgFunc" >
     <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER" >
       SELECT LAST_INSERT_ID()
     </selectKey>
@@ -48,7 +48,7 @@
       </if>
     </trim>
   </insert>
-  <update id="updateByPrimaryKeySelective" parameterType="net.hunanst.eduz100.api.sys.AcOrgFunc" >
+  <update id="updateByPrimaryKeySelective" parameterType="net.sjin.smvc.api.sys.AcOrgFunc" >
     update ac_org_func
     <set >
       <if test="orgid != null" >
@@ -60,13 +60,13 @@
     </set>
     where ID = #{id,jdbcType=INTEGER}
   </update>
-  <update id="updateByPrimaryKey" parameterType="net.hunanst.eduz100.api.sys.AcOrgFunc" >
+  <update id="updateByPrimaryKey" parameterType="net.sjin.smvc.api.sys.AcOrgFunc" >
     update ac_org_func
     set ORGID = #{orgid,jdbcType=INTEGER},
       FUNCID = #{funcid,jdbcType=INTEGER}
     where ID = #{id,jdbcType=INTEGER}
   </update>
-  <select id="select_page" resultMap="BaseResultMap" parameterType="net.hunanst.eduz100.api.sys.AcOrgFunc" >
+  <select id="select_page" resultMap="BaseResultMap" parameterType="net.sjin.smvc.api.sys.AcOrgFunc" >
     select
     <include refid="Base_Column_List" />
      from ac_org_func
@@ -89,7 +89,7 @@
     where ORGID = #{value}
   </select>
   
-  <delete id="deleteByOrgid" parameterType="net.hunanst.eduz100.api.sys.AcOrgFunc">
+  <delete id="deleteByOrgid" parameterType="net.sjin.smvc.api.sys.AcOrgFunc">
   	delete from ac_org_func
     where ORGID = #{orgid}
   </delete>
@@ -112,7 +112,7 @@
     </foreach>
   </insert>
   
-  <insert id="insertAuthByParentOrg" parameterType="net.hunanst.eduz100.api.sys.AcOrg" >
+  <insert id="insertAuthByParentOrg" parameterType="net.sjin.smvc.api.sys.AcOrg" >
     insert into ac_org_func(orgid, funcid)
 	select #{id}, funcid from ac_org_func where orgid = #{parentid}
   </insert>

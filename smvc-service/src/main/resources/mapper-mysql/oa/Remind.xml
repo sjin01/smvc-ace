@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="Remind" >
-  <resultMap id="BaseResultMap" type="net.hunanst.eduz100.api.oa.Remind" >
+  <resultMap id="BaseResultMap" type="net.sjin.smvc.api.oa.Remind" >
 
     <id column="ID" property="id" jdbcType="INTEGER" />
     <result column="REMINDTYPE" property="remindtype" jdbcType="INTEGER" />
@@ -26,7 +26,7 @@
     delete from t_oa_remind
     where ID = #{value}
   </delete>
-  <insert id="insert" parameterType="net.hunanst.eduz100.api.oa.Remind" >
+  <insert id="insert" parameterType="net.sjin.smvc.api.oa.Remind" >
     insert into t_oa_remind (ID, REMINDTYPE, OPERATORUSERID,
     RECIPIENTUSERID, CONTENT, STATUS,
     TYPE, SENDDATE)
@@ -56,7 +56,7 @@
     </foreach>
   </insert>
 
-  <insert id="insertSelective" parameterType="net.hunanst.eduz100.api.oa.Remind" >
+  <insert id="insertSelective" parameterType="net.sjin.smvc.api.oa.Remind" >
     insert into t_oa_remind
     <trim prefix="(" suffix=")" suffixOverrides="," >
       <if test="id != null" >
@@ -111,7 +111,7 @@
       </if>
     </trim>
   </insert>
-  <update id="updateByPrimaryKeySelective" parameterType="net.hunanst.eduz100.api.oa.Remind" >
+  <update id="updateByPrimaryKeySelective" parameterType="net.sjin.smvc.api.oa.Remind" >
     update t_oa_remind
     <set >
       <if test="remindtype != null" >
@@ -138,7 +138,7 @@
     </set>
     where ID = #{id,jdbcType=INTEGER}
   </update>
-  <update id="updateByPrimaryKey" parameterType="net.hunanst.eduz100.api.oa.Remind" >
+  <update id="updateByPrimaryKey" parameterType="net.sjin.smvc.api.oa.Remind" >
     update t_oa_remind
     set REMINDTYPE = #{remindtype,jdbcType=INTEGER},
     OPERATORUSERID = #{operatoruserid,jdbcType=INTEGER},
@@ -149,7 +149,7 @@
     SENDDATE = #{senddate,jdbcType=TIMESTAMP}
     where ID = #{id,jdbcType=INTEGER}
   </update>
-  <select id="select_page" resultMap="BaseResultMap" parameterType="net.hunanst.eduz100.api.oa.Remind" >
+  <select id="select_page" resultMap="BaseResultMap" parameterType="net.sjin.smvc.api.oa.Remind" >
     select
     <include refid="Base_Column_List" />
     from t_oa_remind

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="OfficialdocumentRecord" >
-  <resultMap id="BaseResultMap" type="net.hunanst.eduz100.api.oa.OfficialdocumentRecord" >
+  <resultMap id="BaseResultMap" type="net.sjin.smvc.api.oa.OfficialdocumentRecord" >
     <id column="ID" property="id" jdbcType="INTEGER" />
     <result column="OFFICIALDOCUMENTID" property="officialdocumentid" jdbcType="INTEGER" />
     <result column="USERID" property="userid" jdbcType="INTEGER" />
@@ -25,13 +25,13 @@
     delete from t_oa_officialdocument_record
     where ID = #{value}
   </delete>
-  <insert id="insert" parameterType="net.hunanst.eduz100.api.oa.OfficialdocumentRecord" >
+  <insert id="insert" parameterType="net.sjin.smvc.api.oa.OfficialdocumentRecord" >
     insert into t_oa_officialdocument_record (ID, OFFICIALDOCUMENTID, USERID, 
       ORGID, TYPE ,DATE)
     values (#{id,jdbcType=INTEGER}, #{officialdocumentid,jdbcType=INTEGER}, #{userid,jdbcType=INTEGER}, 
       #{orgid,jdbcType=INTEGER}, #{type,jdbcType=INTEGER} ,#{date, jdbcType=TIMESTAMP} )
   </insert>
-  <insert id="insertSelective" parameterType="net.hunanst.eduz100.api.oa.OfficialdocumentRecord" >
+  <insert id="insertSelective" parameterType="net.sjin.smvc.api.oa.OfficialdocumentRecord" >
     insert into t_oa_officialdocument_record
     <trim prefix="(" suffix=")" suffixOverrides="," >
       <if test="id != null" >
@@ -74,7 +74,7 @@
       </if>
     </trim>
   </insert>
-  <update id="updateByPrimaryKeySelective" parameterType="net.hunanst.eduz100.api.oa.OfficialdocumentRecord" >
+  <update id="updateByPrimaryKeySelective" parameterType="net.sjin.smvc.api.oa.OfficialdocumentRecord" >
     update t_oa_officialdocument_record
     <set >
       <if test="officialdocumentid != null" >
@@ -95,7 +95,7 @@
     </set>
     where ID = #{id,jdbcType=INTEGER}
   </update>
-  <update id="updateByPrimaryKey" parameterType="net.hunanst.eduz100.api.oa.OfficialdocumentRecord" >
+  <update id="updateByPrimaryKey" parameterType="net.sjin.smvc.api.oa.OfficialdocumentRecord" >
     update t_oa_officialdocument_record
     set OFFICIALDOCUMENTID = #{officialdocumentid,jdbcType=INTEGER},
       USERID = #{userid,jdbcType=INTEGER},
@@ -104,7 +104,7 @@
       DATE = #{date, jdbcType=TIMESTAMP}
     where ID = #{id,jdbcType=INTEGER}
   </update>
-  <select id="select_page" resultMap="BaseResultMap" parameterType="net.hunanst.eduz100.api.oa.OfficialdocumentRecord" >
+  <select id="select_page" resultMap="BaseResultMap" parameterType="net.sjin.smvc.api.oa.OfficialdocumentRecord" >
     select
     <include refid="Base_Column_List" />
      from t_oa_officialdocument_record
@@ -131,8 +131,8 @@
   </select>
 
   <!-- 个人档案 -->
-  <select id="selectOfficialdocumentByRecordForUser_page" resultType="net.hunanst.eduz100.api.oa.Officialdocument"
-          parameterType="net.hunanst.eduz100.api.oa.OfficialdocumentRecord">
+  <select id="selectOfficialdocumentByRecordForUser_page" resultType="net.sjin.smvc.api.oa.Officialdocument"
+          parameterType="net.sjin.smvc.api.oa.OfficialdocumentRecord">
       select
       t.*
       ,
@@ -148,8 +148,8 @@
   </select>
 
   <!-- 部门档案 -->
-  <select id="selectOfficialdocumentByRecordForOrg_page" resultType="net.hunanst.eduz100.api.oa.Officialdocument"
-          parameterType="net.hunanst.eduz100.api.oa.OfficialdocumentRecord">
+  <select id="selectOfficialdocumentByRecordForOrg_page" resultType="net.sjin.smvc.api.oa.Officialdocument"
+          parameterType="net.sjin.smvc.api.oa.OfficialdocumentRecord">
       select
       t.*
       ,

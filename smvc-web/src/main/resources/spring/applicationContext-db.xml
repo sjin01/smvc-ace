@@ -44,7 +44,7 @@
 		<property name="dataSource" ref="dataSource" />
 	</bean>
 	
-	<bean id="mybatis.PageInterceptor" class="net.hunanst.common.util.mybatis.pagination.PagePlugin">
+	<bean id="mybatis.PageInterceptor" class="net.sjin.common.util.mybatis.pagination.PagePlugin">
 		<property name="dialect" value="${db.dbtype}"></property>
 	</bean>
 	
