@@ -1,3 +1,4 @@
 # smvc-ace
 spring-mvc+velocity+mybatis ;
-DB:mysql;
+DB: mysql .
+
