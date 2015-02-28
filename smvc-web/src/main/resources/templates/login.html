@@ -3,7 +3,7 @@
 <head>
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
     <meta charset="utf-8"/>
-    <title>临澧县教育平台OA系统</title>
+    <title>SMVC-ACE</title>
 
     <meta name="description" content="User login page"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0"/>
@@ -46,7 +46,7 @@
             <a href="#" class="navbar-brand">
                 <small>
                     <i class="fa fa-leaf "></i>
-                    临澧教育平台 OA系统
+                    SMVC-ACE
                 </small>
             </a>
         </div>
@@ -76,10 +76,12 @@
                                             <ul class="list-unstyled spaced">
                                                 <li><i class="ace-icon fa fa-check bigger-110 green"></i>
                                                     1. 系统推荐使用：
-                                                    <a href="javascript:void(0);" data-rel="popover" data-placement="bottom" class="popover-info" title="UC浏览器"
+                                                    <a href="javascript:void(0);" data-rel="popover"
+                                                       data-placement="bottom" class="popover-info" title="UC浏览器"
                                                        data-content="UC浏览器（原名UCWEB，2009年5月正式更名为UC浏览器）是一款把“互联网装入口袋”的主流手机浏览器 ，由优视科技（原名优视动景）公司研制开发。兼备cmnet、cmwap等联网方式，速度快而稳定，具有视频播放、网站导航、搜索、下载、个人数据管理等功能。
 2014年4月10日UC浏览器PC版正式发布[1-2]   。 6月11日，UC优视将全面并入阿里巴巴集团。UC浏览器为UC 优视的核心产品[3] 。<a href='http://www.uc.cn/' target='_blank'>前往官网下载</a>">UC浏览器</a>，
-                                                    <a href="javascript:void(0);" data-rel="popover" data-placement="bottom" class="popover-info" title="谷歌浏览器"
+                                                    <a href="javascript:void(0);" data-rel="popover"
+                                                       data-placement="bottom" class="popover-info" title="谷歌浏览器"
                                                        data-content="Google Chrome，又称Google浏览器，是一个由Google（谷歌）公司开发的网页浏览器。该浏览器是基于其他开源软件所撰写，包括WebKit，目标是提升稳定性、速度和安全性，并创造出简单且有效率的使用者界面。软件的名称是来自于称作Chrome的网络浏览器图形使用者界面（GUI）。
                                                        软件的beta测试版本在2008年9月2日发布，提供50种语言版本，有Windows、Mac OS X、Linux、Android、以及iOS版本提供下载。2013年9月，Chrome已达全球份额的43%，成为全球使用最广的浏览器。
                                                        <a href='http://www.google.cn/intl/zh-CN/chrome/' target='_blank'>前往官网下载</a><br/>
@@ -105,7 +107,8 @@
                                                 </li>
                                             </ul>
                                         </div>
-                                        <div class="col-sm-4 widget-container-col ui-sortable" style="border-left: 1px dotted rgb(170, 170, 170); ">
+                                        <div class="col-sm-4 widget-container-col ui-sortable"
+                                             style="border-left: 1px dotted rgb(170, 170, 170); ">
 
                                             <h4 class="header blue lighter bigger">
                                                 <i class="ace-icon fa fa-coffee green"></i>
@@ -167,7 +170,7 @@
 
                         <div class="space-6"></div>
                         <div class=" center">
-                            <span class="grey">&copy; 盛通信息技术有限公司</span>
+                            <span class="grey">&copy; S.Jin</span>
                         </div>
                     </div>
                     <!-- /.position-relative -->
@@ -219,17 +222,17 @@
         firefox: /firefox/.test(userAgent),
         ie: /msie/.test(userAgent),
         opera: /opera/.test(userAgent),
-        uc:  (/ubrowser/.test(userAgent) || /ucbrowser/.test(userAgent)) ,
-        ucversion : (userAgent.match(/(?:ubrowser|ucbrowser)[\/: ]([\d.]+)/))[1]
+        uc: (/ubrowser/.test(userAgent) || /ucbrowser/.test(userAgent)),
+        ucversion: (userAgent.match(/(?:ubrowser|ucbrowser)[\/: ]([\d.]+)/))[1]
     }
     /* 获得浏览器的名称及版本信息 */
     /*console.log(navigator.userAgent);
     console.log(userAgent);*/
     if (browser.ie) {
-        if(browser.version < 10){
+        if (browser.version < 10) {
             $("#browser_low").show();
             $("#browser_type").html("您当前使用的是：<span class='green'>IE浏览器</span> 版本：<span class='red'>" + browser.version + "</span>");
-        }else{
+        } else {
             $("#browser_type").html("您当前使用的是：<span class='green'>IE浏览器</span> 版本：<span class='green'>" + browser.version + "</span>");
         }
     } else if (browser.uc) {
@@ -317,7 +320,7 @@
     }
 
     $(function () {
-        $('[data-rel=popover]').popover({html:true});
+        $('[data-rel=popover]').popover({html: true});
 
         $("#usercode , #password").keydown(function (e) {
             if (e.keyCode == 13) {
