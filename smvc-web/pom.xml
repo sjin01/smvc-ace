@@ -42,6 +42,6 @@
     </dependencies>
 
 	<build>
-		<finalName>eduz100</finalName>
+		<finalName>smvc</finalName>
 	</build>	
 </project>
